@@ -1,4 +1,4 @@
-/** 
+/**
  * \file sketchbook/maccepa/defines.h
  * \author Matthew Howard (MH), matthew.howard@ed.ac.uk
  * \ingroup MACCEPA
@@ -10,6 +10,7 @@
 #define __maccepa_defines_h
 
 /* #define VARIABLE_DAMPING */
+#define VARIABLE_DAMPING
 
 /** \brief Dimensionality of joint space. */
 #define DIMQ 1
@@ -69,7 +70,7 @@
  * According to the manual, the HSR-5990TG has minimum
  * angle corresponding to 600 microseconds (so this
  * should be around 1200).
- * Alex: For the HS-7950TH the tested min command 
+ * Alex: For the HS-7950TH the tested min command
  * is 1506 , for the HSR-5990TG it was 1350
  */
 #define U_MIN_SERVO0 1506
@@ -181,41 +182,41 @@
  * maximum position that the servo can reach (as
  * defined by U_MAX_SERVO1).
  *
- * \note With the large drum configuration 
+ * \note With the large drum configuration
  * we can only move the servo half its range as
  * otherwise the spring comes off the runner.
  * Alex: for the new robot we can use the max
- * instead of the old M_PI/2 
+ * instead of the old M_PI/2
 */
 #define U_ULIM_RAD_SERVO1 U_MAX_RAD_SERVO1
 #ifdef VARIABLE_DAMPING
 /**
- * \brief Upper command limit for Damper 0 
+ * \brief Upper command limit for Damper 0
  */
 #define U_ULIM_DAMPER0 1
 #endif
 
-/** 
+/**
  * \brief Lower command limit for Servo 0 (in
  * radiens).
  *
  * \note This may not necessarily correspond to the
  * minimum position that the servo can reach (as
- * defined by U_MIN_SERVO0). 
+ * defined by U_MIN_SERVO0).
  */
 #define U_LLIM_RAD_SERVO0 U_MIN_RAD_SERVO0
-/** 
+/**
  * \brief Lower command limit for Servo 1 (in
  * radiens).
  *
  * \note This may not necessarily correspond to the
  * minimum position that the servo can reach (as
- * defined by U_MIN_SERVO1). 
+ * defined by U_MIN_SERVO1).
  */
 #define U_LLIM_RAD_SERVO1 U_MIN_RAD_SERVO1
 #ifdef VARIABLE_DAMPING
 /**
- * \brief Lower command limit for Damper 0 
+ * \brief Lower command limit for Damper 0
  */
 #define U_LLIM_DAMPER0 0
 #endif
@@ -229,7 +230,7 @@
  * this value with linear regression. was 0.000923775551
  */
 #define W_POT_JOINT 0.0014
-/** 
+/**
  * \brief Scaling factor for converting raw joint
  * accelerometer readings to anglular accleration
  * (radiens per second squared).
@@ -243,23 +244,23 @@
 /**
  * \brief Scaling factor for converting raw pot
  * readings from Servo 0 to the motor angle (in
- * radiens). 
+ * radiens).
  *
  * \note If using the Matlab system-id scripts,
  * set this to 1, then run
  * identify_maccepa_servo_potentiometers.m to
- * calculate this value with linear regression. 
+ * calculate this value with linear regression.
  */
 #define W_POT_SERVO0 M_PI/(2350-309)
 /**
  * \brief Scaling factor for converting raw pot
  * readings from Servo 1 to the motor angle (in
- * radiens). 
+ * radiens).
  *
  * \note If using the Matlab system-id scripts,
  * set this to 1, then run
  * identify_maccepa_servo_potentiometers.m to
- * calculate this value with linear regression. 
+ * calculate this value with linear regression.
  */
 #define W_POT_SERVO1 (M_PI/2)/(1345-2417)
 
@@ -287,7 +288,7 @@
 /**
  * \brief Offset factor for converting raw pot
  * readings from Servo 0 to the motor angle (in
- * radiens). 
+ * radiens).
  *
  * \note If using the Matlab system-id scripts,
  * set this to 0, then run
@@ -298,7 +299,7 @@
 /**
  * \brief Offset factor for converting raw pot
  * readings from Servo 1 to the motor angle (in
- * radiens). 
+ * radiens).
  *
  * \note If using the Matlab system-id scripts,
  * set this to 0, then run
@@ -348,9 +349,9 @@
 /* #define INERTIA INERTIA_AT_COM+LINK_MASS*pow(LINK_LENGTH/2.0,2)+pow(DAMPER_MOTOR_GEAR_RATIO,2)*(DAMPER_MOTOR_INERTIA+DAMPER_MOTOR_GEAR_INERTIA)+MAGNET_MASS*pow(LINK_LENGTH,2)
  */
 
-/** 
+/**
  * \brief Spring constant of spring.
- * 
+ *
  * \note This is taken from the spring data sheet (see
  * doc/Z-081K-01I-datasheet.ps)
  */
@@ -370,9 +371,9 @@
 /** \brief Radius of drum attached to stiffness servo (metres). */
 #define DRUM_RADIUS LARGE_DRUM_RADIUS
 
-/** Alex: select how thread is wound in drum, to change direction of rotation. 
- * Default is clockwise winding, 
- * if DRUM_WINDING_COUNTERCLOCKWISE is defined, it will wind up counterclockwise 
+/** Alex: select how thread is wound in drum, to change direction of rotation.
+ * Default is clockwise winding,
+ * if DRUM_WINDING_COUNTERCLOCKWISE is defined, it will wind up counterclockwise
  */
 #define DRUM_WINDING_COUNTERCLOCKWISE
 
@@ -389,7 +390,7 @@
  * \note Currently, this value must be tuned by hand after running the system-ID script. */
 #define COULOMB_FRICTION 0.0
 
-/** 
+/**
  * \brief Constant for calculating joint damping torque.
  */
 /* #define DAMPING_CONSTANT 2*5*0.004517508630
@@ -411,4 +412,3 @@
 #define CURRENT_R2 21800.0
 
 #endif
-
