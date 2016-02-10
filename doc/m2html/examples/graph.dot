@@ -1,0 +1,16 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  test_ilqr_kawato_1dof_reach [URL="test_ilqr_kawato_1dof_reach.html"];
+  test_ilqr_kawato_arm [URL="test_ilqr_kawato_arm.html"];
+  test_ilqr_kawato_arm_reach [URL="test_ilqr_kawato_arm_reach.html"];
+  test_ilqr_lqr_fh [URL="test_ilqr_lqr_fh.html"];
+  test_ilqr_maccepa_reach [URL="test_ilqr_maccepa_reach.html"];
+  test_lqr_fh [URL="test_lqr_fh.html"];
+  test_lqr_fh_d [URL="test_lqr_fh_d.html"];
+  test_lqr_ih [URL="test_lqr_ih.html"];
+  test_lqr_ih_d [URL="test_lqr_ih_d.html"];
+  test_lspi_gridworld [URL="test_lspi_gridworld.html"];
+  test_lspi_lqr_ih_d [URL="test_lspi_lqr_ih_d.html"];
+  test_lwlspi_lqr_ih_d [URL="test_lwlspi_lqr_ih_d.html"];
+}

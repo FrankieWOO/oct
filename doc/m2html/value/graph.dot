@@ -1,0 +1,8 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  evaluate_trajectory_cost_fh [URL="evaluate_trajectory_cost_fh.html"];
+  evaluate_trajectory_cost_fh_d [URL="evaluate_trajectory_cost_fh_d.html"];
+  evaluate_trajectory_cost_ih [URL="evaluate_trajectory_cost_ih.html"];
+  evaluate_trajectory_cost_ih_d [URL="evaluate_trajectory_cost_ih_d.html"];
+}

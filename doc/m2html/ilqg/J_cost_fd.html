@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of J_cost_fd</title>
+  <meta name="keywords" content="J_cost_fd">
+  <meta name="description" content="Function for calculating the Jacobian of a cost function using finite differences.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">ilqg</a> &gt; J_cost_fd.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\ilqg&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>J_cost_fd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Function for calculating the Jacobian of a cost function using finite differences.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [l_x,l_u] = J_cost_fd ( l, x, u, t ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Function for calculating the Jacobian of a cost function using finite differences.
+ 
+ in:
+    l       - function handle for calculating cost
+    x, u, t - state, command and time at which Jacobian should be calculated
+
+ out:
+    l_x,l_u - Jacobian w.r.t. state and action.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="j_contact_task_1dof_plants.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_contact_task_1dof_plants ( x, u, t, p )">j_contact_task_1dof_plants</a>	'Reaching task' cost function for the 1-DOF plants (e.g., MACCEPA, swinger, etc.) for use with ILQR/G</li><li><a href="j_reaching_task_1dof_plants.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_task_1dof_plants ( x, u, t, p )">j_reaching_task_1dof_plants</a>	'Reaching task' cost function for the 1-DOF plants (e.g., MACCEPA, swinger, etc.) for use with ILQR/G</li><li><a href="j_reaching_task_2dof_plants.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_task_2dof_plants ( x, u, t, p )">j_reaching_task_2dof_plants</a>	'Reaching task' cost function for the 2-DOF plants (e.g., Kawato arm) for use with ILQR/G</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Function for calculating the Jacobian of a cost function using finite differences.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% in:</span>
+0004 <span class="comment">%    l       - function handle for calculating cost</span>
+0005 <span class="comment">%    x, u, t - state, command and time at which Jacobian should be calculated</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% out:</span>
+0008 <span class="comment">%    l_x,l_u - Jacobian w.r.t. state and action.</span>
+0009 <span class="comment">%</span>
+0010 <a name="_sub0" href="#_subfunctions" class="code">function [l_x,l_u] = J_cost_fd ( l, x, u, t )</a>
+0011 
+0012 dimX = size(x,1);
+0013 dimU = size(u,1);
+0014 
+0015 delta=1e-6;
+0016 
+0017 l_x  = zeros(dimX,1);
+0018 <span class="keyword">for</span> i=1:dimX
+0019     dx=zeros(dimX,1); dx(i)=delta;
+0020 
+0021     lxp = l( x+dx, u, t );
+0022     lxm = l( x-dx, u, t );
+0023 
+0024     l_x(i) = (lxp-lxm)/(2*delta);
+0025 <span class="keyword">end</span>
+0026 
+0027 l_u  = zeros(dimU,1);
+0028 <span class="keyword">for</span> i=1:dimU
+0029     du=zeros(dimU,1); du(i)=delta;
+0030 
+0031     lup = l( x, u+du, t );
+0032     lum = l( x, u-du, t );
+0033 
+0034     l_u(i) = (lup-lum)/(2*delta);
+0035 <span class="keyword">end</span>
+0036</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

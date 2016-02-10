@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of argmaxuQ_lwlspi</title>
+  <meta name="keywords" content="argmaxuQ_lwlspi">
+  <meta name="description" content="Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">value</a> &gt; <a href="#">q</a> &gt; <a href="#">argmaxuq</a> &gt; argmaxuQ_lwlspi.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\value\q\argmaxuq&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>argmaxuQ_lwlspi
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU, p ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis. 
+ 
+  [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU )
+
+ in: 
+     theta - basis function weights
+     dimX  - dimensionality of state vector x
+     dimU  - dimensionality of command vector u
+
+ out:
+     pi    - optimal policy (function handle)
+     L     - policy gains (since this is a linear policy)
+
+ Note: 
+ This function assumes that you are using
+ fn_basis_quadratic.m as basis functions, and gives a
+ closed-form solution.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../control/pi_lwlspi.html" class="code" title="function u = fn_policy_lwlspi ( x, Lx, Lu, L1, W, p )">pi_lwlspi</a>	LWLSPI policy</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../examples/test_lwlspi_lqr_ih_d.html" class="code" title="">test_lwlspi_lqr_ih_d</a>	Demo script: Test LWLSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [pi, L, Wx, Wu, W1] = argmaxuQ_fn_basis_quadratic ( theta, dimX, dimU )</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%  [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU )</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% in:</span>
+0006 <span class="comment">%     theta - basis function weights</span>
+0007 <span class="comment">%     dimX  - dimensionality of state vector x</span>
+0008 <span class="comment">%     dimU  - dimensionality of command vector u</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% out:</span>
+0011 <span class="comment">%     pi    - optimal policy (function handle)</span>
+0012 <span class="comment">%     L     - policy gains (since this is a linear policy)</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Note:</span>
+0015 <span class="comment">% This function assumes that you are using</span>
+0016 <span class="comment">% fn_basis_quadratic.m as basis functions, and gives a</span>
+0017 <span class="comment">% closed-form solution.</span>
+0018 <span class="comment">%</span>
+0019 <a name="_sub0" href="#_subfunctions" class="code">function [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU, p )</a>
+0020 
+0021 Nc = size(model.w,3);
+0022 <span class="keyword">for</span> nc=1:Nc
+0023     [d1, d2, Lx(:,:,nc), Lu(:,:,nc), L1(:,:,nc)] = <a href="#_sub1" class="code" title="subfunction [pi, L, Wx, Wu, W1] = argmaxuQ_fn_basis_quadratic ( theta, dimX, dimU )">argmaxuQ_fn_basis_quadratic</a>(model.w(:,:,nc),dimX,dimU);
+0024 <span class="keyword">end</span>
+0025 
+0026 pi=@(x)<a href="../../../control/pi_lwlspi.html" class="code" title="function u = fn_policy_lwlspi ( x, Lx, Lu, L1, W, p )">pi_lwlspi</a>(x,Lx,Lu,L1,model.W,p);
+0027 
+0028 
+0029 <span class="comment">% Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%  [pi, L] = argmaxuQ_fn_basis_quadratic ( theta, dimX, dimU )</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% in:</span>
+0034 <span class="comment">%     theta - basis function weights</span>
+0035 <span class="comment">%     dimX  - dimensionality of state vector x</span>
+0036 <span class="comment">%     dimU  - dimensionality of command vector u</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% out:</span>
+0039 <span class="comment">%     pi    - optimal policy (function handle)</span>
+0040 <span class="comment">%     L     - policy gains (since this is a linear policy)</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">% Note:</span>
+0043 <span class="comment">% This function assumes that you are using</span>
+0044 <span class="comment">% fn_basis_quadratic.m as basis functions, and gives a</span>
+0045 <span class="comment">% closed-form solution.</span>
+0046 <span class="comment">%</span>
+0047 <a name="_sub1" href="#_subfunctions" class="code">function [pi, L, Wx, Wu, W1] = argmaxuQ_fn_basis_quadratic ( theta, dimX, dimU )</a>
+0048 
+0049 n = dimX; m = dimU; 
+0050 
+0051 <span class="comment">% convert theta to W</span>
+0052 W = zeros(n+m+1,n+m+1);
+0053 inds = find([~tril(ones(n+m)),zeros(n+m,1);zeros(1,n+m+1)]); ninds = length(inds);
+0054 <span class="keyword">for</span> i=1:length(inds), W(inds(i)) = .5*theta(n+m+i); <span class="keyword">end</span>
+0055 W(<span class="keyword">end</span>,1:n+m)=theta(1+ninds+n+m:ninds+2*(n+m));
+0056 W=W+W';
+0057 W=W+diag([theta(1:n+m);theta(end)]);
+0058 
+0059 <span class="comment">% set up linear system</span>
+0060 Wx = W(n+1:n+m,  1:n  )+W(  1:n  ,n+1:n+m)';
+0061 Wu = W(n+1:n+m,n+1:n+m)+W(n+1:n+m,n+1:n+m)';
+0062 W1 = W(n+1:n+m,n+m+1);
+0063 
+0064 <span class="comment">% solve for gains</span>
+0065 <span class="comment">%L  = inv(Wu+1e-6*eye(m))*[Wx,W1];</span>
+0066 <span class="comment">%L  = Wu\[Wx,W1];</span>
+0067 L  = (Wu+1e-6*eye(m))\[Wx,W1];
+0068 
+0069 <span class="comment">% policy</span>
+0070 pi=@(x)fn_policy_linear([x;ones(1,size(x,2))],L);
+0071</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

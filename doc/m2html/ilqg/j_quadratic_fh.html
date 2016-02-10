@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of j_quadratic_fh</title>
+  <meta name="keywords" content="j_quadratic_fh">
+  <meta name="description" content="Finite horizon quadratic cost function.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">ilqg</a> &gt; j_quadratic_fh.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\ilqg&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>j_quadratic_fh
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Finite horizon quadratic cost function.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_quadratic_fh ( x, u, t, p ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Finite horizon quadratic cost function.
+
+     J = x^T QT x + \int_0^T x^T Q x + u^T R u dt
+ 
+ in: 
+    x - state
+    u - command
+    p - parameter struct, containing
+     .Q,R,QT - cost parameters
+
+ out:
+    l,l_x,l_xx,l_u,l_uu,l_ux - cost and derivatives
+ 
+ NOTE: For use with ILQG, the function should be called with t=NaN to access the final cost (and derivatives).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../cost/l_quadratic_fh.html" class="code" title="function l = l_quadratic_fh ( x, u, t, p )">l_quadratic_fh</a>	Finite horizon quadratic cost function.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../examples/test_ilqr_lqr_fh.html" class="code" title="">test_ilqr_lqr_fh</a>	Demo script: Test solution of finite horizon linear-quadratic regulator problem in continuous time using ILQR.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Finite horizon quadratic cost function.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%     J = x^T QT x + \int_0^T x^T Q x + u^T R u dt</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% in:</span>
+0006 <span class="comment">%    x - state</span>
+0007 <span class="comment">%    u - command</span>
+0008 <span class="comment">%    p - parameter struct, containing</span>
+0009 <span class="comment">%     .Q,R,QT - cost parameters</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% out:</span>
+0012 <span class="comment">%    l,l_x,l_xx,l_u,l_uu,l_ux - cost and derivatives</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% NOTE: For use with ILQG, the function should be called with t=NaN to access the final cost (and derivatives).</span>
+0015 <span class="comment">%</span>
+0016 <a name="_sub0" href="#_subfunctions" class="code">function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_quadratic_fh ( x, u, t, p )</a>
+0017 
+0018 l = <a href="../cost/l_quadratic_fh.html" class="code" title="function l = l_quadratic_fh ( x, u, t, p )">l_quadratic_fh</a> ( x, u, t, p );
+0019 
+0020 <span class="comment">% compute derivatives of cost</span>
+0021 <span class="keyword">if</span>(nargout&gt;1)
+0022     dimX = size(x,1);
+0023     dimU = size(u,1);
+0024 
+0025     <span class="keyword">if</span> isnan(t)
+0026         QT   = p.QT;
+0027 
+0028         l_x  = 2*QT*x;
+0029         l_xx = 2*QT;
+0030 
+0031         l_u  = zeros(dimU,1);
+0032         l_uu = zeros(dimU,dimU);
+0033 
+0034         l_ux = zeros(dimU,dimX);
+0035     <span class="keyword">else</span>
+0036         Q    = p.Q;
+0037         R    = p.R;
+0038 
+0039         l_x  = 2*Q*x;
+0040         l_xx = 2*Q;
+0041 
+0042         l_u  = 2*R*u;
+0043         l_uu = 2*R;
+0044 
+0045         l_ux = zeros(dimU,dimX);
+0046     <span class="keyword">end</span>
+0047 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

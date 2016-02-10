@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of pi_lwlspi</title>
+  <meta name="keywords" content="pi_lwlspi">
+  <meta name="description" content="LWLSPI policy">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">control</a> &gt; pi_lwlspi.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\control&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>pi_lwlspi
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>LWLSPI policy</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function u = fn_policy_lwlspi ( x, Lx, Lu, L1, W, p ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> LWLSPI policy
+
+  u = fn_policy_lwlspi ( x, L )
+
+ Implements a policy of the form 
+
+  u = -L x
+
+ in:
+     x - state
+     L - parameters (gains)
+
+ out:
+     u  - action</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../value/q/argmaxuq/argmaxuQ_lwlspi.html" class="code" title="function [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU, p )">argmaxuQ_lwlspi</a>	Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis.</li><li><a href="../value/q/argmaxuq/argmaxuQ_lwlspi.html" class="code" title="function [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU, p )">argmaxuQ_lwlspi</a>	Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis.</li><li><a href="../value/q/argmaxuq/argmaxuQ_lwlspi.html" class="code" title="function [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU, p )">argmaxuQ_lwlspi</a>	Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% LWLSPI policy</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%  u = fn_policy_lwlspi ( x, L )</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Implements a policy of the form</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%  u = -L x</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% in:</span>
+0010 <span class="comment">%     x - state</span>
+0011 <span class="comment">%     L - parameters (gains)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% out:</span>
+0014 <span class="comment">%     u  - action</span>
+0015 <span class="comment">%</span>
+0016 <a name="_sub0" href="#_subfunctions" class="code">function u = fn_policy_lwlspi ( x, Lx, Lu, L1, W, p )</a>
+0017 
+0018 [dimX N] = size(x);  <span class="comment">% get no. data points, dimensionality of X</span>
+0019 dimU = size(Lu,2);   <span class="comment">% get dimensionality of U</span>
+0020 
+0021 <span class="keyword">if</span> isfield(p,<span class="string">'umax'</span> ),umax  = p.umax ;<span class="keyword">else</span>,umax  =  inf(dimU,1);<span class="keyword">end</span>
+0022 <span class="keyword">if</span> isfield(p,<span class="string">'umin'</span> ),umin  = p.umin ;<span class="keyword">else</span>,umin  = -inf(dimU,1);<span class="keyword">end</span>
+0023 
+0024 <span class="comment">% find weights</span>
+0025 W = W(x);
+0026 Nc = size(W,1);   <span class="comment">% get no. local models</span>
+0027 
+0028 <span class="comment">% compute action</span>
+0029 u    = zeros(dimU,N);
+0030 wLu  = zeros(dimU,dimU,N);
+0031 wLx  = zeros(dimU,dimX,N);
+0032 wL1  = zeros(dimU,   1,N);
+0033 <span class="keyword">for</span> n=1:N
+0034     <span class="keyword">for</span> nc=1:Nc
+0035     wLu(:,:,n) = wLu(:,:,n) + W(nc,n)*Lu(:,:,nc);
+0036     wLx(:,:,n) = wLx(:,:,n) + W(nc,n)*Lx(:,:,nc);
+0037     wL1(:,:,n) = wL1(:,:,n) + W(nc,n)*L1(:,:,nc);
+0038     <span class="keyword">end</span>
+0039     u(:,n) = -(wLu(:,:,n))\([wLx(:,:,n),wL1(:,:,n)]*[x(:,n);1]);
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="comment">% enforce command limits</span>
+0043 <span class="keyword">for</span> m=1:dimU
+0044     i=find(u(m,:)&gt;umax(m)); u(m,i)=umax(m);
+0045     i=find(u(m,:)&lt;umin(m)); u(m,i)=umin(m);
+0046 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

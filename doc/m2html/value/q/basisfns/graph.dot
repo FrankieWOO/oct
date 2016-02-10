@@ -1,0 +1,13 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  fn_basis_gridworld [URL="fn_basis_gridworld.html"];
+  fn_basis_gridworld [URL="fn_basis_gridworld.html"];
+  fn_basis_gridworld [URL="fn_basis_gridworld.html"];
+  phi_lqrq [URL="phi_lqrq.html"];
+  phi_lqrq [URL="phi_lqrq.html"];
+  phi_lqrq [URL="phi_lqrq.html"];
+  phi_quadratic [URL="phi_quadratic.html"];
+  phi_quadratic [URL="phi_quadratic.html"];
+  phi_quadratic [URL="phi_quadratic.html"];
+}

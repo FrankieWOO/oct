@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of simulate_feedback_time_indexed</title>
+  <meta name="keywords" content="simulate_feedback_time_indexed">
+  <meta name="description" content="Simulate trajectory using Euler integration under closed-loop, time-indexed policy control, in continuous time">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">simulate</a> &gt; simulate_feedback_time_indexed.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\simulate&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>simulate_feedback_time_indexed
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Simulate trajectory using Euler integration under closed-loop, time-indexed policy control, in continuous time</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [x,u] = simulate_feedback_time_indexed ( x0, f, pi, p ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Simulate trajectory using Euler integration under closed-loop, time-indexed policy control, in continuous time
+ 
+ in:
+    x0 - initial state
+    f  - (continuous time) dynamics (function handle: xdot=f(x,u))
+    pi - time-indexed policies (function handle: u=pi(x,n))
+    p  - parameter struct containing:
+     .N  - number of steps to simulate
+     .dt - time step
+ 
+ 
+ out: 
+     x,u     - state,action trajectory</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../examples/test_ilqr_kawato_1dof_reach.html" class="code" title="">test_ilqr_kawato_1dof_reach</a>	Demo script: Test ilqr on reaching problem for 2-muscle, 1-joint system with 'kawato model' muscle dynamics.</li><li><a href="../examples/test_ilqr_kawato_arm.html" class="code" title="">test_ilqr_kawato_arm</a>	Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</li><li><a href="../examples/test_ilqr_kawato_arm_reach.html" class="code" title="">test_ilqr_kawato_arm_reach</a>	Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</li><li><a href="../examples/test_ilqr_lqr_fh.html" class="code" title="">test_ilqr_lqr_fh</a>	Demo script: Test solution of finite horizon linear-quadratic regulator problem in continuous time using ILQR.</li><li><a href="../examples/test_ilqr_maccepa_reach.html" class="code" title="">test_ilqr_maccepa_reach</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../examples/test_lqr_fh.html" class="code" title="">test_lqr_fh</a>	Demo script: Test numerical solution of finite horizon linear-quadratic regulator problem in continuous time.</li><li><a href="../maccepa/m-files/Test_ilqr_maccepa_contact_task.html" class="code" title="">Test_ilqr_maccepa_contact_task</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../maccepa/m-files/Test_ilqr_maccepa_contact_task.html" class="code" title="">Test_ilqr_maccepa_contact_task</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../optimize/test_ilqr_maccepa_reach.html" class="code" title="">test_ilqr_maccepa_reach</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Simulate trajectory using Euler integration under closed-loop, time-indexed policy control, in continuous time</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% in:</span>
+0004 <span class="comment">%    x0 - initial state</span>
+0005 <span class="comment">%    f  - (continuous time) dynamics (function handle: xdot=f(x,u))</span>
+0006 <span class="comment">%    pi - time-indexed policies (function handle: u=pi(x,n))</span>
+0007 <span class="comment">%    p  - parameter struct containing:</span>
+0008 <span class="comment">%     .N  - number of steps to simulate</span>
+0009 <span class="comment">%     .dt - time step</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% out:</span>
+0013 <span class="comment">%     x,u     - state,action trajectory</span>
+0014 <span class="comment">%</span>
+0015 <a name="_sub0" href="#_subfunctions" class="code">function [x,u] = simulate_feedback_time_indexed ( x0, f, pi, p )</a>
+0016 
+0017 dt= p.dt;
+0018 N = p.N;
+0019 x = nan(size(x0,1),N); x(:,1)=x0; <span class="comment">% initialise x</span>
+0020 u = nan(size(pi(x0,1),1),N-1);      <span class="comment">% initialise u</span>
+0021 <span class="comment">% simulate</span>
+0022 <span class="keyword">for</span> n=1:N-1
+0023     u(:,n  ) = pi(x(:,n),n);                 <span class="comment">% get next action</span>
+0024     x(:,n+1) = x(:,n) + dt*f(x(:,n),u(:,n)); <span class="comment">% euler step</span>
+0025 <span class="keyword">end</span>
+0026</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

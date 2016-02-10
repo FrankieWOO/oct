@@ -1,0 +1,26 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  g_ideal_contact -> J_fd;
+  g_kawato_1dof -> J_fd;
+  g_maccepa -> J_fd;
+  j_contact_task_1dof_plants -> H_cost_fd;
+  j_contact_task_1dof_plants -> J_cost_fd;
+  j_reaching_task_1dof_plants -> H_cost_fd;
+  j_reaching_task_1dof_plants -> J_cost_fd;
+  j_reaching_task_2dof_plants -> H_cost_fd;
+  j_reaching_task_2dof_plants -> J_cost_fd;
+
+  H_cost_fd [URL="H_cost_fd.html"];
+  J_cost_fd [URL="J_cost_fd.html"];
+  J_fd [URL="J_fd.html"];
+  g_ideal_contact [URL="g_ideal_contact.html"];
+  g_kawato_1dof [URL="g_kawato_1dof.html"];
+  g_kawato_arm [URL="g_kawato_arm.html"];
+  g_linear [URL="g_linear.html"];
+  g_maccepa [URL="g_maccepa.html"];
+  ilqr [URL="ilqr.html"];
+  j_contact_task_1dof_plants [URL="j_contact_task_1dof_plants.html"];
+  j_quadratic_fh [URL="j_quadratic_fh.html"];
+  j_reaching_task_1dof_plants [URL="j_reaching_task_1dof_plants.html"];
+  j_reaching_task_2dof_plants [URL="j_reaching_task_2dof_plants.html"];
+}

@@ -1,0 +1,52 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  f_ideal_contact -> qddot_ideal_contact;
+  f_ideal_contact -> qddot_ideal_contact;
+  f_ideal_contact -> qddot_ideal_contact;
+  f_ideal_contact -> qddot_ideal_contact;
+  f_maccepa -> qddot_maccepa;
+  f_maccepa -> qddot_maccepa;
+  f_maccepa -> qddot_maccepa;
+  f_maccepa -> qddot_maccepa;
+  qddot_ideal_contact -> Fx_ideal_contact;
+  qddot_ideal_contact -> Fx_ideal_contact;
+  qddot_ideal_contact -> rdotx_ideal_contact;
+  qddot_ideal_contact -> rdotx_ideal_contact;
+  qddot_ideal_contact -> rho_ideal_contact;
+  qddot_ideal_contact -> rho_ideal_contact;
+  qddot_ideal_contact -> tau_maccepa_ideal_contact;
+  qddot_ideal_contact -> tau_maccepa_ideal_contact;
+  qddot_ideal_contact -> Fx_ideal_contact;
+  qddot_ideal_contact -> Fx_ideal_contact;
+  qddot_ideal_contact -> rdotx_ideal_contact;
+  qddot_ideal_contact -> rdotx_ideal_contact;
+  qddot_ideal_contact -> rho_ideal_contact;
+  qddot_ideal_contact -> rho_ideal_contact;
+  qddot_ideal_contact -> tau_maccepa_ideal_contact;
+  qddot_ideal_contact -> tau_maccepa_ideal_contact;
+
+  Fx_ideal_contact [URL="Fx_ideal_contact.html"];
+  Fx_ideal_contact [URL="Fx_ideal_contact.html"];
+  Test_ilqr_maccepa_contact_task [URL="Test_ilqr_maccepa_contact_task.html"];
+  Test_ilqr_maccepa_contact_task [URL="Test_ilqr_maccepa_contact_task.html"];
+  f_ideal_contact [URL="f_ideal_contact.html"];
+  f_ideal_contact [URL="f_ideal_contact.html"];
+  f_maccepa [URL="f_maccepa.html"];
+  f_maccepa [URL="f_maccepa.html"];
+  k_maccepa [URL="k_maccepa.html"];
+  k_maccepa [URL="k_maccepa.html"];
+  q0_maccepa [URL="q0_maccepa.html"];
+  q0_maccepa [URL="q0_maccepa.html"];
+  qddot_ideal_contact [URL="qddot_ideal_contact.html"];
+  qddot_ideal_contact [URL="qddot_ideal_contact.html"];
+  qddot_maccepa [URL="qddot_maccepa.html"];
+  qddot_maccepa [URL="qddot_maccepa.html"];
+  rdotx_ideal_contact [URL="rdotx_ideal_contact.html"];
+  rdotx_ideal_contact [URL="rdotx_ideal_contact.html"];
+  rho_ideal_contact [URL="rho_ideal_contact.html"];
+  rho_ideal_contact [URL="rho_ideal_contact.html"];
+  tau_maccepa [URL="tau_maccepa.html"];
+  tau_maccepa [URL="tau_maccepa.html"];
+  tau_maccepa_ideal_contact [URL="tau_maccepa_ideal_contact.html"];
+  tau_maccepa_ideal_contact [URL="tau_maccepa_ideal_contact.html"];
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of wlstd0</title>
+  <meta name="keywords" content="wlstd0">
+  <meta name="description" content="Function for computing weighted Least Squares Temporal Difference learning estimators.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">lspi</a> &gt; wlstd0.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\lspi&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>wlstd0
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Function for computing weighted Least Squares Temporal Difference learning estimators.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function theta = wlstd0 ( Phi, Phin, R, W, gamma, p ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Function for computing weighted Least Squares Temporal Difference learning estimators.
+
+    theta = wlstd0 ( Phi, R, Phin, W, gamma )
+
+ in:
+     Phi               - feature matrix (NxM)
+     R                 - reward sample vector (Nx1)
+     Phin              - next state/action feature matrix (NxM)
+     W                 - weight vector (1xN)
+     gamma             - discount factor
+     p                 - parameter struct (optionally) containing:
+      .regularisation  - regularisation method {'svd': singular value decomposition, 'eigenvalue': eigenvalue decomposition, 'pinv': Matlab's inbuilt pinv, 'ridge': ridge-regression, default: none}
+       (any fields that are unspecified will be set by default values).
+
+ out:
+     theta             - parameter estimate (Mx1)
+
+ NOTE: 
+    1) This finds the Least Squares Fixed Point
+       approximation to the value function (see Lagoudakis,
+       2003). The latter appears to be the most commonly used
+       approximation in LSTD learning.
+    2) Set W = ones(1,N) for ordinary (non-weighted) LSTD(0).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="lstd0.html" class="code" title="function model = lstd0 ( X, R, Xn, model, gamma, p )">lstd0</a>	Function for estimating the V-function of a policy through Least Squares Temporal Difference learning (i.e., TD(0)).</li><li><a href="lwlstd0.html" class="code" title="function model = lwlstd0 ( Y, R, Yn, model, gamma, p )">lwlstd0</a>	Function for estimating the V-function of a policy through Locally Weighted Least Squares Temporal Difference learning (i.e., TD(0)).</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Function for computing weighted Least Squares Temporal Difference learning estimators.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%    theta = wlstd0 ( Phi, R, Phin, W, gamma )</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% in:</span>
+0006 <span class="comment">%     Phi               - feature matrix (NxM)</span>
+0007 <span class="comment">%     R                 - reward sample vector (Nx1)</span>
+0008 <span class="comment">%     Phin              - next state/action feature matrix (NxM)</span>
+0009 <span class="comment">%     W                 - weight vector (1xN)</span>
+0010 <span class="comment">%     gamma             - discount factor</span>
+0011 <span class="comment">%     p                 - parameter struct (optionally) containing:</span>
+0012 <span class="comment">%      .regularisation  - regularisation method {'svd': singular value decomposition, 'eigenvalue': eigenvalue decomposition, 'pinv': Matlab's inbuilt pinv, 'ridge': ridge-regression, default: none}</span>
+0013 <span class="comment">%       (any fields that are unspecified will be set by default values).</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% out:</span>
+0016 <span class="comment">%     theta             - parameter estimate (Mx1)</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% NOTE:</span>
+0019 <span class="comment">%    1) This finds the Least Squares Fixed Point</span>
+0020 <span class="comment">%       approximation to the value function (see Lagoudakis,</span>
+0021 <span class="comment">%       2003). The latter appears to be the most commonly used</span>
+0022 <span class="comment">%       approximation in LSTD learning.</span>
+0023 <span class="comment">%    2) Set W = ones(1,N) for ordinary (non-weighted) LSTD(0).</span>
+0024 <span class="comment">%</span>
+0025 <a name="_sub0" href="#_subfunctions" class="code">function theta = wlstd0 ( Phi, Phin, R, W, gamma, p )</a>
+0026 
+0027 <span class="comment">% unpack parameter struct</span>
+0028 <span class="keyword">if</span> isfield(p,<span class="string">'regularisation'</span>),regularisation = p.regularisation;<span class="keyword">else</span> regularisation = <span class="string">'none'</span>;<span class="keyword">end</span>
+0029 
+0030 dimPhi = size(Phi,2);
+0031 
+0032 <span class="comment">% compute temporal difference</span>
+0033 dPhi = Phi-gamma*Phin;
+0034 
+0035 <span class="comment">% compute weighted Phi</span>
+0036 WPhi=repmat(W,dimPhi,1)'.*Phi;
+0037 
+0038 <span class="comment">% compute statistics A,b (vectorised calculation)</span>
+0039 A=WPhi'*dPhi;
+0040 b=WPhi'*R;
+0041 
+0042 <span class="comment">% compute parameter estimate</span>
+0043 <span class="keyword">switch</span> regularisation
+0044 <span class="keyword">case</span> <span class="string">'svd'</span>
+0045     <span class="comment">% SVD inversion</span>
+0046     [U,S,V] = svd(A); 
+0047     sv = diag(S);
+0048     i = find(sv&gt;p.min_sv); 
+0049     sv(i) = sv(i).^-1; pinvA1 = V(:,i)*diag(sv(i))*U(:,i)'; theta=pinvA1*b;
+0050     <span class="comment">%% --- add nullspace term ---</span>
+0051     <span class="comment">%ind = find(ev&lt;1e-6); ev(ind) = 0;</span>
+0052     <span class="comment">%theta = theta + V(:,ind)*((2*rand-1)*ones(size(V(:,ind),2),1));</span>
+0053     <span class="comment">%fprintf(1,'Removed singular values %i/%i\n',length(ind),length(ev))</span>
+0054     <span class="comment">%% ---                    ---</span>
+0055 <span class="keyword">case</span> <span class="string">'eigenvalue'</span>
+0056     <span class="comment">% eigen-decomposition inversion</span>
+0057     [V,D] = eig(A); ev = diag(D); ind = find(ev&gt;p.min_ev); V1=V(:,ind); pinvA1 = V1*diag(ev(ind).^-1)*V1'; theta=pinvA1*b;
+0058 <span class="keyword">case</span> <span class="string">'pinv'</span>
+0059     <span class="comment">% pseudoinverse</span>
+0060     theta=pinv(A)*b;
+0061 <span class="keyword">case</span> <span class="string">'ridge'</span>
+0062     <span class="comment">% inversion with tikhonov regurlarisation</span>
+0063     theta=(A+p.lambda*eye(size(A)))\b;
+0064 <span class="keyword">case</span> <span class="string">'none'</span>
+0065     <span class="comment">% Gaussian elimination</span>
+0066     theta=A\b;
+0067 <span class="keyword">otherwise</span>
+0068     warning(<span class="string">'Unknown regularisation scheme, defaulting to ''none''.'</span>)
+0069     theta=A\b;
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% The below computes the error in the inversion</span>
+0073 <span class="comment">%sum((A*theta-b).^2,1)</span>
+0074</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

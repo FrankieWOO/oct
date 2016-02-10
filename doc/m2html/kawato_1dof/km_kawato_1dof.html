@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of km_kawato_1dof</title>
+  <meta name="keywords" content="km_kawato_1dof">
+  <meta name="description" content="Function for computing the muscle stiffnesses for the Kawato arm model.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">kawato_1dof</a> &gt; km_kawato_1dof.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\kawato_1dof&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>km_kawato_1dof
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Function for computing the muscle stiffnesses for the Kawato arm model.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function K = km_kawato_1dof(u,model) %#eml </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Function for computing the muscle stiffnesses for the Kawato arm model.
+
+  in:
+      x      - state (pos,vel)
+      u      - motor commands 
+      model  - model structure
+  out:
+      km     - muscle stiffnesses</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="k_kawato_1dof.html" class="code" title="function k = get_stiffness_kawato_1dof ( u, model )">k_kawato_1dof</a>	Estimate joint stiffness of 1-DOF Kawato model for a given command u and state x.</li><li><a href="q0_kawato_1dof.html" class="code" title="function q0 = q0_kawato_1dof ( u, model )">q0_kawato_1dof</a>	Estimate equilibrium position of simplified 1-joint, 2-muscle model.</li><li><a href="tau_kawato_1dof_mx.html" class="code" title="function tau = get_torque_kawato_1dof_mx ( q, qdot, u, model ) %#eml">tau_kawato_1dof_mx</a>	Calculate torque for Kawato 1-DOF model given state x, motor command u and model parameters (model struct).</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Function for computing the muscle stiffnesses for the Kawato arm model.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%  in:</span>
+0004 <span class="comment">%      x      - state (pos,vel)</span>
+0005 <span class="comment">%      u      - motor commands</span>
+0006 <span class="comment">%      model  - model structure</span>
+0007 <span class="comment">%  out:</span>
+0008 <span class="comment">%      km     - muscle stiffnesses</span>
+0009 <span class="comment">%</span>
+0010 <a name="_sub0" href="#_subfunctions" class="code">function K = km_kawato_1dof(u,model) </a><span class="comment">%#eml</span>
+0011 
+0012 N  = size(u,2);
+0013 k0 = model.k0;  <span class="comment">% muscle stiffness parameters</span>
+0014 gk = model.gk;  <span class="comment">%</span>
+0015 K  = repmat(k0,1,N) + repmat(gk,1,N).*u;
+0016 
+0017 <span class="comment">%&gt; @file get_muscle_stiffness_kawato_1dof.m</span>
+0018 <span class="comment">%&gt; @author Matthew Howard (MH), matthew.howard@ed.ac.uk</span>
+0019 <span class="comment">%&gt; @date 11/07/11 17:50:47</span></pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

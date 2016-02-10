@@ -1,0 +1,8 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  lqr_fh [URL="lqr_fh.html"];
+  lqr_fh_d [URL="lqr_fh_d.html"];
+  lqr_ih [URL="lqr_ih.html"];
+  lqr_ih_d [URL="lqr_ih_d.html"];
+}

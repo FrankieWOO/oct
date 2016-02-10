@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of g_kawato_arm</title>
+  <meta name="keywords" content="g_kawato_arm">
+  <meta name="description" content="Dynamics function for the Kawato arm model for use with ILQR/G.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">ilqg</a> &gt; g_kawato_arm.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\ilqg&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>g_kawato_arm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Dynamics function for the Kawato arm model for use with ILQR/G.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [xdot, xdot_x, xdot_u] = g_kawato_arm ( x, u, model ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Dynamics function for the Kawato arm model for use with ILQR/G.
+
+ in: 
+     x     - state [position; velocity]
+     u     - command [muscle activations]
+     model - model struct
+ 
+ out:
+     xdot,xdot_x,xdot_u - state change and derivatives</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../examples/test_ilqr_kawato_arm.html" class="code" title="">test_ilqr_kawato_arm</a>	Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</li><li><a href="../examples/test_ilqr_kawato_arm_reach.html" class="code" title="">test_ilqr_kawato_arm_reach</a>	Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Dynamics function for the Kawato arm model for use with ILQR/G.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% in:</span>
+0004 <span class="comment">%     x     - state [position; velocity]</span>
+0005 <span class="comment">%     u     - command [muscle activations]</span>
+0006 <span class="comment">%     model - model struct</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% out:</span>
+0009 <span class="comment">%     xdot,xdot_x,xdot_u - state change and derivatives</span>
+0010 <span class="comment">%</span>
+0011 <a name="_sub0" href="#_subfunctions" class="code">function [xdot, xdot_x, xdot_u] = g_kawato_arm ( x, u, model )</a>
+0012 
+0013 xdot = f_kawato_arm ( x, u, model );
+0014 
+0015 <span class="comment">% compute xdot_x, xdot_u</span>
+0016 <span class="keyword">if</span> nargout &gt; 1
+0017     <span class="comment">% analytical derivatives</span>
+0018     dimU = model.dimU;
+0019     dimQ = model.dimQ;
+0020     dimX = 2*dimQ;
+0021 
+0022     q   = x(1:2);   <span class="comment">% joint angles</span>
+0023     qdot= x(3:4);   <span class="comment">% joint velocities</span>
+0024     tau = tau_kawato_arm(q,qdot,u,model); <span class="comment">% torque</span>
+0025     Mq  = Mq_planar_2_link_arm(q,model); invMq=inv(Mq);
+0026     L   = model.L;  <span class="comment">% link lengths</span>
+0027     M   = model.M;  <span class="comment">% mass</span>
+0028     Lg  = model.Lg; <span class="comment">% center of gravity</span>
+0029     A   = model.A;
+0030     lm  = model.lm_l0;
+0031     gk  = model.gk;
+0032     gb  = model.gb;
+0033     K   = diag(km_kawato_arm(u,model));
+0034     B   = diag(bm_kawato_arm(u,model));
+0035     R   = diag(model.gr);
+0036 
+0037     xdot_x        =  zeros(dimX);
+0038     xdot_x(1:2,:) = [zeros(dimQ) eye(dimQ)];
+0039     dTdx1 = -K*A*[1;0]; dtaudx1 = A'*dTdx1; 
+0040     xdot_x(3:4,1) = invMq*dtaudx1;
+0041 
+0042     fv=model.viscous_friction;    
+0043     c=M(2)*L(1)*Lg(2)*sin(q(2));
+0044     C=c*[-2*qdot(2),-qdot(2);<span class="keyword">...</span>
+0045             qdot(1),      0];
+0046     dMqdx2 = [-2*M(2)*L(1)*Lg(2)*sin(q(2)),-M(2)*L(1)*Lg(2)*sin(q(2));<span class="keyword">...</span>
+0047                 -M(2)*L(1)*Lg(2)*sin(q(2)),0                        ];
+0048     dinvMqdx2 = -invMq*dMqdx2*invMq;
+0049     dCqdotdx2 = M(2)*L(1)*Lg(2)*cos(q(2))*[-2*qdot(2),-qdot(2); qdot(1),0]*qdot;
+0050     dTdx2 = -K*A*[0;1]; dtaudx2 = A'*dTdx2;
+0051        xdot_x(3:4,2) = dinvMqdx2*tau - dinvMqdx2*(C*qdot) + invMq*dtaudx2 - invMq*dCqdotdx2;
+0052     xdot_x(3:4,3) = -invMq*A'*B*(A*[1;0]) + invMq*[ 2*c*qdot(2); -2*c*qdot(1)] - [fv;0];
+0053     xdot_x(3:4,4) = -invMq*A'*B*(A*[0;1]) + invMq*[ 2*c*qdot(2) + 2*c*qdot(1); 0] - [0;fv];
+0054 
+0055     xdot_u        =  zeros(dimX,dimU);
+0056     dKdu1 = diag([gk(1),0,0,0,0,0]); dBdu1 = diag([gb(1),0,0,0,0,0]); dTdu1 = dKdu1*R*u - dKdu1*A*q + dKdu1*lm - dBdu1*A*qdot + K*R*[1;0;0;0;0;0]; xdot_u(3:4,1) = invMq*(A'*dTdu1);
+0057     dKdu2 = diag([0,gk(2),0,0,0,0]); dBdu2 = diag([0,gb(2),0,0,0,0]); dTdu2 = dKdu2*R*u - dKdu2*A*q + dKdu2*lm - dBdu2*A*qdot + K*R*[0;1;0;0;0;0]; xdot_u(3:4,2) = invMq*(A'*dTdu2);
+0058     dKdu3 = diag([0,0,gk(3),0,0,0]); dBdu3 = diag([0,0,gb(3),0,0,0]); dTdu3 = dKdu3*R*u - dKdu3*A*q + dKdu3*lm - dBdu3*A*qdot + K*R*[0;0;1;0;0;0]; xdot_u(3:4,3) = invMq*(A'*dTdu3);
+0059     dKdu4 = diag([0,0,0,gk(4),0,0]); dBdu4 = diag([0,0,0,gb(4),0,0]); dTdu4 = dKdu4*R*u - dKdu4*A*q + dKdu4*lm - dBdu4*A*qdot + K*R*[0;0;0;1;0;0]; xdot_u(3:4,4) = invMq*(A'*dTdu4);
+0060     dKdu5 = diag([0,0,0,0,gk(5),0]); dBdu5 = diag([0,0,0,0,gb(5),0]); dTdu5 = dKdu5*R*u - dKdu5*A*q + dKdu5*lm - dBdu5*A*qdot + K*R*[0;0;0;0;1;0]; xdot_u(3:4,5) = invMq*(A'*dTdu5);
+0061     dKdu6 = diag([0,0,0,0,0,gk(6)]); dBdu6 = diag([0,0,0,0,0,gb(6)]); dTdu6 = dKdu6*R*u - dKdu6*A*q + dKdu6*lm - dBdu6*A*qdot + K*R*[0;0;0;0;0;1]; xdot_u(3:4,6) = invMq*(A'*dTdu6);
+0062 <span class="keyword">end</span>
+0063</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

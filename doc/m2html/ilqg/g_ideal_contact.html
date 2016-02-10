@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of g_ideal_contact</title>
+  <meta name="keywords" content="g_ideal_contact">
+  <meta name="description" content="Dynamics function for the MACCEPA.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">ilqg</a> &gt; g_ideal_contact.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\ilqg&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>g_ideal_contact
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Dynamics function for the MACCEPA.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [xdot, xdot_x, xdot_u] = g_ideal_contact ( x, u, model ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Dynamics function for the MACCEPA.
+
+ in: 
+     x     - state [position; velocity]
+     u     - command vector [desired motor positions in radiens; damping command]
+     model - struct containing model parameters
+
+ out:
+     xdot,xdot_x,xdot_u - state change and derivatives</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="J_fd.html" class="code" title="function J = get_jacobian_fd ( f, x )">J_fd</a>	Function for calculating the Jacobian of a function with finite central differences.</li><li><a href="../maccepa/m-files/f_ideal_contact.html" class="code" title="function xdot = f_ideal_contact ( x, u, model )">f_ideal_contact</a>	State space dynamics function for the MACCEPA.</li><li><a href="../maccepa/m-files/f_ideal_contact.html" class="code" title="function xdot = f_ideal_contact ( x, u, model )">f_ideal_contact</a>	State space dynamics function for the MACCEPA.</li><li><a href="../maccepa/m-files/qddot_ideal_contact.html" class="code" title="function qddot = qddot_ideal_contact ( q, qdot, u, model )">qddot_ideal_contact</a>	Calculate acceleration for MACCEPA</li><li><a href="../maccepa/m-files/qddot_ideal_contact.html" class="code" title="function qddot = qddot_ideal_contact ( q, qdot, u, model )">qddot_ideal_contact</a>	Calculate acceleration for MACCEPA</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../maccepa/m-files/Test_ilqr_maccepa_contact_task.html" class="code" title="">Test_ilqr_maccepa_contact_task</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../maccepa/m-files/Test_ilqr_maccepa_contact_task.html" class="code" title="">Test_ilqr_maccepa_contact_task</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Dynamics function for the MACCEPA.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% in:</span>
+0004 <span class="comment">%     x     - state [position; velocity]</span>
+0005 <span class="comment">%     u     - command vector [desired motor positions in radiens; damping command]</span>
+0006 <span class="comment">%     model - struct containing model parameters</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% out:</span>
+0009 <span class="comment">%     xdot,xdot_x,xdot_u - state change and derivatives</span>
+0010 <span class="comment">%</span>
+0011 <a name="_sub0" href="#_subfunctions" class="code">function [xdot, xdot_x, xdot_u] = g_ideal_contact ( x, u, model )</a>
+0012 
+0013 xdot = <a href="../maccepa/m-files/f_ideal_contact.html" class="code" title="function xdot = f_ideal_contact ( x, u, model )">f_ideal_contact</a> ( x, u, model );
+0014 
+0015 <span class="comment">% compute xdot_x, xdot_u</span>
+0016 <span class="keyword">if</span> nargout &gt; 1
+0017     <span class="comment">% finite difference calculation</span>
+0018     dimQ = model.dimQ;
+0019     dimX = 2*dimQ;
+0020     dimU = model.dimU;
+0021 
+0022     fx=@(x)<a href="../maccepa/m-files/qddot_ideal_contact.html" class="code" title="function qddot = qddot_ideal_contact ( q, qdot, u, model )">qddot_ideal_contact</a>(x(1),x(2),u,model);
+0023     dqddotdx=<a href="J_fd.html" class="code" title="function J = get_jacobian_fd ( f, x )">J_fd</a>(fx,x);
+0024     fu=@(u)<a href="../maccepa/m-files/qddot_ideal_contact.html" class="code" title="function qddot = qddot_ideal_contact ( q, qdot, u, model )">qddot_ideal_contact</a>(x(1),x(2),u,model);
+0025     dqddotdu=<a href="J_fd.html" class="code" title="function J = get_jacobian_fd ( f, x )">J_fd</a>(fu,u);
+0026 
+0027     xdot_x = [0 1; dqddotdx];
+0028     xdot_u = [0 0 0; dqddotdu];
+0029 
+0030 <span class="keyword">end</span>
+0031</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

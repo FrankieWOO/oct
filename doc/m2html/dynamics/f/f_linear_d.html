@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of f_linear_d</title>
+  <meta name="keywords" content="f_linear_d">
+  <meta name="description" content="Linear dynamics function in discrete time">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">dynamics</a> &gt; <a href="#">f</a> &gt; f_linear_d.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\dynamics\f&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>f_linear_d
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Linear dynamics function in discrete time</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function x = f_linear_d ( x, u, model ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Linear dynamics function in discrete time
+
+     x_{n+1} = A x_n + B u_n
+ 
+ in: 
+    x   - state
+    u   - command
+    A,B - model parameters
+
+ out:
+    x   - next state</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../examples/test_lqr_fh_d.html" class="code" title="">test_lqr_fh_d</a>	Demo script: Test numerical solution of finite horizon linear-quadratic regulator problem in discrete time.</li><li><a href="../../examples/test_lqr_ih_d.html" class="code" title="">test_lqr_ih_d</a>	Demo script: Test numerical solution of infinite horizon linear-quadratic regulator problem in discrete time.</li><li><a href="../../examples/test_lspi_lqr_ih_d.html" class="code" title="">test_lspi_lqr_ih_d</a>	Demo script: Test LSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</li><li><a href="../../examples/test_lwlspi_lqr_ih_d.html" class="code" title="">test_lwlspi_lqr_ih_d</a>	Demo script: Test LWLSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Linear dynamics function in discrete time</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%     x_{n+1} = A x_n + B u_n</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% in:</span>
+0006 <span class="comment">%    x   - state</span>
+0007 <span class="comment">%    u   - command</span>
+0008 <span class="comment">%    A,B - model parameters</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% out:</span>
+0011 <span class="comment">%    x   - next state</span>
+0012 <span class="comment">%</span>
+0013 <a name="_sub0" href="#_subfunctions" class="code">function x = f_linear_d ( x, u, model )</a>
+0014 
+0015 A = model.A;
+0016 B = model.B;
+0017 
+0018 x = A*x + B*u;
+0019</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

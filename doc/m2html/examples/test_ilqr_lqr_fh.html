@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_ilqr_lqr_fh</title>
+  <meta name="keywords" content="test_ilqr_lqr_fh">
+  <meta name="description" content="Demo script: Test solution of finite horizon linear-quadratic regulator problem in continuous time using ILQR.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; test_ilqr_lqr_fh.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\examples&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>test_ilqr_lqr_fh
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Demo script: Test solution of finite horizon linear-quadratic regulator problem in continuous time using ILQR.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Demo script: Test solution of finite horizon linear-quadratic regulator problem in continuous time using ILQR.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../control/pi_ilqr.html" class="code" title="function u = pi_ilqr ( x, t, p )">pi_ilqr</a>	ILQR/G policy</li><li><a href="../cost/l_quadratic_fh.html" class="code" title="function l = l_quadratic_fh ( x, u, t, p )">l_quadratic_fh</a>	Finite horizon quadratic cost function.</li><li><a href="../dynamics/f/f_linear.html" class="code" title="function xdot = f_linear ( x, u, model )">f_linear</a>	Linear dynamics function.</li><li><a href="../dynamics/f/f_linear.html" class="code" title="function xdot = f_linear ( x, u, model )">f_linear</a>	Linear dynamics function.</li><li><a href="../dynamics/models/model_linear.html" class="code" title="function model = model_linear">model_linear</a>	Simple linear model, with two state dimensions, one control dimension.</li><li><a href="../dynamics/models/model_linear.html" class="code" title="function model = model_linear">model_linear</a>	Simple linear model, with two state dimensions, one control dimension.</li><li><a href="../ilqg/g_linear.html" class="code" title="function [ xdot, xdot_x, xdot_u ] = g_linear ( x, u, model )">g_linear</a>	Linear dynamics function.</li><li><a href="../ilqg/ilqr.html" class="code" title="function [x, u, L, cost] = ilqr(f, j, dt, N, x0, u0, p )">ilqr</a>	Function for solving (finite horizon) optimal control problems with the Iterative Linear Quadratic Regulator method.</li><li><a href="../ilqg/j_quadratic_fh.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_quadratic_fh ( x, u, t, p )">j_quadratic_fh</a>	Finite horizon quadratic cost function.</li><li><a href="../lqr/lqr_fh.html" class="code" title="function [pi,L,S] = lqr_fh (A, B, QT, Q, R, p)">lqr_fh</a>	Solve Riccati equation and compute optimal gains for finite horizon linear-quadratic regulator problem in continuous time.</li><li><a href="../plot/plot_lq_fh.html" class="code" title="function h = plot_lq_fh(figNo,figName,t,x,u,L,xh,colour)">plot_lq_fh</a>	Function for plotting solutions to the finite horizon LQ problem from the demo scripts</li><li><a href="../simulate/simulate_feedback_time_indexed.html" class="code" title="function [x,u] = simulate_feedback_time_indexed ( x0, f, pi, p )">simulate_feedback_time_indexed</a>	Simulate trajectory using Euler integration under closed-loop, time-indexed policy control, in continuous time</li><li><a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a>	Function for evaluating the cost along a trajectory under a given cost function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Demo script: Test solution of finite horizon linear-quadratic regulator problem in continuous time using ILQR.</span>
+0002 
+0003 clear all;
+0004 
+0005 <span class="comment">% set up numerical simulation</span>
+0006 dt = 0.02;       <span class="comment">% time step</span>
+0007 N  = 200;        <span class="comment">% number of time steps</span>
+0008 t  = (0:N-1)*dt; <span class="comment">% sample times</span>
+0009 
+0010 <span class="comment">% simulation parameters</span>
+0011 ps = []; ps.dt = dt; ps.N = N; ps.solver = <span class="string">'euler'</span>;
+0012 
+0013 <span class="comment">% start state</span>
+0014 x0 = [1;0];
+0015 
+0016 <span class="comment">% dynamics</span>
+0017 model = <a href="../dynamics/models/model_linear.html" class="code" title="function model = model_linear">model_linear</a>; <span class="comment">%</span>
+0018 f = @(x, u) <a href="../dynamics/f/f_linear.html" class="code" title="function xdot = f_linear ( x, u, model )">f_linear</a> ( x, u, model );
+0019 
+0020 <span class="comment">% cost</span>
+0021 pc = [];
+0022 <span class="comment">% terminal state cost</span>
+0023 pc.QT = [1  0;  0  0.1];
+0024 <span class="comment">% state cost</span>
+0025 pc.Q  = pc.QT;
+0026 <span class="comment">% command cost</span>
+0027 pc.R  = .1;
+0028 l  = @(x,u,t) <a href="../cost/l_quadratic_fh.html" class="code" title="function l = l_quadratic_fh ( x, u, t, p )">l_quadratic_fh</a> ( x, u, t, pc ); <span class="comment">% quadratic costs</span>
+0029 
+0030 <span class="comment">% set ilqr parameters</span>
+0031 u0 = 1; <span class="comment">% command initialisation</span>
+0032 po = [];
+0033 po.lambda_init = 1e-3;
+0034 <span class="comment">% function handles including derivatives for ilqr</span>
+0035 g  = @(x, u) <a href="../ilqg/g_linear.html" class="code" title="function [ xdot, xdot_x, xdot_u ] = g_linear ( x, u, model )">g_linear</a>        ( x, u, model ); <span class="comment">% linear dynamics</span>
+0036 j  = @(x,u,t) <a href="../ilqg/j_quadratic_fh.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_quadratic_fh ( x, u, t, p )">j_quadratic_fh</a> ( x, u, t, pc ); <span class="comment">% quadratic costs</span>
+0037 
+0038 <span class="comment">% optimise</span>
+0039 [xx, uu, L] = <a href="../ilqg/ilqr.html" class="code" title="function [x, u, L, cost] = ilqr(f, j, dt, N, x0, u0, p )">ilqr</a>(g,j,dt,N,x0,u0,po);
+0040 
+0041 <span class="comment">% run controller on plant</span>
+0042 ppi = []; ppi.xn = xx; ppi.un = uu; ppi.Ln = L;
+0043 pi = @(x,n)<a href="../control/pi_ilqr.html" class="code" title="function u = pi_ilqr ( x, t, p )">pi_ilqr</a>(x,n,ppi);
+0044 [x,u] = <a href="../simulate/simulate_feedback_time_indexed.html" class="code" title="function [x,u] = simulate_feedback_time_indexed ( x0, f, pi, p )">simulate_feedback_time_indexed</a> (x0,f,pi,ps);
+0045 
+0046 <span class="comment">% evaluate cost of trajectory on plant</span>
+0047 cost = <a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a>(x,u,l,ps);
+0048 fprintf(1,<span class="string">'Cost (evaluated on plant) = %f\n'</span>,cost)
+0049 
+0050 <span class="comment">% evaluate error in solution (compared to numerical)</span>
+0051 A = model.A; B = model.B; QT = pc.QT; Q = pc.Q; R = pc.R;
+0052 [pit,Lt,Vt] = <a href="../lqr/lqr_fh.html" class="code" title="function [pi,L,S] = lqr_fh (A, B, QT, Q, R, p)">lqr_fh</a>(model.A,model.B,pc.QT,pc.Q,pc.R,ps);
+0053 [xt,ut] = <a href="../simulate/simulate_feedback_time_indexed.html" class="code" title="function [x,u] = simulate_feedback_time_indexed ( x0, f, pi, p )">simulate_feedback_time_indexed</a> ( x0, f, pit, ps );
+0054 RMSE_x=sqrt(sum((xt-x).^2,2)/N);
+0055 RMSE_u=sqrt(sum((ut-u).^2,2)/N);
+0056 RMSE_L=sqrt(sum((squeeze(Lt)-squeeze(-L)).^2,2)/N);
+0057 fprintf(1,<span class="string">'RMSE(x,x*)=[%f %f],RMSE(u,u*)=%f,RMSE(L,L*)=[%f %f]\n'</span>,RMSE_x(1),RMSE_x(2),RMSE_u,RMSE_L)
+0058 
+0059 <span class="comment">% plot</span>
+0060 fn=1;figure(fn),clf
+0061 <a href="../plot/plot_lq_fh.html" class="code" title="function h = plot_lq_fh(figNo,figName,t,x,u,L,xh,colour)">plot_lq_fh</a>(fn,<span class="string">'iLQR'</span>,t,x,u,-L,[],<span class="string">'b'</span>);
+0062</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

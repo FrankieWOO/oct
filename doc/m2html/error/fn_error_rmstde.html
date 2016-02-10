@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fn_error_rmstde</title>
+  <meta name="keywords" content="fn_error_rmstde">
+  <meta name="description" content="Function for computing the root mean sqaured temporal difference error on a set of samples of a value function">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">error</a> &gt; fn_error_rmstde.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\error&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>fn_error_rmstde
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Function for computing the root mean sqaured temporal difference error on a set of samples of a value function</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [rmstde d mtde] = get_tde(Q,Qn,j,gamma) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Function for computing the root mean sqaured temporal difference error on a set of samples of a value function
+
+    [rmstde d] = get_tde(Q,Qn,j,gamma)
+
+ in:
+     Q          - state-action values
+     Qn         - state-action values for next step
+     j          - cost/reward values
+     gamma      - discount factor
+
+ out:
+     rmstde     - root mean squared temporal difference error
+     d          - TD error vector (each element gives the TD error for that data point)
+     mtde       - mean absolute TD error over points</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../lspi/lspi.html" class="code" title="function [ pi, Q, model ] = lspi ( D, pi0, model, argmaxuQ, gamma, p );">lspi</a>	Function for solving (infinite horizon) optimal control problems with the Least Squares Policy Iteration method.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Function for computing the root mean sqaured temporal difference error on a set of samples of a value function</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%    [rmstde d] = get_tde(Q,Qn,j,gamma)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% in:</span>
+0006 <span class="comment">%     Q          - state-action values</span>
+0007 <span class="comment">%     Qn         - state-action values for next step</span>
+0008 <span class="comment">%     j          - cost/reward values</span>
+0009 <span class="comment">%     gamma      - discount factor</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% out:</span>
+0012 <span class="comment">%     rmstde     - root mean squared temporal difference error</span>
+0013 <span class="comment">%     d          - TD error vector (each element gives the TD error for that data point)</span>
+0014 <span class="comment">%     mtde       - mean absolute TD error over points</span>
+0015 <span class="comment">%</span>
+0016 <a name="_sub0" href="#_subfunctions" class="code">function [rmstde d mtde] = get_tde(Q,Qn,j,gamma)</a>
+0017 
+0018 N     = size(j,2);         <span class="comment">% get no. data points</span>
+0019 TQ    = j + gamma*Qn;      <span class="comment">% T[Q], where T is the Bellman operator</span>
+0020 d     = (Q - TQ)';         <span class="comment">% TD error vector</span>
+0021 rmstde= sqrt(sum(d.^2)/N); <span class="comment">% root mean squared TDE</span>
+0022 absd  = abs(d);            <span class="comment">%</span>
+0023 mtde  = mean(absd);        <span class="comment">%</span>
+0024 <span class="comment">%nmtde = mtde/std(Q,0,2);   %</span>
+0025 
+0026 <span class="comment">%tde   = sqrt(d'*d);   % length of TD error vector</span>
+0027 <span class="comment">%rmstde= tde/sqrt(N);  % root mean squared TDE (equivalent to rmstde = sqrt(sum(d.^2)/N))</span></pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

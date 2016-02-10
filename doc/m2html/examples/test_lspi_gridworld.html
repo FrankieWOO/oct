@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_lspi_gridworld</title>
+  <meta name="keywords" content="test_lspi_gridworld">
+  <meta name="description" content="Demo script: Test LSPI solution of infinite horizon gridworld problem.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; test_lspi_gridworld.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\examples&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>test_lspi_gridworld
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Demo script: Test LSPI solution of infinite horizon gridworld problem.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Demo script: Test LSPI solution of infinite horizon gridworld problem.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../cost/l_gridworld.html" class="code" title="function l = fn_cost_gridworld(x,u)">l_gridworld</a>	Cost function for the 4x4 gridworld</li><li><a href="../dynamics/f/f_gridworld.html" class="code" title="function x = f_gridworld(x,u)">f_gridworld</a>	Dynamics function for the 4x4 gridworld</li><li><a href="../dynamics/f/f_gridworld.html" class="code" title="function x = f_gridworld(x,u)">f_gridworld</a>	Dynamics function for the 4x4 gridworld</li><li><a href="../lspi/lspi.html" class="code" title="function [ pi, Q, model ] = lspi ( D, pi0, model, argmaxuQ, gamma, p );">lspi</a>	Function for solving (infinite horizon) optimal control problems with the Least Squares Policy Iteration method.</li><li><a href="../plot/get_action_vector_gridworld.html" class="code" title="function a = get_action_vector_gridworld(u)">get_action_vector_gridworld</a>	</li><li><a href="../plot/get_coords_gridworld.html" class="code" title="function r = get_coords_gridworld(x)">get_coords_gridworld</a>	</li><li><a href="../simulate/simulate_feedback_d.html" class="code" title="function [x,u] = simulate_feedback_d ( x0, f, pi, p )">simulate_feedback_d</a>	Simulate trajectory under closed-loop feedback control, in discrete time</li><li><a href="../value/evaluate_trajectory_cost_ih_d.html" class="code" title="function cost = evaluate_trajectory_cost_ih_d ( x, u, l, gamma )">evaluate_trajectory_cost_ih_d</a>	Function for evaluating the cost along a trajectory under a given cost function in discrete time</li><li><a href="../value/q/argmaxuq/argmaxuQ_fn_basis_gridworld.html" class="code" title="function pi = argmaxuQ_fn_basis_lqr ( theta )">argmaxuQ_fn_basis_gridworld</a>	Function for calculating argmax_u (Q) from the weights of the Q-function for the LQR problem.</li><li><a href="../value/q/argmaxuq/argmaxuQ_fn_basis_gridworld.html" class="code" title="function pi = argmaxuQ_fn_basis_lqr ( theta )">argmaxuQ_fn_basis_gridworld</a>	Function for calculating argmax_u (Q) from the weights of the Q-function for the LQR problem.</li><li><a href="../value/q/argmaxuq/argmaxuQ_fn_basis_gridworld.html" class="code" title="function pi = argmaxuQ_fn_basis_lqr ( theta )">argmaxuQ_fn_basis_gridworld</a>	Function for calculating argmax_u (Q) from the weights of the Q-function for the LQR problem.</li><li><a href="../value/q/basisfns/fn_basis_gridworld.html" class="code" title="function phi = fn_basis_gridworld ( x, u )">fn_basis_gridworld</a>	phi = fn_basis_gridworld ( x, u )</li><li><a href="../value/q/basisfns/fn_basis_gridworld.html" class="code" title="function phi = fn_basis_gridworld ( x, u )">fn_basis_gridworld</a>	phi = fn_basis_gridworld ( x, u )</li><li><a href="../value/q/basisfns/fn_basis_gridworld.html" class="code" title="function phi = fn_basis_gridworld ( x, u )">fn_basis_gridworld</a>	phi = fn_basis_gridworld ( x, u )</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Demo script: Test LSPI solution of infinite horizon gridworld problem.</span>
+0002 
+0003 clear all;
+0004 rand(<span class="string">'seed'</span>,1);randn(<span class="string">'seed'</span>,1)
+0005 tic
+0006 
+0007 N  = 7;        <span class="comment">% number of time steps</span>
+0008 
+0009 <span class="comment">% set up numerical simulation</span>
+0010 s = []; s.N = N;
+0011 
+0012 <span class="comment">% start state</span>
+0013 x0 = 11;
+0014 
+0015 <span class="comment">% dynamics</span>
+0016 f = @(x,u)<a href="../dynamics/f/f_gridworld.html" class="code" title="function x = f_gridworld(x,u)">f_gridworld</a>(x,u);
+0017 
+0018 <span class="comment">% cost</span>
+0019 l = @(x,u)<a href="../cost/l_gridworld.html" class="code" title="function l = fn_cost_gridworld(x,u)">l_gridworld</a>(x,u);
+0020 
+0021 <span class="comment">% observer</span>
+0022 h = @(x)x;
+0023 
+0024 <span class="comment">% get training data</span>
+0025 Ntr = 1000;                                       <span class="comment">% no. data points</span>
+0026 <span class="keyword">for</span> n=1:Ntr
+0027 xr = randperm(16); xr = xr(1);
+0028 ur = randperm(5);  ur = ur(1);
+0029 D.X (:,n)= xr;
+0030 D.U (:,n)= ur;
+0031 D.Xn(:,n)=  f(D.X(  n),D.U(  n));
+0032 D.R (:,n)= -l(D.X(  n),D.U(  n)); <span class="comment">% reward is negative cost</span>
+0033 <span class="keyword">end</span>
+0034 D.Y = h(D.X );
+0035 D.Yn= h(D.Xn);
+0036 
+0037 <span class="comment">% set up LSPI parameters, functions</span>
+0038 model.phi  = @(z)<a href="../value/q/basisfns/fn_basis_gridworld.html" class="code" title="function phi = fn_basis_gridworld ( x, u )">fn_basis_gridworld</a>(z(1,:),z(2,:));              <span class="comment">% basis functions</span>
+0039 fnArgmaxuQ = @(theta)<a href="../value/q/argmaxuq/argmaxuQ_fn_basis_gridworld.html" class="code" title="function pi = argmaxuQ_fn_basis_lqr ( theta )">argmaxuQ_fn_basis_gridworld</a>(theta); <span class="comment">% function for finding the argmax of the Q-function</span>
+0040 theta = randperm(80); pi0=<a href="../value/q/argmaxuq/argmaxuQ_fn_basis_gridworld.html" class="code" title="function pi = argmaxuQ_fn_basis_lqr ( theta )">argmaxuQ_fn_basis_gridworld</a>(theta); <span class="comment">% function for finding the argmax of the Q-function</span>
+0041 gamma = .99;
+0042 p          = [];
+0043 
+0044 <span class="comment">% optimise</span>
+0045 [pi, Q, model] = <a href="../lspi/lspi.html" class="code" title="function [ pi, Q, model ] = lspi ( D, pi0, model, argmaxuQ, gamma, p );">lspi</a>( D, pi0, model, fnArgmaxuQ, gamma, p );
+0046 
+0047 <span class="comment">% run controller on plant</span>
+0048 [x,u] = <a href="../simulate/simulate_feedback_d.html" class="code" title="function [x,u] = simulate_feedback_d ( x0, f, pi, p )">simulate_feedback_d</a> ( x0, f, pi, s );
+0049 
+0050 <span class="comment">% evaluate cost of trajectory on plant</span>
+0051 cost = <a href="../value/evaluate_trajectory_cost_ih_d.html" class="code" title="function cost = evaluate_trajectory_cost_ih_d ( x, u, l, gamma )">evaluate_trajectory_cost_ih_d</a>(x,u,l,gamma);
+0052 fprintf(1,<span class="string">'Cost (evaluated on plant) = %f\n'</span>,cost)
+0053 
+0054 <span class="comment">% plot</span>
+0055 fn=1;figure(fn),clf
+0056 subplot(1,2,1)
+0057 hold on
+0058 r = <a href="../plot/get_coords_gridworld.html" class="code" title="function r = get_coords_gridworld(x)">get_coords_gridworld</a>(x);
+0059 plot(r(1,:),r(2,:),<span class="string">'r'</span>)
+0060 plot(r(1,end),r(2,end),<span class="string">'r.'</span>)
+0061 xlim([0 4]),ylim([0 4])
+0062 [X,Y]=meshgrid(linspace(0,4,5),linspace(0,4,5));
+0063 <span class="keyword">for</span> i=1:5
+0064 plot(X(:,i),Y(:,i),<span class="string">'k'</span>)
+0065 plot(X(i,:),Y(i,:),<span class="string">'k'</span>)
+0066 <span class="keyword">end</span>
+0067 <span class="keyword">for</span> i=1:16,r=<a href="../plot/get_coords_gridworld.html" class="code" title="function r = get_coords_gridworld(x)">get_coords_gridworld</a>(i);text(r(1),r(2),num2str(i));<span class="keyword">end</span>
+0068 axis square,axis off
+0069 <span class="comment">% visualise policy</span>
+0070 X=zeros(2,16); U=zeros(2,16);
+0071 <span class="keyword">for</span> x=1:16, X(:,x)=<a href="../plot/get_coords_gridworld.html" class="code" title="function r = get_coords_gridworld(x)">get_coords_gridworld</a>(x); U(:,x)=.5*<a href="../plot/get_action_vector_gridworld.html" class="code" title="function a = get_action_vector_gridworld(u)">get_action_vector_gridworld</a>(pi(x)); <span class="keyword">end</span>
+0072 quiver(X(1,:),X(2,:),U(1,:),U(2,:),0,<span class="string">'k'</span>);
+0073 
+0074 <span class="comment">% plot optimal V-function</span>
+0075 subplot(1,2,2)
+0076 V=zeros(16,1);<span class="keyword">for</span> x=1:16,V(x)=Q(x,pi(x));<span class="keyword">end</span>,
+0077 k=1;<span class="keyword">for</span> i=4:-1:1,<span class="keyword">for</span> j=1:4,VV(i,j)=V(k);k=k+1;<span class="keyword">end</span>,<span class="keyword">end</span>
+0078 imagesc(VV); colorbar
+0079 axis square,axis off
+0080 
+0081</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

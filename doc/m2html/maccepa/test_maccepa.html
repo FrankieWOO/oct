@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_maccepa</title>
+  <meta name="keywords" content="test_maccepa">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">maccepa</a> &gt; test_maccepa.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\maccepa&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>test_maccepa
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../maccepa/m-files/f_maccepa.html" class="code" title="function xdot = f_maccepa ( x, u, model )">f_maccepa</a>	State space dynamics function for the MACCEPA.</li><li><a href="../maccepa/m-files/f_maccepa.html" class="code" title="function xdot = f_maccepa ( x, u, model )">f_maccepa</a>	State space dynamics function for the MACCEPA.</li><li><a href="../simulate/simulate_feedforward.html" class="code" title="function x = simulate_feedforward ( x0, f, u, p )">simulate_feedforward</a>	Simulate trajectory under open-loop, feed forward control, in continuous time</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 clear all
+0002 
+0003 <span class="comment">% set up simulation</span>
+0004 dt = .02;              <span class="comment">% control frequency</span>
+0005 N  = 400;              <span class="comment">% no. samples</span>
+0006 t  = (0:N-1)*dt;       <span class="comment">% sample times</span>
+0007 x0 = zeros(2,1);       <span class="comment">% start state</span>
+0008 
+0009 <span class="comment">% set up dynamics function</span>
+0010 m  = model_maccepa(<span class="string">'maccepa_model'</span>); <span class="comment">% model parameters</span>
+0011 f = @(x, u) <a href="../maccepa/m-files/f_maccepa.html" class="code" title="function xdot = f_maccepa ( x, u, model )">f_maccepa</a>  ( x, u, m ); <span class="comment">% dynamics function</span>
+0012 
+0013 <span class="comment">% simulation parameter struct</span>
+0014 p = [];
+0015 p.dt = dt;
+0016 p.solver = <span class="string">'rk4'</span>;
+0017 
+0018 <span class="comment">% define feed forward commands</span>
+0019 umax=.5*m.umax;
+0020 w=100*2*pi/N; <span class="comment">% frequency</span>
+0021 u1=[umax(1)*sin(w*t);
+0022        zeros(1,N);zeros(1,N)]; 
+0023 
+0024 w=200*2*pi/N; <span class="comment">% frequency</span>
+0025 t=(0:N-1)*dt; <span class="comment">% time</span>
+0026 u2=[zeros(1,N); .5*umax(2)*(sin( w*t - pi/2 )+1);zeros(1,N)];
+0027 
+0028 u3=u1+u2;
+0029 
+0030 U = [u1,u2,u3]; <span class="comment">% concatenate the three phases</span>
+0031 
+0032 <span class="comment">% simulate</span>
+0033 X = <a href="../simulate/simulate_feedforward.html" class="code" title="function x = simulate_feedforward ( x0, f, u, p )">simulate_feedforward</a> ( x0, f, U, p );
+0034 
+0035 <span class="comment">% plot joint angles, velocities, commands</span>
+0036 subplot(3,1,1),plot(X(1,:)'),ylabel(<span class="string">'q (rad)'</span>)
+0037 subplot(3,1,2),plot(X(2,:)'),ylabel(<span class="string">'dq/dt (rad/s)'</span>)
+0038 subplot(3,1,3),plot(U'),ylabel(<span class="string">'u'</span>),xlabel(<span class="string">'t (s)'</span>)</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

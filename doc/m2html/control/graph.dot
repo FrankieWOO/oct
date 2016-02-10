@@ -1,0 +1,8 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  pi_ilqr [URL="pi_ilqr.html"];
+  pi_linear [URL="pi_linear.html"];
+  pi_linear_fh [URL="pi_linear_fh.html"];
+  pi_lwlspi [URL="pi_lwlspi.html"];
+}

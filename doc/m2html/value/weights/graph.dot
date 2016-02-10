@@ -1,0 +1,8 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  fn_weight_gaussians [URL="fn_weight_gaussians.html"];
+  fn_weight_gaussians [URL="fn_weight_gaussians.html"];
+  fn_weight_normalised_gaussians [URL="fn_weight_normalised_gaussians.html"];
+  fn_weight_normalised_gaussians [URL="fn_weight_normalised_gaussians.html"];
+}

@@ -1,0 +1,19 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  lspi -> lstd0q;
+  lstd0 -> wlstd0;
+  lstd0q -> lstd0;
+  lwlspi -> lwlstd0q;
+  lwlstd0 -> wlstd0;
+  lwlstd0q -> lwlstd0;
+
+  distances [URL="distances.html"];
+  lspi [URL="lspi.html"];
+  lstd0 [URL="lstd0.html"];
+  lstd0q [URL="lstd0q.html"];
+  lwlspi [URL="lwlspi.html"];
+  lwlstd0 [URL="lwlstd0.html"];
+  lwlstd0q [URL="lwlstd0q.html"];
+  rand_interval [URL="rand_interval.html"];
+  wlstd0 [URL="wlstd0.html"];
+}

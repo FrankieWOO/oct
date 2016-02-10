@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of lspi</title>
+  <meta name="keywords" content="lspi">
+  <meta name="description" content="Function for solving (infinite horizon) optimal control problems with the Least Squares Policy Iteration method.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">lspi</a> &gt; lspi.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\lspi&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>lspi
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Function for solving (infinite horizon) optimal control problems with the Least Squares Policy Iteration method.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ pi, Q, model ] = lspi ( D, pi0, model, argmaxuQ, gamma, p ); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Function for solving (infinite horizon) optimal control problems with the Least Squares Policy Iteration method.
+
+    [ pi, Q, model ] = lspi ( D, pi0, model, argmaxuQ, gamma, p )
+
+ in:
+     D                 - data struct, containing samples of
+      .Y               - state measurements
+      .U               - commands
+      .R               - cost (reward)
+      .Yn              - next state measurements
+     pi0               - initial policy (function handle) 
+     phi               - basis functions (function handle) 
+     argmaxuQ          - function for finding the argmax_u (Q) (i.e., converting theta to a policy function (function handle) 
+     gamma             - discount factor
+     p                 - parameter struct (optionally) containing:
+      .iter_max        - threshold on number of iterations (exit if exceeded)
+      .dtheta_converge - threshold on relative improvement in cost (exit if improvement less than this value)
+      .online_printing - print: {0:never, 1:every iteration, 2:final iteration only}
+                         (any fields that are unspecified will be set by default values).
+
+ out:
+     pi                - learnt policy (function handle)
+     Q                 - Q-function (function handle)
+     model             - learnt Q-function model</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../error/fn_error_rmstde.html" class="code" title="function [rmstde d mtde] = get_tde(Q,Qn,j,gamma)">fn_error_rmstde</a>	Function for computing the root mean sqaured temporal difference error on a set of samples of a value function</li><li><a href="lstd0q.html" class="code" title="function model = lstd0q ( Y, U, R, Yn, Un, model, gamma, p )">lstd0q</a>	Function for estimating the Q-function of a policy through Least Squares Temporal Difference learning (i.e., TD(0)).</li><li><a href="../predict/predict_linear.html" class="code" title="function Yp = predict_linear(X,model)">predict_linear</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../examples/test_lspi_gridworld.html" class="code" title="">test_lspi_gridworld</a>	Demo script: Test LSPI solution of infinite horizon gridworld problem.</li><li><a href="../examples/test_lspi_lqr_ih_d.html" class="code" title="">test_lspi_lqr_ih_d</a>	Demo script: Test LSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Function for solving (infinite horizon) optimal control problems with the Least Squares Policy Iteration method.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%    [ pi, Q, model ] = lspi ( D, pi0, model, argmaxuQ, gamma, p )</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% in:</span>
+0006 <span class="comment">%     D                 - data struct, containing samples of</span>
+0007 <span class="comment">%      .Y               - state measurements</span>
+0008 <span class="comment">%      .U               - commands</span>
+0009 <span class="comment">%      .R               - cost (reward)</span>
+0010 <span class="comment">%      .Yn              - next state measurements</span>
+0011 <span class="comment">%     pi0               - initial policy (function handle)</span>
+0012 <span class="comment">%     phi               - basis functions (function handle)</span>
+0013 <span class="comment">%     argmaxuQ          - function for finding the argmax_u (Q) (i.e., converting theta to a policy function (function handle)</span>
+0014 <span class="comment">%     gamma             - discount factor</span>
+0015 <span class="comment">%     p                 - parameter struct (optionally) containing:</span>
+0016 <span class="comment">%      .iter_max        - threshold on number of iterations (exit if exceeded)</span>
+0017 <span class="comment">%      .dtheta_converge - threshold on relative improvement in cost (exit if improvement less than this value)</span>
+0018 <span class="comment">%      .online_printing - print: {0:never, 1:every iteration, 2:final iteration only}</span>
+0019 <span class="comment">%                         (any fields that are unspecified will be set by default values).</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% out:</span>
+0022 <span class="comment">%     pi                - learnt policy (function handle)</span>
+0023 <span class="comment">%     Q                 - Q-function (function handle)</span>
+0024 <span class="comment">%     model             - learnt Q-function model</span>
+0025 <span class="comment">%</span>
+0026 <a name="_sub0" href="#_subfunctions" class="code">function [ pi, Q, model ] = lspi ( D, pi0, model, argmaxuQ, gamma, p );</a>
+0027 
+0028 <span class="comment">% unpack parameter struct</span>
+0029 <span class="keyword">if</span> isfield(p,<span class="string">'evalobjective'</span>  ),evalobjective   = p.evalobjective  ;<span class="keyword">else</span>,evalobjective   = <span class="string">'lsfp'</span>;<span class="keyword">end</span>
+0030 <span class="keyword">if</span> isfield(p,<span class="string">'dtheta_converge'</span>),dtheta_converge = p.dtheta_converge;<span class="keyword">else</span>,dtheta_converge =  1e-9 ;<span class="keyword">end</span>
+0031 <span class="keyword">if</span> isfield(p,<span class="string">'iter_max'</span>       ),iter_max        = p.iter_max       ;<span class="keyword">else</span>,iter_max        =  100  ;<span class="keyword">end</span>
+0032 <span class="keyword">if</span> isfield(p,<span class="string">'online_printing'</span>),online_printing = p.online_printing;<span class="keyword">else</span>,online_printing =  1    ;<span class="keyword">end</span>
+0033 <span class="keyword">if</span> isfield(p,<span class="string">'p_lstd0q'</span>       ),p_lstd0q        = p.p_lstd0q       ;<span class="keyword">else</span>,p_lstd0q        =  []   ;<span class="keyword">end</span>
+0034 
+0035 <span class="comment">% unpack data</span>
+0036 Y = D.Y;
+0037 U = D.U; 
+0038 R = D.R; 
+0039 Yn= D.Yn;
+0040 [dimY N] = size(Y);             <span class="comment">% get y dimensionality, no. data points</span>
+0041  dimU    = size(U,1);           <span class="comment">% get u dimensionality</span>
+0042 
+0043 <span class="comment">% initialise matrices</span>
+0044 Un = zeros(dimU,N);
+0045 
+0046 <span class="comment">% initialise policy</span>
+0047 pi = pi0;
+0048 
+0049 <span class="comment">% main loop</span>
+0050 <span class="keyword">for</span> iter=1:iter_max
+0051 
+0052     <span class="comment">% sample actions from current policy</span>
+0053     Un = pi(Yn);
+0054 
+0055     <span class="comment">% estimate Q</span>
+0056     model = <a href="lstd0q.html" class="code" title="function model = lstd0q ( Y, U, R, Yn, Un, model, gamma, p )">lstd0q</a> ( Y, U, R', Yn, Un, model, gamma, p_lstd0q );
+0057     Q = @(y,u)-<a href="../predict/predict_linear.html" class="code" title="function Yp = predict_linear(X,model)">predict_linear</a>([y;u],model);
+0058 
+0059     <span class="comment">% find the policy by taking the argmax</span>
+0060     pi = argmaxuQ(model.w); 
+0061 
+0062     <span class="comment">% compute root mean squared temporal difference error</span>
+0063     Qp = Q(Y ,U );
+0064     Qpn= Q(Yn,Un);
+0065     rmstde = <a href="../error/fn_error_rmstde.html" class="code" title="function [rmstde d mtde] = get_tde(Q,Qn,j,gamma)">fn_error_rmstde</a>(Qp,Qpn,R,gamma);
+0066 
+0067     <span class="comment">% print stuff out</span>
+0068     <span class="keyword">if</span> online_printing==1,fprintf(<span class="string">'Iteration = %d, RMSTDE = %e, Qp = %f +/- %f (mean +/- s.d.)\n'</span>,iter,rmstde,mean(Qp),std(Qp));<span class="keyword">end</span>
+0069 
+0070     <span class="comment">% check for convergence</span>
+0071     <span class="keyword">if</span> iter&gt;1 
+0072         <span class="comment">% find change in theta</span>
+0073         dtheta = norm(model.w(:)-modelp.w(:));
+0074         <span class="keyword">if</span> dtheta&lt;dtheta_converge,
+0075             fprintf(<span class="string">'Minimum parameter change threshold reached. '</span>); <span class="keyword">break</span>; <span class="comment">% parameter change too small: EXIT</span>
+0076         <span class="keyword">end</span>
+0077     <span class="keyword">end</span>
+0078     modelp = model;
+0079 <span class="keyword">end</span>
+0080 <span class="keyword">if</span> iter==iter_max
+0081     fprintf(<span class="string">'Max. number of iterations reached. '</span>);
+0082 <span class="keyword">end</span>
+0083 <span class="comment">% print final result if necessary</span>
+0084 <span class="keyword">if</span> online_printing==2,
+0085     fprintf(<span class="string">'Iterations = %d; '</span>, iter);
+0086 <span class="keyword">end</span>
+0087 fprintf(<span class="string">'\n'</span>);
+0088</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

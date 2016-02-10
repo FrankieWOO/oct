@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_ilqr_kawato_arm_reach</title>
+  <meta name="keywords" content="test_ilqr_kawato_arm_reach">
+  <meta name="description" content="Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; test_ilqr_kawato_arm_reach.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\examples&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>test_ilqr_kawato_arm_reach
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../control/pi_ilqr.html" class="code" title="function u = pi_ilqr ( x, t, p )">pi_ilqr</a>	ILQR/G policy</li><li><a href="../ilqg/g_kawato_arm.html" class="code" title="function [xdot, xdot_x, xdot_u] = g_kawato_arm ( x, u, model )">g_kawato_arm</a>	Dynamics function for the Kawato arm model for use with ILQR/G.</li><li><a href="../ilqg/ilqr.html" class="code" title="function [x, u, L, cost] = ilqr(f, j, dt, N, x0, u0, p )">ilqr</a>	Function for solving (finite horizon) optimal control problems with the Iterative Linear Quadratic Regulator method.</li><li><a href="../ilqg/j_reaching_task_2dof_plants.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_task_2dof_plants ( x, u, t, p )">j_reaching_task_2dof_plants</a>	'Reaching task' cost function for the 2-DOF plants (e.g., Kawato arm) for use with ILQR/G</li><li><a href="../simulate/simulate_feedback_time_indexed.html" class="code" title="function [x,u] = simulate_feedback_time_indexed ( x0, f, pi, p )">simulate_feedback_time_indexed</a>	Simulate trajectory using Euler integration under closed-loop, time-indexed policy control, in continuous time</li><li><a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a>	Function for evaluating the cost along a trajectory under a given cost function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</span>
+0002 
+0003 clear all;
+0004 tic
+0005 
+0006 <span class="comment">% time</span>
+0007 dt = 0.02;       <span class="comment">% time step</span>
+0008 N  = 25 ;        <span class="comment">% number of time steps</span>
+0009 t  = (0:N-1)*dt; <span class="comment">% sample times</span>
+0010 
+0011 <span class="comment">% simulation parameters</span>
+0012 ps = []; ps.dt = dt; ps.N = N; ps.solver = <span class="string">'euler'</span>;
+0013 
+0014 model = model_kawato_arm; <span class="comment">%</span>
+0015 
+0016 <span class="comment">% dynamics</span>
+0017 umax = model.umax;
+0018 umin = model.umin;
+0019 f = @(x, u) <a href="../ilqg/g_kawato_arm.html" class="code" title="function [xdot, xdot_x, xdot_u] = g_kawato_arm ( x, u, model )">g_kawato_arm</a> ( x, u, model ); <span class="comment">% state space dynamics</span>
+0020 
+0021 <span class="comment">% cost</span>
+0022 pc = [];
+0023 pc.w   = [10000,100,0.1]; pc.w = pc.w/sum(pc.w);
+0024 pc.qt  = (pi/180)*[80; 40]; <span class="comment">% center target shifted</span>
+0025 pc.tau = @(x,u) tau_kawato_arm ( x(1:2,:), x(3:4,:), u, model );
+0026 j = @(x,u,t) <a href="../ilqg/j_reaching_task_2dof_plants.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_task_2dof_plants ( x, u, t, p )">j_reaching_task_2dof_plants</a> ( x, u, t, pc );
+0027 
+0028 <span class="comment">% start state</span>
+0029 x0 = (pi/180)*[45; 70 ; zeros(2,1)]; <span class="comment">% start state</span>
+0030 
+0031 <span class="comment">% set ilqr parameters</span>
+0032 u0 = [zeros(3,1);ones(3,1)]; <span class="comment">% command initialisation</span>
+0033 <span class="comment">%u0 = rand(6,1); % command initialisation</span>
+0034 po = [];
+0035 po.umax = umax;
+0036 po.umin = umin;
+0037 <span class="comment">%po.lambda_max = inf;</span>
+0038 
+0039 <span class="comment">% optimise</span>
+0040 [xx, uu, L] = <a href="../ilqg/ilqr.html" class="code" title="function [x, u, L, cost] = ilqr(f, j, dt, N, x0, u0, p )">ilqr</a>(f,j,dt,N,x0,u0,po);
+0041 
+0042 <span class="comment">% run controller on plant</span>
+0043 ppi = []; ppi.xn = xx; ppi.un = uu; ppi.Ln = L;
+0044 pi = @(x,n)<a href="../control/pi_ilqr.html" class="code" title="function u = pi_ilqr ( x, t, p )">pi_ilqr</a>(x,n,ppi);
+0045 [x,u] = <a href="../simulate/simulate_feedback_time_indexed.html" class="code" title="function [x,u] = simulate_feedback_time_indexed ( x0, f, pi, p )">simulate_feedback_time_indexed</a> ( x0, f, pi, ps );
+0046 
+0047 <span class="comment">% evaluate cost of trajectory on plant</span>
+0048 cost = <a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a>(x,u,j,ps);
+0049 fprintf(1,<span class="string">'Cost (evaluated on plant) = %f\n'</span>,cost)
+0050 
+0051 <span class="comment">% plot example trajectory</span>
+0052 name=<span class="string">'Kawato Arm'</span>; figure(1),set(gcf,<span class="string">'Name'</span>,name),set(gcf,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>),clf
+0053 subplot(2,2,1);
+0054 hold on
+0055 plot(t,x');
+0056 plot(t(N),pc.qt',<span class="string">'o'</span>);
+0057 xlabel(<span class="string">'t'</span>)
+0058 ylabel(<span class="string">'x'</span>)
+0059 axis tight
+0060 
+0061 subplot(2,2,2);
+0062 hold on
+0063 plot(t(1:end-1),u');
+0064 xlabel(<span class="string">'t'</span>)
+0065 ylabel(<span class="string">'u'</span>)
+0066 axis tight
+0067 
+0068 subplot(2,2,3);
+0069 hold on
+0070 <span class="keyword">for</span> n=1:N-1
+0071 l(n)=j(x(:,n), u(:,n), t(n));
+0072 <span class="keyword">end</span>
+0073 l(N)=j(x(:,N), nan, nan);
+0074 plot(t,l);
+0075 xlabel(<span class="string">'t'</span>)
+0076 ylabel(<span class="string">'cost'</span>)
+0077 axis tight
+0078 
+0079 toc
+0080</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

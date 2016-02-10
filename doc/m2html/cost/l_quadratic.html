@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of l_quadratic</title>
+  <meta name="keywords" content="l_quadratic">
+  <meta name="description" content="Finite horizon quadratic cost function.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">cost</a> &gt; l_quadratic.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\cost&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>l_quadratic
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Finite horizon quadratic cost function.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function l = l_quadratic ( x, u, p ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Finite horizon quadratic cost function.
+
+     J = \int_0^\infty x^T Q x + u^T R u dt
+ 
+ in: 
+    x - state
+    u - command
+    p - parameter struct, containing
+     .Q,R  - cost parameters
+
+ out:
+    l - cost</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../examples/test_lqr_ih.html" class="code" title="">test_lqr_ih</a>	Demo script: Test numerical solution of infinite horizon linear-quadratic regulator problem in continuous time.</li><li><a href="../examples/test_lqr_ih_d.html" class="code" title="">test_lqr_ih_d</a>	Demo script: Test numerical solution of infinite horizon linear-quadratic regulator problem in discrete time.</li><li><a href="../examples/test_lspi_lqr_ih_d.html" class="code" title="">test_lspi_lqr_ih_d</a>	Demo script: Test LSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</li><li><a href="../examples/test_lwlspi_lqr_ih_d.html" class="code" title="">test_lwlspi_lqr_ih_d</a>	Demo script: Test LWLSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Finite horizon quadratic cost function.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%     J = \int_0^\infty x^T Q x + u^T R u dt</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% in:</span>
+0006 <span class="comment">%    x - state</span>
+0007 <span class="comment">%    u - command</span>
+0008 <span class="comment">%    p - parameter struct, containing</span>
+0009 <span class="comment">%     .Q,R  - cost parameters</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% out:</span>
+0012 <span class="comment">%    l - cost</span>
+0013 <span class="comment">%</span>
+0014 <a name="_sub0" href="#_subfunctions" class="code">function l = l_quadratic ( x, u, p )</a>
+0015 
+0016 Q  = p.Q;
+0017 R  = p.R;
+0018 l=sum(x.*(Q*x))+sum(u.*(R*u),1);
+0019</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

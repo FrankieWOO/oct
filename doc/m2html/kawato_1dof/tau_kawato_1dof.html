@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of tau_kawato_1dof</title>
+  <meta name="keywords" content="tau_kawato_1dof">
+  <meta name="description" content="Calculate torque for Kawato 1-DOF model given given current joint angles, velocities and muscle activations.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">kawato_1dof</a> &gt; tau_kawato_1dof.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\kawato_1dof&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>tau_kawato_1dof
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Calculate torque for Kawato 1-DOF model given given current joint angles, velocities and muscle activations.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function tau = tau_kawato_1dof ( q, qdot, u, model ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Calculate torque for Kawato 1-DOF model given given current joint angles, velocities and muscle activations.
+ 
+  in:
+      q     - joint angles
+      qdot  - joint velocities
+      u     - muscle activations
+      model - model struct
+
+  out:
+      tau   - torque</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="tau_kawato_1dof_mx.html" class="code" title="function tau = get_torque_kawato_1dof_mx ( q, qdot, u, model ) %#eml">tau_kawato_1dof_mx</a>	Calculate torque for Kawato 1-DOF model given state x, motor command u and model parameters (model struct).</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../examples/test_ilqr_kawato_1dof_reach.html" class="code" title="">test_ilqr_kawato_1dof_reach</a>	Demo script: Test ilqr on reaching problem for 2-muscle, 1-joint system with 'kawato model' muscle dynamics.</li><li><a href="qddot_kawato_1dof.html" class="code" title="function qddot = qddot_kawato_1dof ( q, qdot, u, model )">qddot_kawato_1dof</a>	Calculate acceleration for Kawato 1-DOF model given current state x, motor command u and model parameters (model struct).</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Calculate torque for Kawato 1-DOF model given given current joint angles, velocities and muscle activations.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%  in:</span>
+0004 <span class="comment">%      q     - joint angles</span>
+0005 <span class="comment">%      qdot  - joint velocities</span>
+0006 <span class="comment">%      u     - muscle activations</span>
+0007 <span class="comment">%      model - model struct</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%  out:</span>
+0010 <span class="comment">%      tau   - torque</span>
+0011 <span class="comment">%</span>
+0012 <a name="_sub0" href="#_subfunctions" class="code">function tau = tau_kawato_1dof ( q, qdot, u, model )</a>
+0013 
+0014 tau = <a href="tau_kawato_1dof_mx.html" class="code" title="function tau = get_torque_kawato_1dof_mx ( q, qdot, u, model ) %#eml">tau_kawato_1dof_mx</a> ( q, qdot, u, model );
+0015</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of q0_maccepa</title>
+  <meta name="keywords" content="q0_maccepa">
+  <meta name="description" content="Estimate equilibrium position of MACCEPA model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">maccepa</a> &gt; <a href="#">m-files</a> &gt; q0_maccepa.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\maccepa\m-files&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>q0_maccepa
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Estimate equilibrium position of MACCEPA model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function q0 = q0_maccepa ( u, model ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Estimate equilibrium position of MACCEPA model
+
+ in:
+      u     - command vector
+      model - struct containing model parameters
+
+ out:
+      q0    - equilibrium position</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../examples/test_ilqr_maccepa_reach.html" class="code" title="">test_ilqr_maccepa_reach</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../../optimize/test_ilqr_maccepa_reach.html" class="code" title="">test_ilqr_maccepa_reach</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Estimate equilibrium position of MACCEPA model</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% in:</span>
+0004 <span class="comment">%      u     - command vector</span>
+0005 <span class="comment">%      model - struct containing model parameters</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% out:</span>
+0008 <span class="comment">%      q0    - equilibrium position</span>
+0009 <span class="comment">%</span>
+0010 <a name="_sub0" href="#_subfunctions" class="code">function q0 = q0_maccepa ( u, model )</a>
+0011 
+0012 <span class="comment">% libmaccepa calculation:</span>
+0013 q0 = model_maccepa(<span class="string">'maccepa_model_get_equilibrium_position'</span>,nan(2,size(u,2)),u,model);
+0014 
+0015</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

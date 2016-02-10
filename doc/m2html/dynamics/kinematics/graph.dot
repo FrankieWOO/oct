@@ -1,0 +1,22 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  r_planar_3_link_arm -> r_planar_2_link_arm;
+  r_planar_3_link_arm -> r_planar_2_link_arm;
+  r_planar_3_link_arm -> r_planar_2_link_arm;
+  r_planar_3_link_arm -> r_planar_2_link_arm;
+  rdot_planar_2_link_arm -> J_planar_2_link_arm;
+  rdot_planar_2_link_arm -> J_planar_2_link_arm;
+  rdot_planar_2_link_arm -> J_planar_2_link_arm;
+  rdot_planar_2_link_arm -> J_planar_2_link_arm;
+
+  J_planar_2_link_arm [URL="J_planar_2_link_arm.html"];
+  J_planar_2_link_arm [URL="J_planar_2_link_arm.html"];
+  J_planar_3_link_arm [URL="J_planar_3_link_arm.html"];
+  J_planar_3_link_arm [URL="J_planar_3_link_arm.html"];
+  r_planar_2_link_arm [URL="r_planar_2_link_arm.html"];
+  r_planar_2_link_arm [URL="r_planar_2_link_arm.html"];
+  r_planar_3_link_arm [URL="r_planar_3_link_arm.html"];
+  r_planar_3_link_arm [URL="r_planar_3_link_arm.html"];
+  rdot_planar_2_link_arm [URL="rdot_planar_2_link_arm.html"];
+  rdot_planar_2_link_arm [URL="rdot_planar_2_link_arm.html"];
+}

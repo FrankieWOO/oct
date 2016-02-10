@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of simulate_feedforward</title>
+  <meta name="keywords" content="simulate_feedforward">
+  <meta name="description" content="Simulate trajectory under open-loop, feed forward control, in continuous time">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">simulate</a> &gt; simulate_feedforward.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\simulate&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>simulate_feedforward
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Simulate trajectory under open-loop, feed forward control, in continuous time</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function x = simulate_feedforward ( x0, f, u, p ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Simulate trajectory under open-loop, feed forward control, in continuous time
+ 
+     x = simulate_feedforward ( x0, f, u, dt )
+ 
+ in:
+    x0 - initial state
+    f  - (continuous time) dynamics (function handle: xdot=f(x,u))
+    u  - command sequence
+    p  - parameter struct containing:
+         p.solver - numerical solver (see simulation_step.m)
+         p.dt     - time step
+ 
+ out: 
+    x        - state trajectory</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="simulate_step.html" class="code" title="function xn = simulate_step ( f, x, u, p )">simulate_step</a>	Make one simulation step</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../ilqg/ilqr.html" class="code" title="function [x, u, L, cost] = ilqr(f, j, dt, N, x0, u0, p )">ilqr</a>	Function for solving (finite horizon) optimal control problems with the Iterative Linear Quadratic Regulator method.</li><li><a href="../maccepa/test_maccepa.html" class="code" title="">test_maccepa</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Simulate trajectory under open-loop, feed forward control, in continuous time</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%     x = simulate_feedforward ( x0, f, u, dt )</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% in:</span>
+0006 <span class="comment">%    x0 - initial state</span>
+0007 <span class="comment">%    f  - (continuous time) dynamics (function handle: xdot=f(x,u))</span>
+0008 <span class="comment">%    u  - command sequence</span>
+0009 <span class="comment">%    p  - parameter struct containing:</span>
+0010 <span class="comment">%         p.solver - numerical solver (see simulation_step.m)</span>
+0011 <span class="comment">%         p.dt     - time step</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% out:</span>
+0014 <span class="comment">%    x        - state trajectory</span>
+0015 <span class="comment">%</span>
+0016 <a name="_sub0" href="#_subfunctions" class="code">function x = simulate_feedforward ( x0, f, u, p )</a>
+0017 
+0018 N = size(u,2)+1;
+0019 x = nan(size(x0,1),N); x(:,1)=x0; <span class="comment">% initialise x</span>
+0020 <span class="keyword">for</span> n=1:N-1
+0021     x(:,n+1) = <a href="simulate_step.html" class="code" title="function xn = simulate_step ( f, x, u, p )">simulate_step</a> ( f, x(:,n), u(:,n), p );
+0022 <span class="keyword">end</span>
+0023 
+0024</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,6 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  predict_linear [URL="predict_linear.html"];
+  predict_local_linear [URL="predict_local_linear.html"];
+}

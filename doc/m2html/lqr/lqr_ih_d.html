@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of lqr_ih_d</title>
+  <meta name="keywords" content="lqr_ih_d">
+  <meta name="description" content="Solve Riccati equation and compute optimal gains for infinite horizon linear-quadratic regulator problem in discrete time.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">lqr</a> &gt; lqr_ih_d.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\lqr&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>lqr_ih_d
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Solve Riccati equation and compute optimal gains for infinite horizon linear-quadratic regulator problem in discrete time.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [pi,L,S] = lqr_ih_d(A, B, Q, R) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Solve Riccati equation and compute optimal gains for infinite horizon linear-quadratic regulator problem in discrete time.
+
+ in: 
+     A,B    - matrices defining the dynamics (x_{n+1} = A*x_n + B*u_n)
+     Q,R    - matrices defining the cost (J = \sum_0^\infty x_n^T Q x_n + u_n^T R u_n)
+ 
+ out: 
+     L      - optimal feedback gains
+     S      - optimal value</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../control/pi_linear.html" class="code" title="function u = pi_linear ( x, L )">pi_linear</a>	Linear policy</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../examples/test_lqr_ih_d.html" class="code" title="">test_lqr_ih_d</a>	Demo script: Test numerical solution of infinite horizon linear-quadratic regulator problem in discrete time.</li><li><a href="../examples/test_lspi_lqr_ih_d.html" class="code" title="">test_lspi_lqr_ih_d</a>	Demo script: Test LSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</li><li><a href="../examples/test_lwlspi_lqr_ih_d.html" class="code" title="">test_lwlspi_lqr_ih_d</a>	Demo script: Test LWLSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Solve Riccati equation and compute optimal gains for infinite horizon linear-quadratic regulator problem in discrete time.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% in:</span>
+0004 <span class="comment">%     A,B    - matrices defining the dynamics (x_{n+1} = A*x_n + B*u_n)</span>
+0005 <span class="comment">%     Q,R    - matrices defining the cost (J = \sum_0^\infty x_n^T Q x_n + u_n^T R u_n)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% out:</span>
+0008 <span class="comment">%     L      - optimal feedback gains</span>
+0009 <span class="comment">%     S      - optimal value</span>
+0010 <span class="comment">%</span>
+0011 <a name="_sub0" href="#_subfunctions" class="code">function [pi,L,S] = lqr_ih_d(A, B, Q, R)</a>
+0012 
+0013 dimX = size(A,2); <span class="comment">% state dimensionality</span>
+0014 dimU = size(B,2); <span class="comment">% command dimensionality</span>
+0015 
+0016 <span class="comment">% initialise matrices</span>
+0017 S = nan(dimX,dimX); <span class="comment">% value</span>
+0018 L = nan(dimU,dimX); <span class="comment">% control gains</span>
+0019 
+0020 <span class="comment">% solve Riccati equation</span>
+0021 <span class="comment">%S = Q;</span>
+0022 S = rand(dimX); <span class="comment">% initialise Q (however you like)</span>
+0023 err = inf; iter = 0;
+0024 <span class="keyword">while</span> err&gt;1e-6 &amp;&amp; iter &lt; 1000
+0025     iter = iter + 1; Sp = S; 
+0026     S = Q + A'*(S - S*B*inv(B'*S*B+R)*B'*S)*A;
+0027     err = max(max(abs(S-Sp)));
+0028 <span class="keyword">end</span>
+0029 <span class="comment">% compute gains</span>
+0030 L = inv(B'*S*B+R)*B'*S*A;
+0031 
+0032 pi=@(x)<a href="../control/pi_linear.html" class="code" title="function u = pi_linear ( x, L )">pi_linear</a>(x,L);</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,12 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  simulate_feedforward -> simulate_step;
+
+  simulate_feedback [URL="simulate_feedback.html"];
+  simulate_feedback_d [URL="simulate_feedback_d.html"];
+  simulate_feedback_time_indexed [URL="simulate_feedback_time_indexed.html"];
+  simulate_feedback_time_indexed_d [URL="simulate_feedback_time_indexed_d.html"];
+  simulate_feedforward [URL="simulate_feedforward.html"];
+  simulate_feedforward_d [URL="simulate_feedforward_d.html"];
+  simulate_step [URL="simulate_step.html"];
+}

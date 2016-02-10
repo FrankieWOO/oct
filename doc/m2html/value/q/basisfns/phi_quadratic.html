@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of phi_quadratic</title>
+  <meta name="keywords" content="phi_quadratic">
+  <meta name="description" content="Quadratic basis function.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">value</a> &gt; <a href="#">q</a> &gt; <a href="#">basisfns</a> &gt; phi_quadratic.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\value\q\basisfns&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>phi_quadratic
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Quadratic basis function.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function phi = fn_basis_quadratic ( x ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Quadratic basis function.
+
+  phi = fn_basis_quadratic ( x )
+
+ Implements quadratic basis function:
+
+  phi(x) = [ x1^2; x2^2; ...; x1x2; ...; x1; x2; ... 1 ]
+
+ in: 
+     x   - input
+
+ out: 
+     phi - basis function prediction
+
+ Note: This uses the outer product to compute the basis elements, 
+       in matrix form. These are then selected from the upper 
+       triangle of the matrix. There may be a more efficient way
+       to do this, avoiding the uncessary computation of the lower
+       triangular part, and the find() operation.
+
+ TODO % Return offset element, but include projection matrix
+ in argmaxQ_fn_basis_quadratic.m</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../examples/test_lwlspi_lqr_ih_d.html" class="code" title="">test_lwlspi_lqr_ih_d</a>	Demo script: Test LWLSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Quadratic basis function.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%  phi = fn_basis_quadratic ( x )</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Implements quadratic basis function:</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%  phi(x) = [ x1^2; x2^2; ...; x1x2; ...; x1; x2; ... 1 ]</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% in:</span>
+0010 <span class="comment">%     x   - input</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% out:</span>
+0013 <span class="comment">%     phi - basis function prediction</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Note: This uses the outer product to compute the basis elements,</span>
+0016 <span class="comment">%       in matrix form. These are then selected from the upper</span>
+0017 <span class="comment">%       triangle of the matrix. There may be a more efficient way</span>
+0018 <span class="comment">%       to do this, avoiding the uncessary computation of the lower</span>
+0019 <span class="comment">%       triangular part, and the find() operation.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% TODO % Return offset element, but include projection matrix</span>
+0022 <span class="comment">% in argmaxQ_fn_basis_quadratic.m</span>
+0023 <a name="_sub0" href="#_subfunctions" class="code">function phi = fn_basis_quadratic ( x )</a>
+0024 
+0025 <span class="comment">%N = size(x,2);</span>
+0026 <span class="comment">%for n=1:N</span>
+0027 <span class="comment">%xxT = x(:,n)*x(:,n)';</span>
+0028 <span class="comment">%phi(:,n) = [diag(xxT); xxT(find(~tril(ones(size(xxT))))); x(:,n); 1];</span>
+0029 <span class="comment">%end</span>
+0030 
+0031 N = size(x,2);
+0032 <span class="keyword">for</span> n=1:N
+0033 xxT = x(:,n)*x(:,n)';
+0034 phi(:,n) = [diag(xxT); xxT(find(~tril(ones(size(xxT))))); x(:,n); 1];
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">%function phi = fn_basis_quadratic ( x, u )</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">%z = [x;u]</span>
+0040 <span class="comment">%N = size(z,2);</span>
+0041 <span class="comment">%for n=1:N</span>
+0042 <span class="comment">%zzT = z(:,n)*z(:,n)';</span>
+0043 <span class="comment">%phi(:,n) = [diag(zzT); zzT(find(~tril(ones(size(zzT))))); z(:,n); 1];</span>
+0044 <span class="comment">%end</span>
+0045 <span class="comment">%</span></pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

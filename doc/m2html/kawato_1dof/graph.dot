@@ -1,0 +1,22 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  f_kawato_1dof -> qddot_kawato_1dof;
+  fn_dynamics_kawato_1dof -> qddot_kawato_1dof;
+  k_kawato_1dof -> km_kawato_1dof;
+  q0_kawato_1dof -> km_kawato_1dof;
+  qddot_kawato_1dof -> tau_kawato_1dof;
+  tau_kawato_1dof -> tau_kawato_1dof_mx;
+  tau_kawato_1dof_mx -> bm_kawato_1dof;
+  tau_kawato_1dof_mx -> km_kawato_1dof;
+
+  bm_kawato_1dof [URL="bm_kawato_1dof.html"];
+  f_kawato_1dof [URL="f_kawato_1dof.html"];
+  fn_dynamics_kawato_1dof [URL="fn_dynamics_kawato_1dof.html"];
+  k_kawato_1dof [URL="k_kawato_1dof.html"];
+  km_kawato_1dof [URL="km_kawato_1dof.html"];
+  model_kawato_1dof [URL="model_kawato_1dof.html"];
+  q0_kawato_1dof [URL="q0_kawato_1dof.html"];
+  qddot_kawato_1dof [URL="qddot_kawato_1dof.html"];
+  tau_kawato_1dof [URL="tau_kawato_1dof.html"];
+  tau_kawato_1dof_mx [URL="tau_kawato_1dof_mx.html"];
+}

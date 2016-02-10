@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_lwlspi_lqr_ih_d</title>
+  <meta name="keywords" content="test_lwlspi_lqr_ih_d">
+  <meta name="description" content="Demo script: Test LWLSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; test_lwlspi_lqr_ih_d.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\examples&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>test_lwlspi_lqr_ih_d
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Demo script: Test LWLSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Demo script: Test LWLSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../control/pi_linear.html" class="code" title="function u = pi_linear ( x, L )">pi_linear</a>	Linear policy</li><li><a href="../cost/l_quadratic.html" class="code" title="function l = l_quadratic ( x, u, p )">l_quadratic</a>	Finite horizon quadratic cost function.</li><li><a href="../dynamics/f/f_linear_d.html" class="code" title="function x = f_linear_d ( x, u, model )">f_linear_d</a>	Linear dynamics function in discrete time</li><li><a href="../dynamics/f/f_linear_d.html" class="code" title="function x = f_linear_d ( x, u, model )">f_linear_d</a>	Linear dynamics function in discrete time</li><li><a href="../lqr/lqr_ih_d.html" class="code" title="function [pi,L,S] = lqr_ih_d(A, B, Q, R)">lqr_ih_d</a>	Solve Riccati equation and compute optimal gains for infinite horizon linear-quadratic regulator problem in discrete time.</li><li><a href="../lspi/distances.html" class="code" title="function D = distances(A,B)">distances</a>	</li><li><a href="../lspi/lwlspi.html" class="code" title="function [ pi, Q, model, stats ] = lwlspi ( D, pi0, model, argmaxuQ, gamma, p )">lwlspi</a>	Function for solving (infinite horizon) optimal control problems with Locally Weighted Least Squares Policy Iteration method.</li><li><a href="../lspi/rand_interval.html" class="code" title="function r=rand_interval(N,M,rmax,rmin)">rand_interval</a>	</li><li><a href="../plot/plot_lq_fh.html" class="code" title="function h = plot_lq_fh(figNo,figName,t,x,u,L,xh,colour)">plot_lq_fh</a>	Function for plotting solutions to the finite horizon LQ problem from the demo scripts</li><li><a href="../simulate/simulate_feedback_d.html" class="code" title="function [x,u] = simulate_feedback_d ( x0, f, pi, p )">simulate_feedback_d</a>	Simulate trajectory under closed-loop feedback control, in discrete time</li><li><a href="../value/evaluate_trajectory_cost_ih_d.html" class="code" title="function cost = evaluate_trajectory_cost_ih_d ( x, u, l, gamma )">evaluate_trajectory_cost_ih_d</a>	Function for evaluating the cost along a trajectory under a given cost function in discrete time</li><li><a href="../value/q/argmaxuq/argmaxuQ_lwlspi.html" class="code" title="function [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU, p )">argmaxuQ_lwlspi</a>	Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis.</li><li><a href="../value/q/argmaxuq/argmaxuQ_lwlspi.html" class="code" title="function [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU, p )">argmaxuQ_lwlspi</a>	Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis.</li><li><a href="../value/q/argmaxuq/argmaxuQ_lwlspi.html" class="code" title="function [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU, p )">argmaxuQ_lwlspi</a>	Function for calculating argmax_u (Q) from the weights of the Q-function represented with a quadratic basis.</li><li><a href="../value/q/basisfns/phi_quadratic.html" class="code" title="function phi = fn_basis_quadratic ( x )">phi_quadratic</a>	Quadratic basis function.</li><li><a href="../value/q/basisfns/phi_quadratic.html" class="code" title="function phi = fn_basis_quadratic ( x )">phi_quadratic</a>	Quadratic basis function.</li><li><a href="../value/q/basisfns/phi_quadratic.html" class="code" title="function phi = fn_basis_quadratic ( x )">phi_quadratic</a>	Quadratic basis function.</li><li><a href="../value/weights/fn_weight_gaussians.html" class="code" title="function W = fn_weight_gaussians(X,c,s2)">fn_weight_gaussians</a>	Normalised Gaussian weighting function.</li><li><a href="../value/weights/fn_weight_gaussians.html" class="code" title="function W = fn_weight_gaussians(X,c,s2)">fn_weight_gaussians</a>	Normalised Gaussian weighting function.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Demo script: Test LWLSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</span>
+0002 
+0003 clear all;
+0004 rand(<span class="string">'seed'</span>,1),randn(<span class="string">'seed'</span>,1)
+0005 datafile = [<span class="string">'D_'</span>,mfilename,<span class="string">'.mat'</span>];
+0006 <span class="keyword">if</span> 1,unix([<span class="string">'rm -f '</span>,datafile]);<span class="keyword">end</span> <span class="comment">% remove old data if needed</span>
+0007 
+0008 <span class="comment">% set up numerical simulation</span>
+0009 dt = 0.02;       <span class="comment">% time step</span>
+0010 N  = 200;        <span class="comment">% number of time steps</span>
+0011 t  = (0:N-1)*dt; <span class="comment">% sample times</span>
+0012 
+0013 <span class="comment">% simulation parameters</span>
+0014 ps = []; ps.N = N;
+0015 
+0016 <span class="comment">% dimensionality</span>
+0017 dimX = 2;
+0018 dimU = 1;
+0019 dimY = dimX;
+0020 
+0021 <span class="comment">% start state</span>
+0022 x0 = [1;0];
+0023 
+0024 <span class="comment">% dynamics</span>
+0025 model.A = [ 1 dt ; <span class="keyword">...</span>
+0026             0  1 ];
+0027 model.B = [ 0 ; <span class="keyword">...</span>
+0028            dt ];
+0029 f = @(x, u) <a href="../dynamics/f/f_linear_d.html" class="code" title="function x = f_linear_d ( x, u, model )">f_linear_d</a> ( x, u, model );         <span class="comment">% linear dynamics (discrete time)</span>
+0030 
+0031 <span class="comment">% sensor</span>
+0032 h = @(x)x;
+0033 
+0034 <span class="comment">% cost</span>
+0035 pc = [];
+0036 <span class="comment">% state cost</span>
+0037 pc.Q  = dt*[1  0;  0  0.1];
+0038 <span class="comment">% command cost</span>
+0039 pc.R  = dt*.1;
+0040 l  = @(x,u) <a href="../cost/l_quadratic.html" class="code" title="function l = l_quadratic ( x, u, p )">l_quadratic</a> ( x, u, pc ); <span class="comment">% quadratic costs</span>
+0041 
+0042 <span class="comment">% get training data</span>
+0043 <span class="keyword">try</span>   <span class="comment">% load data, if possible</span>
+0044 load(datafile);
+0045 <span class="keyword">catch</span> <span class="comment">% otherwise, regenerate</span>
+0046 <span class="comment">% generate training data</span>
+0047 xmax = 1.1*ones(dimX,1); xmin=-xmax; umax = 10; umin = -umax; <span class="comment">% range of data</span>
+0048 Ntr = 500;                                        <span class="comment">% no. data points</span>
+0049 X  = nan(dimX,Ntr);<span class="keyword">for</span> i=1:dimX,X(i,:) = <a href="../lspi/rand_interval.html" class="code" title="function r=rand_interval(N,M,rmax,rmin)">rand_interval</a>(1,Ntr,xmax(i),xmin(i));<span class="keyword">end</span>
+0050 U  = nan(dimU,Ntr);<span class="keyword">for</span> i=1:dimU,U(i,:) = <a href="../lspi/rand_interval.html" class="code" title="function r=rand_interval(N,M,rmax,rmin)">rand_interval</a>(1,Ntr,umax(i),umin(i));<span class="keyword">end</span>
+0051 Xn = nan(dimX,Ntr);
+0052 RR = nan(   1,Ntr);
+0053 <span class="keyword">for</span> n=1:Ntr
+0054 Xn(:,n)=  f(X(:,n),U(:,n));
+0055 RR(:,n)= -l(X(:,n),U(:,n));
+0056 <span class="keyword">end</span>
+0057 Y  = h(X );
+0058 Yn = h(Xn);
+0059 D.X = X; D.Y = Y; D.R = RR; D.Xn = Xn; D.U = U; D.Yn = Yn;
+0060 <span class="comment">% save data</span>
+0061 save(datafile,<span class="string">'D'</span>);
+0062 <span class="keyword">end</span>
+0063 <span class="comment">% unpack data</span>
+0064 Ntr = size(D.X,2);
+0065 fprintf(1,<span class="string">'#Data: %5d, '</span>,Ntr);   
+0066 
+0067 <span class="comment">% set up LSPI parameters, functions</span>
+0068 gamma      = 1-1e-6; <span class="comment">% discount factor</span>
+0069 p          = [];
+0070 p.p_pi     = [];
+0071 <span class="comment">% set up regression model</span>
+0072 cmax = xmax-.1*(xmax-xmin); cmin = xmin+.1*(xmax-xmin); Ngp  = 5; Nc = Ngp^dimX;
+0073 [c1,c2] = ndgrid(linspace(cmin(1),cmax(1),Ngp),linspace(cmin(2),cmax(2),Ngp)); c = [c1(:),c2(:)]';
+0074 cDs = sqrt(<a href="../lspi/distances.html" class="code" title="function D = distances(A,B)">distances</a>(c,c)); sortcDs = sort(cDs); s2 = sortcDs(2,1);
+0075 model.W    = @(z)<a href="../value/weights/fn_weight_gaussians.html" class="code" title="function W = fn_weight_gaussians(X,c,s2)">fn_weight_gaussians</a>( z(1:dimX,:), c, s2 );
+0076 model.phi  = @(z)<a href="../value/q/basisfns/phi_quadratic.html" class="code" title="function phi = fn_basis_quadratic ( x )">phi_quadratic</a> ( z );
+0077 argmaxuQ   = @(model)<a href="../value/q/argmaxuq/argmaxuQ_lwlspi.html" class="code" title="function [pi, L] = argmaxuQ_lwlspi ( model, dimX, dimU, p )">argmaxuQ_lwlspi</a>(model,dimX,dimU,p.p_pi); <span class="comment">% function for finding the argmax of the Q-function</span>
+0078 pi0        = @(x)<a href="../control/pi_linear.html" class="code" title="function u = pi_linear ( x, L )">pi_linear</a>(x,[1,1]);        <span class="comment">% initial policy</span>
+0079 
+0080 <span class="comment">% optimise</span>
+0081 [pi, Qp, model] = <a href="../lspi/lwlspi.html" class="code" title="function [ pi, Q, model, stats ] = lwlspi ( D, pi0, model, argmaxuQ, gamma, p )">lwlspi</a>( D, pi0, model, argmaxuQ, gamma, p );
+0082 
+0083 <span class="comment">% estimate cost from computed Q function</span>
+0084 costp = Qp(x0,pi(x0));
+0085 fprintf(1,<span class="string">'Predicted cost from x0    = %f\n'</span>,costp)
+0086 
+0087 <span class="comment">% run controller on plant</span>
+0088 [x,u] = <a href="../simulate/simulate_feedback_d.html" class="code" title="function [x,u] = simulate_feedback_d ( x0, f, pi, p )">simulate_feedback_d</a>(x0,f,pi,ps);
+0089 
+0090 <span class="comment">% evaluate cost of trajectory on plant</span>
+0091 cost = <a href="../value/evaluate_trajectory_cost_ih_d.html" class="code" title="function cost = evaluate_trajectory_cost_ih_d ( x, u, l, gamma )">evaluate_trajectory_cost_ih_d</a>(x,u,l,1);
+0092 fprintf(1,<span class="string">'Cost (evaluated on plant) = %f\n'</span>,cost)
+0093 
+0094 <span class="comment">% evaluate error in solution (compared to analytical)</span>
+0095 [pit,Lt,Vt] = <a href="../lqr/lqr_ih_d.html" class="code" title="function [pi,L,S] = lqr_ih_d(A, B, Q, R)">lqr_ih_d</a>(model.A, model.B, pc.Q, pc.R); <span class="comment">% optimise policy numerically</span>
+0096 [xt,ut] = <a href="../simulate/simulate_feedback_d.html" class="code" title="function [x,u] = simulate_feedback_d ( x0, f, pi, p )">simulate_feedback_d</a> ( x0, f, pit, ps );
+0097 Nx=min(size(x,2),size(xt,2)); RMSE_x=sqrt(sum((xt(:,1:Nx)-x(:,1:Nx)).^2,2)/Nx);
+0098 Nu=min(size(u,2),size(ut,2)); RMSE_u=sqrt(sum((ut(:,1:Nu)-u(:,1:Nu)).^2,2)/Nu);
+0099 fprintf(1,<span class="string">'RMSE(x,x*)=[%f %f],RMSE(u,u*)=%f\n'</span>,RMSE_x,RMSE_u)
+0100 
+0101 <span class="comment">% plot</span>
+0102 fn=2;figure(fn),clf
+0103 <a href="../plot/plot_lq_fh.html" class="code" title="function h = plot_lq_fh(figNo,figName,t,x,u,L,xh,colour)">plot_lq_fh</a>(fn,<span class="string">'LWLSPI/LQR-IH (discrete time)'</span>,t,x,u,[],[],<span class="string">'g'</span>);
+0104 
+0105 subplot(2,4,[1 2 5 6])
+0106 
+0107 <span class="comment">% plot out data points</span>
+0108 plot3(D.X(1,:),D.X(2,:),D.U,<span class="string">'x'</span>,<span class="string">'Color'</span>,.9*ones(1,3))
+0109 
+0110 <span class="comment">% plot centres</span>
+0111 plot3(c(1,:),c(2,:),zeros(size(c,2)),<span class="string">'bo'</span>)
+0112 
+0113 <span class="comment">% plot optimal V-function</span>
+0114 Ngp=50; [X1,X2]=meshgrid(linspace(xmin(1),xmax(1),Ngp),linspace(xmin(2),xmax(2),Ngp)); 
+0115 contour(X1,X2,reshape(Qp([X1(:),X2(:)]',pi([X1(:),X2(:)]')),Ngp,Ngp))
+0116 
+0117 xlim([xmin(1),xmax(1)])
+0118 ylim([xmin(2),xmax(2)])
+0119 zlim([umin(1),umax(1)])
+0120 
+0121 <span class="comment">% plot Q-function</span>
+0122 subplot(2,4,8)
+0123 Ngp=10; [X1,X2,U]=meshgrid(linspace(xmin(1),xmax(1),Ngp),linspace(xmin(2),xmax(2),Ngp),linspace(umin(1),umax(1),Ngp)); Z=[X1(:),X2(:),U(:)]';
+0124 scatter3(Z(1,:),Z(2,:),Z(3,:),200*ones(1,size(Z,2)),Qp([Z(1,:);Z(2,:)],Z(3,:)),<span class="string">'.'</span>)
+0125 xlabel(<span class="string">'x_1'</span>)
+0126 ylabel(<span class="string">'x_2'</span>)
+0127 zlabel(<span class="string">'u'</span>)
+0128 
+0129</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

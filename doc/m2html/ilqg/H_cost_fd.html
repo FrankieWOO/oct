@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of H_cost_fd</title>
+  <meta name="keywords" content="H_cost_fd">
+  <meta name="description" content="Function for calculating the Hessian of a cost function using finite differences on the cost Jacobian.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">ilqg</a> &gt; H_cost_fd.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\ilqg&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>H_cost_fd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Function for calculating the Hessian of a cost function using finite differences on the cost Jacobian.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [l_xx,l_uu,l_ux] = H_cost_fd ( J, x, u, t ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Function for calculating the Hessian of a cost function using finite differences on the cost Jacobian.
+ 
+ in:
+    J       - function handle for calculating cost Jacobian
+    x, u, t - state, command and time at which Hessian should be calculated
+
+ out:
+    l_xx,l_uu,l_ux - Hessian w.r.t. state, action and cross term.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="j_contact_task_1dof_plants.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_contact_task_1dof_plants ( x, u, t, p )">j_contact_task_1dof_plants</a>	'Reaching task' cost function for the 1-DOF plants (e.g., MACCEPA, swinger, etc.) for use with ILQR/G</li><li><a href="j_reaching_task_1dof_plants.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_task_1dof_plants ( x, u, t, p )">j_reaching_task_1dof_plants</a>	'Reaching task' cost function for the 1-DOF plants (e.g., MACCEPA, swinger, etc.) for use with ILQR/G</li><li><a href="j_reaching_task_2dof_plants.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_task_2dof_plants ( x, u, t, p )">j_reaching_task_2dof_plants</a>	'Reaching task' cost function for the 2-DOF plants (e.g., Kawato arm) for use with ILQR/G</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Function for calculating the Hessian of a cost function using finite differences on the cost Jacobian.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% in:</span>
+0004 <span class="comment">%    J       - function handle for calculating cost Jacobian</span>
+0005 <span class="comment">%    x, u, t - state, command and time at which Hessian should be calculated</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% out:</span>
+0008 <span class="comment">%    l_xx,l_uu,l_ux - Hessian w.r.t. state, action and cross term.</span>
+0009 <span class="comment">%</span>
+0010 <a name="_sub0" href="#_subfunctions" class="code">function [l_xx,l_uu,l_ux] = H_cost_fd ( J, x, u, t )</a>
+0011 
+0012 dimX = size(x,1);
+0013 dimU = size(u,1);
+0014 
+0015 delta=1e-6;
+0016 
+0017 l_xx = zeros(dimX,dimX);
+0018 l_ux = zeros(dimU,dimX);
+0019 <span class="keyword">for</span> i=1:dimX
+0020     dx=zeros(dimX,1); dx(i)=delta;
+0021 
+0022     [lxxp,luxp] = J( x+dx, u, t );
+0023     [lxxm,luxm] = J( x-dx, u, t );
+0024 
+0025     l_xx(:,i) = (lxxp-lxxm)/(2*delta);
+0026     l_ux(:,i) = (luxp-luxm)/(2*delta);
+0027 <span class="keyword">end</span>
+0028 
+0029 l_uu = zeros(dimU,dimU);
+0030 <span class="keyword">for</span> i=1:dimU
+0031     du=zeros(dimU,1); du(i)=delta;
+0032 
+0033     [dummy,luup] = J( x, u+du, t );
+0034     [dummy,luum] = J( x, u-du, t );
+0035 
+0036     l_uu(:,i) = (luup-luum)/(2*delta);
+0037 <span class="keyword">end</span>
+0038</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

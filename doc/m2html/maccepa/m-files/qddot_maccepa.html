@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of qddot_maccepa</title>
+  <meta name="keywords" content="qddot_maccepa">
+  <meta name="description" content="Calculate acceleration for MACCEPA">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">maccepa</a> &gt; <a href="#">m-files</a> &gt; qddot_maccepa.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\maccepa\m-files&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>qddot_maccepa
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Calculate acceleration for MACCEPA</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function qddot = qddot_maccepa ( q, qdot, u, model ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Calculate acceleration for MACCEPA
+
+  in:
+     q     - joint angles
+     qdot  - joint velocities
+     u     - command [desired motor positions in radiens]
+     model - model struct
+
+ out:  
+       acc           - acceleration</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../ilqg/g_maccepa.html" class="code" title="function [xdot, xdot_x, xdot_u] = g_maccepa ( x, u, model )">g_maccepa</a>	Dynamics function for the MACCEPA.</li><li><a href="f_maccepa.html" class="code" title="function xdot = f_maccepa ( x, u, model )">f_maccepa</a>	State space dynamics function for the MACCEPA.</li><li><a href="f_maccepa.html" class="code" title="function xdot = f_maccepa ( x, u, model )">f_maccepa</a>	State space dynamics function for the MACCEPA.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Calculate acceleration for MACCEPA</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%  in:</span>
+0004 <span class="comment">%     q     - joint angles</span>
+0005 <span class="comment">%     qdot  - joint velocities</span>
+0006 <span class="comment">%     u     - command [desired motor positions in radiens]</span>
+0007 <span class="comment">%     model - model struct</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% out:</span>
+0010 <span class="comment">%       acc           - acceleration</span>
+0011 <span class="comment">%</span>
+0012 <a name="_sub0" href="#_subfunctions" class="code">function qddot = qddot_maccepa ( q, qdot, u, model )</a>
+0013 
+0014 qddot = model_maccepa ( <span class="string">'maccepa_model_get_acceleration'</span>, [q;qdot], u, model );
+0015 
+0016 <span class="comment">%% add damping torque</span>
+0017 <span class="comment">%% TODO % migrate the below to libmaccepa once the damping model is finalised</span>
+0018 <span class="comment">%I = model.I;</span>
+0019 <span class="comment">%b = get_damping_maccepa ( x, u, model );</span>
+0020 <span class="comment">%acc = acc - b*x(2)/I;</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%%function tau = get_torque_maccepa(x,u,model)</span>
+0023 <span class="comment">%%B     = model.lever_length;</span>
+0024 <span class="comment">%%C     = model.pin_displacement;</span>
+0025 <span class="comment">%%kappa = model.spring_constant;</span>
+0026 <span class="comment">%%r     = model.drum_radius;</span>
+0027 <span class="comment">%%a     = u(1)-x(1); % we control psi, so calculate alpha from this and current joint angle</span>
+0028 <span class="comment">%%</span>
+0029 <span class="comment">%%tau = kappa*B*C*sin(a)*( 1 + (r*u(2)-(C-B))/sqrt(B^2+C^2+2*B*C*cos(a)) );</span>
+0030 
+0031 <span class="comment">%&gt; \file get_acceleration_maccepa.m</span>
+0032 <span class="comment">%&gt; \author Matthew Howard (MH), matthew.howard@ed.ac.uk</span>
+0033 <span class="comment">%&gt; \ingroup MACCEPA</span>
+0034 <span class="comment">%&gt; \brief Matlab wrapper to libmaccepa -&gt; maccepa_model_get_acceleration</span>
+0035 <span class="comment">%&gt; \sa &lt;a href=&quot;../m2html/MACCEPA/m-files/dynamics/models/get_acceleration_maccepa.html&quot;&gt;m2html documentation&lt;/a&gt;</span></pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

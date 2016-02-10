@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of phi_lqrq</title>
+  <meta name="keywords" content="phi_lqrq">
+  <meta name="description" content="Polynomial basis function for use on the 1-D LQR problem with linear function approximation fitting of Q.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">value</a> &gt; <a href="#">q</a> &gt; <a href="#">basisfns</a> &gt; phi_lqrq.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\value\q\basisfns&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>phi_lqrq
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Polynomial basis function for use on the 1-D LQR problem with linear function approximation fitting of Q.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function phi = phi_lqrq ( x, u ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Polynomial basis function for use on the 1-D LQR problem with linear function approximation fitting of Q.
+
+  phi = fn_basis_lqr_q ( x, u )
+
+ Implements polynomial basis function of the form:
+
+  phi(x,u) = [x1^2, x2^2, u^2, x1*x2, x1*u, x2*u]'
+
+ in: 
+     x,u - state, action
+
+ out: 
+     phi - basis function prediction
+
+ Note: This is a special case of fn_basis_quadratic
+       in which the linear terms are not computed.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../examples/test_lspi_lqr_ih_d.html" class="code" title="">test_lspi_lqr_ih_d</a>	Demo script: Test LSPI solution of infinite horizon linear-quadratic regulator problem in discrete time.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Polynomial basis function for use on the 1-D LQR problem with linear function approximation fitting of Q.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%  phi = fn_basis_lqr_q ( x, u )</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Implements polynomial basis function of the form:</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%  phi(x,u) = [x1^2, x2^2, u^2, x1*x2, x1*u, x2*u]'</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% in:</span>
+0010 <span class="comment">%     x,u - state, action</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% out:</span>
+0013 <span class="comment">%     phi - basis function prediction</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Note: This is a special case of fn_basis_quadratic</span>
+0016 <span class="comment">%       in which the linear terms are not computed.</span>
+0017 <span class="comment">%</span>
+0018 <a name="_sub0" href="#_subfunctions" class="code">function phi = phi_lqrq ( x, u )</a>
+0019 
+0020 phi(1,:)=x(1,:).^2;
+0021 phi(2,:)=x(2,:).^2;
+0022 phi(3,:)=u.^2;
+0023 phi(4,:)=x(1,:).*x(2,:);
+0024 phi(5,:)=x(1,:).*u;
+0025 phi(6,:)=x(2,:).*u;
+0026</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:31:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
