@@ -17,6 +17,43 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+
+# =========================
+# Matlab temp file
+# =========================
+
 # =========================
 # Operating System Files
 # =========================
