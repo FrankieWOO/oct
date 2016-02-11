@@ -1,10 +1,14 @@
-% Demo script: Test ilqr on reaching problem for MACCEPA actuator.
+% Demo script: Test ilqr on reaching problem for MACCEPA actuator with U dimension of 2.
 
 clear all;
 curPath = pwd;
 curPaths = strsplit(curPath,{'\','/'});
 fatherPath = strjoin(curPaths(1:end-1),'/');
-addpath(genpath(fatherPath));
+addpath([fatherPath,'/external/genpath_exclude'])
+
+addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}))
+
+addpath([fatherPath,'/maccepa/model_maccepa_d2']);
 
 tic
 
@@ -105,5 +109,5 @@ legend(h,'q_0','k','Location','Best')
 %xlabel('t')
 
 toc
-
-rmpath(genpath(fatherPath));
+%%
+rmpath(genpath(fatherPath))
