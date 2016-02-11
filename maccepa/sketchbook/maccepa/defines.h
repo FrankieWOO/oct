@@ -10,7 +10,7 @@
 #define __maccepa_defines_h
 
 /* #define VARIABLE_DAMPING */
-#define VARIABLE_DAMPING
+/*#define VARIABLE_DAMPING */
 
 /** \brief Dimensionality of joint space. */
 #define DIMQ 1
