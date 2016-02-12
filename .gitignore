@@ -54,6 +54,7 @@ $RECYCLE.BIN/
 # Matlab m~ file and mex files
 # =========================
 *.m~
+*.asv
 *.mexa64
 *.mexw64
 
