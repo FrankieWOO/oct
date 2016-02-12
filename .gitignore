@@ -51,8 +51,11 @@ $RECYCLE.BIN/
 *.dSYM/
 
 # =========================
-# Matlab temp file
+# Matlab m~ file and mex files
 # =========================
+*.m~
+*.mexa64
+*.mexw64
 
 # =========================
 # Operating System Files
@@ -60,7 +63,7 @@ $RECYCLE.BIN/
 
 # OSX
 # =========================
-
+.gitignore~
 .DS_Store
 .AppleDouble
 .LSOverride
