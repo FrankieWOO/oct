@@ -1,6 +1,16 @@
 % Demo script: Test ilqr on reaching problem for MACCEPA actuator.
 
 clear all;
+
+curPath = pwd;
+curPaths = strsplit(curPath,{'\','/'});
+fatherPath = strjoin(curPaths(1:end-1),'/');
+addpath([fatherPath,'/external/genpath_exclude']);
+
+addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
+
+addpath([fatherPath,'/maccepa/model_maccepa_d3']);
+
 tic
 
 % time
@@ -11,37 +21,37 @@ t  = (0:N-1)*dt; % sample times
 % simulation parameters
 ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 
-%model = model_maccepa('maccepa_model'); %
-model = [];
-model.m  = 2.5;
-model.g  = 9.81;
-model.l  = 25;
-model.kb = 5;
-model.bb = sqrt(model.kb);
-model.rho0 = 15;
-model.dimQ = 1;
-model.dimU = 3;
+model = model_maccepa('maccepa_model'); %
+% model = [];
+% model.m  = 2.5;
+% model.g  = 9.81;
+% model.l  = 25;
+% model.kb = 5;
+% model.bb = sqrt(model.kb);
+% model.rho0 = 15;
+% model.dimQ = 1;
+% model.dimU = 3;
 
-model.umax = [ pi/2; 3; sqrt(3)]; %[equilibrium position;damping;stiffness]  
-model.umin = [-pi/2; 0; -sqrt(3)];
+model.umax = [ pi/2; pi/8; 1]; %[equilibrium position;damping;stiffness]  
+model.umin = [ pi/2; pi/8; 0];
 
 % dynamics
 umax = model.umax;
 umin = model.umin;
-f = @(x, u) g_ideal_contact ( x, u, model ); % state space dynamics
+f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
 
 % cost/reward
 pc = [];
 pc.Fx_desired = 1;
 pc.w   = 1e-4;
 pc.model = model;
-j = @(x,u,t) j_contact_task_1dof_plants ( x, u, t, pc );
+j = @(x,u,t) l_reaching_task_2dof_plants ( x, u, t, pc );
 
 % start state j_contact_task_1dof_plants
 x0 = zeros(2,1);
 
 % set ilqr parameters
-u0 = [0;.1;0]; % command initialisation
+u0 = [pi/2;pi/8;0]; % command initialisation
 po = [];
 po.umax = umax;
 po.umin = umin;
@@ -108,4 +118,6 @@ legend(h,'q_0','k','Location','Best')
 %xlabel('t')
 
 toc
+%%
+rmpath(genpath(fatherPath))
 

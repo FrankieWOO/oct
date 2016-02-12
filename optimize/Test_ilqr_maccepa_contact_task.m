@@ -1,6 +1,7 @@
-% Demo script: Test ilqr on reaching problem for MACCEPA actuator with U dimension of 2.
+% Demo script: Test ilqr on reaching problem for MACCEPA actuator.
 
 clear all;
+
 curPath = pwd;
 curPaths = strsplit(curPath,{'\','/'});
 fatherPath = strjoin(curPaths(1:end-1),'/');
@@ -8,37 +9,49 @@ addpath([fatherPath,'/external/genpath_exclude']);
 
 addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
 
-addpath([fatherPath,'/maccepa/model_maccepa_d2']);
+%addpath([fatherPath,'/maccepa/model_maccepa_d2']);
 
 tic
 
 % time
-dt = 0.02;       % time step
+dt = 0.05;       % time step
 N  = 25 ;        % number of time steps
 t  = (0:N-1)*dt; % sample times
 
 % simulation parameters
 ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 
-model = model_maccepa('maccepa_model'); %
+%model = model_maccepa('maccepa_model'); %
+model = [];
+model.m  = 2.5;
+model.g  = 9.81;
+model.l  = 25;
+model.kb = 5;
+model.bb = sqrt(model.kb);
+model.rho0 = 15;
+model.dimQ = 1;
+model.dimU = 3;
+
+model.umax = [ pi/2; 3; sqrt(3)]; %[equilibrium position;damping;stiffness]  
+model.umin = [-pi/2; 0; -sqrt(3)];
 
 % dynamics
 umax = model.umax;
 umin = model.umin;
-f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
+f = @(x, u) g_ideal_contact ( x, u, model ); % state space dynamics
 
 % cost/reward
 pc = [];
-pc.w   = [1;.1;.01]; pc.w = pc.w/sum(pc.w);
-pc.qt  = 30*(pi/180);
-pc.tau = @(x,u) tau_maccepa ( x(1,:), x(2,:), u, model );
-j = @(x,u,t) j_reaching_task_1dof_plants ( x, u, t, pc );
+pc.Fx_desired = 1;
+pc.w   = 1e-4;
+pc.model = model;
+j = @(x,u,t) j_contact_task_1dof_plants ( x, u, t, pc );
 
-% start state
+% start state j_contact_task_1dof_plants
 x0 = zeros(2,1);
 
 % set ilqr parameters
-u0 = [0;.1]; % command initialisation
+u0 = [0;.1;0]; % command initialisation
 po = [];
 po.umax = umax;
 po.umin = umin;
@@ -60,7 +73,6 @@ name='MACCEPA'; figure(1),set(gcf,'Name',name),set(gcf,'NumberTitle','off'),clf
 subplot(2,2,1);
 hold on
 plot(t,x');
-plot(t(N),pc.qt,'o');
 xlabel('t')
 ylabel('x')
 axis tight
@@ -85,11 +97,8 @@ axis tight
 
 subplot(2,2,4);
 hold on
-q0=nan(1,N-1); k=nan(1,N-1);
-for n=1:N-1
-q0(n) = q0_maccepa(              u(:,n),model);
- k(n) = k_maccepa (x(1,n),       u(:,n),model);
-end
+q0=u(1,:);
+ k=u(2,:);
 h(1)=plot(t(1:end-1),q0,'b');
 h(2)=plot(t(1:end-1), k,'r');
 xlabel('t')
