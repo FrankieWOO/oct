@@ -36,7 +36,7 @@
  * sketchbook/maccepa/defines.h
  *
  * \subsection sys_id System Identification
- * 
+ *
  * All estimated parameters from system identification are stored in
  * sketchbook/maccepa/defines.h
  *
@@ -63,8 +63,8 @@
  *
  * Based on this model of the dynamics, the below figures give some
  * characterisation of the system dynamics.
- * 
- * \image html eqpos_vs_u_maccepa.png "Equlibrium position vs. motor positions (evaluated at q=0, dq/dt=0)" 
+ *
+ * \image html eqpos_vs_u_maccepa.png "Equlibrium position vs. motor positions (evaluated at q=0, dq/dt=0)"
  *
  * \image html stiff_vs_u_maccepa.png "Stiffness vs. motor positions (evaluated at q=0, dq/dt=0)"
  *
@@ -89,7 +89,7 @@
  *
  * \li The maximum range of equilibrium positions is \f$-\frac{\pi}{2}\le
  * q_0\le\frac{\pi}{2}\f$ radiens.
- * 
+ *
  * \subsection components Components
  * Datasheets for the componenets used can be found below.
  * \li <a href="../datasheets/doc8161.pdf">Microcontroller (Atmel 328)</a>
@@ -101,16 +101,16 @@
  * \li <a href="../datasheets/L293D.pdf">H-bridge (for controlling the electro-magnet)</a>
  *
  * \subsection current_sensor Current Sensing Circuit
- * Current sensing circuit is show below. 
+ * Current sensing circuit is show below.
  * \image html current_sensor.png
  * Current can be calculated as \f$ V_{out} = I R_s ( 1 + R_2/R_2) \to I= \frac{V_{out}}{R_s(1+R_2/R_2)}\f$.
- * \sa Forum discussions <a href="http://letsmakerobots.com/node/10960">here</a> and <a href="http://letsmakerobots.com/node/18517">here</a> 
+ * \sa Forum discussions <a href="http://letsmakerobots.com/node/10960">here</a> and <a href="http://letsmakerobots.com/node/18517">here</a>
  *
  *
  *
  * \subsection references References
  *
- * The MACCEPA design was originally proposed in: 
+ * The MACCEPA design was originally proposed in:
  *
  * \li Ham, R. V.; Vanderborght, B.;
  * Damme, M. V.; Verrelst, B. & Lefeber, D.  MACCEPA, the mechanically
@@ -121,8 +121,8 @@
  * \ingroup MACCEPA
  */
 
-/** 
- * \file libmaccepa.c 
+/**
+ * \file libmaccepa.c
  * \author Matthew Howard (MH), matthew.howard@ed.ac.uk
  * \date August 2010
  * \brief Library of functions for calculating dynamics properties of the MACCEPA.
@@ -169,7 +169,7 @@ void maccepa_model_init(maccepa_model *model) {
     model->b_filter[11]     = SERVO1_FIR_B5;
 }
 
-/** \brief Calculate joint accleration as a function of current state and command. 
+/** \brief Calculate joint accleration as a function of current state and command.
  *  \param[out] acc joint acceleration
  *  \param[in]  x state (velocity, acceleration)
  *  \param[in]  u command (motor positions in radiens)
@@ -188,8 +188,8 @@ void maccepa_model_get_acceleration ( double * acc, double * x, double * u, macc
 	return;
 }
 
-/** 
- *  \brief Calculate total joint torque as a function of current state and command. 
+/**
+ *  \brief Calculate total joint torque as a function of current state and command.
  *  \param[out] tau torque
  *  \param[in]  x state (velocity, acceleration)
  *  \param[in]  u command (motor positions in radiens)
@@ -210,13 +210,13 @@ void maccepa_model_get_torque( double * tau, double * x, double * u, maccepa_mod
 	return;
 }
 
-/** \brief Calculate joint torque due to actuators as a function of current state and command. 
+/** \brief Calculate joint torque due to actuators as a function of current state and command.
  *  \param[out] tau torque
  *  \param[in]  x state (velocity, acceleration)
  *  \param[in]  u command (motor positions in radiens)
  *  \param[in]  model model struct
  *
- *  This implements 
+ *  This implements
  *  \f$ \tau(q,\mathbf{u}) = \kappa BC\sin(u_1-q)\left(1+\frac{ru_2-(C-B)}{\sqrt{B^2 + C^2 - 2BC\cos(u_1-q)}}\right)\f$
  *
  * \note This calculation is based on the derivation given in:
@@ -239,7 +239,7 @@ void maccepa_model_get_actuator_torque( double * tau, double * x, double * u, ma
 	return;
 }
 
-/** \brief Calculate joint torque due to damping as a function of current state and command. 
+/** \brief Calculate joint torque due to damping as a function of current state and command.
  *  \param[out] tau torque
  *  \param[in]  x state (velocity, acceleration)
  *  \param[in]  u command (motor positions in radiens)
@@ -255,12 +255,12 @@ void maccepa_model_get_actuator_torque( double * tau, double * x, double * u, ma
 void maccepa_model_get_damping_torque( double * tau, double * x, double * u, maccepa_model * model ) {
 
 	double b; maccepa_model_get_damping( &b, x, u, model );
-  	tau[0] = b*x[1]; 
+  	tau[0] = b*x[1];
 
 	return;
 }
 
-/** \brief Calculate joint torque due to gravity as a function of current state and command. 
+/** \brief Calculate joint torque due to gravity as a function of current state and command.
  *  \param[out] tau torque
  *  \param[in]  x state (velocity, acceleration)
  *  \param[in]  u command (motor positions in radiens)
@@ -277,7 +277,7 @@ void maccepa_model_get_gravity_torque( double * tau, double * x, double * u, mac
 	return;
 }
 
-/** \brief Calculate joint torque due to friction as a function of current state and command. 
+/** \brief Calculate joint torque due to friction as a function of current state and command.
  *  \param[out] tau torque
  *  \param[in]  x state (velocity, acceleration)
  *  \param[in]  u command (motor positions in radiens)
@@ -288,7 +288,7 @@ void maccepa_model_get_gravity_torque( double * tau, double * x, double * u, mac
  */
 void maccepa_model_get_friction_torque( double * tau, double * x, double * u, maccepa_model * model ) {
 
- 	tau[0] = model->viscous_friction*x[1] + model->coulomb_friction*copysign(1.0,x[1]);
+ 	tau[0] = model->viscous_friction*x[1] + model->coulomb_friction*copysign(1.0,x[1]) ;
 
 	return;
 }
@@ -300,18 +300,18 @@ void maccepa_model_get_friction_torque( double * tau, double * x, double * u, ma
  *  \param[in]  u command (motor positions in radiens)
  *  \param[in]  model model struct
  *
- *  This implements 
- *  \f$k(q,\mathbf{u})=-\frac{\partial\tau}{\partial q}|_{q}= \kappa BC\cos(u_1-q)\left(1+\frac{(ru_2-(C-B)}{\sqrt{B^2+C^2-2BC\cos(u_1-q)}}\right) -\frac{\kappa B^2 C^2\sin^2(u_1-q)(ru_2-(C-B))}{(B^2+C^2-2BC\cos(u_1-q))^{\frac{3}{2}}}\f$ 
+ *  This implements
+ *  \f$k(q,\mathbf{u})=-\frac{\partial\tau}{\partial q}|_{q}= \kappa BC\cos(u_1-q)\left(1+\frac{(ru_2-(C-B)}{\sqrt{B^2+C^2-2BC\cos(u_1-q)}}\right) -\frac{\kappa B^2 C^2\sin^2(u_1-q)(ru_2-(C-B))}{(B^2+C^2-2BC\cos(u_1-q))^{\frac{3}{2}}}\f$
  *
- *  where \f$\tau\f$ is the actuator torque (i.e., torque due to 
+ *  where \f$\tau\f$ is the actuator torque (i.e., torque due to
  *  the variable stiffness mechanism).
  */
 void maccepa_model_get_stiffness ( double * k, double * x, double * u, maccepa_model * model ) {
-	
+
 	double B     = model->lever_length;
 	double C     = model->pin_displacement;
 	double kappa = model->spring_constant;
-	double r     = model->drum_radius;   
+	double r     = model->drum_radius;
 	double a     = u[0]-x[0];
 	double L     = sqrt(pow(B,2)+pow(C,2)-2*B*C*cos(a));
 	double b     = r*u[1]-(C-B);
@@ -320,7 +320,7 @@ void maccepa_model_get_stiffness ( double * k, double * x, double * u, maccepa_m
                   -kappa*(pow(B*C*sin(a),2))*b/pow(L,3);
 
 	return;
-}     
+}
 
 /** \brief Calculate Jacobian of stiffness with respect to motor commands (as a function of current state and command).
  *  \param[out] J joint stiffness Jacobian
@@ -344,7 +344,7 @@ void maccepa_model_get_stiffness_jacobian ( double * J, double * x, double * u, 
 	}
 
 	return;
-}     
+}
 
 /** \brief Calculate equilibrium position as a function of current state and command.
  *  \param[out] q0 joint equilibrium position
@@ -359,7 +359,7 @@ void maccepa_model_get_equilibrium_position ( double * q0, double * x, double * 
  	q0[0] = u[0];
 
 	return;
-}     
+}
 
 /** \brief Calculate Jacobian of equilibrium position with respect to motor commands (as a function of current state and command).
  *  \param[out] J joint equilibrium position
@@ -393,7 +393,7 @@ void maccepa_model_get_equilibrium_position_jacobian ( double * J, double * x, d
 	void
 maccepa_model_get_damping ( double * b, double * x, double * u, maccepa_model * model )
 {
-/* 
+/*
  * 	int i;
  * 	int    Nc     = model.Nc_damping_model;
  * 	double s2     = model.s2_damping_model;
@@ -402,7 +402,7 @@ maccepa_model_get_damping ( double * b, double * x, double * u, maccepa_model * 
  * 	double d[Nc],phi[Nc],sumphi=0;
  * 	for ( i = 0; i < Nc; i += 1 ) {
  * 		d  [i] = u[2]-c[i];
- * 		phi[i] = exp(-(0.5/s2)*d[i]); 
+ * 		phi[i] = exp(-(0.5/s2)*d[i]);
  * 		sumphi+=phi[i];
  * 	}
  * 	b[0]=0;
@@ -412,7 +412,7 @@ maccepa_model_get_damping ( double * b, double * x, double * u, maccepa_model * 
  * 	}
  */
 #ifdef  VARIABLE_DAMPING
-  	b[0]=0;
+  	b[0]=u[2];
 #else      /* -----  not VARIABLE_DAMPING  ----- */
 	b[0]=model->damping_constant;
 #endif     /* -----  not VARIABLE_DAMPING  ----- */
@@ -420,7 +420,7 @@ maccepa_model_get_damping ( double * b, double * x, double * u, maccepa_model * 
 	return ;
 }		/* -----  end of function maccepa_model_get_damping  ----- */
 
-/** \brief Calculate spring force as a function of current state and command. 
+/** \brief Calculate spring force as a function of current state and command.
  *  \param[out] force spring force
  *  \param[in]  x state (velocity, acceleration)
  *  \param[in]  u command (motor positions in radiens)
@@ -444,8 +444,8 @@ void maccepa_model_get_spring_force( double * f, double * x, double * u, maccepa
 	return;
 }
 
-/** 
- * \brief Calculate motor positions based on finite impulse response filters. 
+/**
+ * \brief Calculate motor positions based on finite impulse response filters.
  * \param[out] m motor positions
  * \param[in]  x filter states (velocity, acceleration)
  * \param[in]  model model struct
@@ -464,4 +464,3 @@ void maccepa_model_get_motor_positions ( double * m, double * x, maccepa_model *
 
 	return;
 }
-
