@@ -175,7 +175,7 @@ void maccepa_model_init(maccepa_model *model) {
  *  \param[in]  u command (motor positions in radiens)
  *  \param[in]  model model struct
  *
- *  This implements \f$ \ddot{q}(\mathbf{x},\mathbf{u}) = (\tau_{actuators} - \tau_{damping} - \tau_{gravity} - \tau_{friction})/I \f$
+ *  This implements \f$ \ddot{q}(\mathbf{x},\mathbf{u}) = (\tau_{actuators} + \tau_{damping} + \tau_{gravity} + \tau_{friction})/I \f$
  *
  */
 void maccepa_model_get_acceleration ( double * acc, double * x, double * u, maccepa_model * model ) {
@@ -195,7 +195,7 @@ void maccepa_model_get_acceleration ( double * acc, double * x, double * u, macc
  *  \param[in]  u command (motor positions in radiens)
  *  \param[in]  model model struct
  *
- *  This implements \f$ \tau(\mathbf{x},\mathbf{u}) = \tau_{actuators} - \tau_{damping} - \tau_{gravity} - \tau_{friction} \f$
+ *  This implements \f$ \tau(\mathbf{x},\mathbf{u}) = \tau_{actuators} + \tau_{damping} + \tau_{gravity} + \tau_{friction} \f$
  *
  */
 void maccepa_model_get_torque( double * tau, double * x, double * u, maccepa_model * model ) {
@@ -205,7 +205,7 @@ void maccepa_model_get_torque( double * tau, double * x, double * u, maccepa_mod
 	double tau_gravity ;  maccepa_model_get_gravity_torque  ( &tau_gravity , x, u, model );
 	double tau_friction;  maccepa_model_get_friction_torque ( &tau_friction, x, u, model );
 
-	tau[0] = tau_actuator - tau_damping - tau_gravity - tau_friction;
+	tau[0] = tau_actuator + tau_damping + tau_gravity + tau_friction;
 
 	return;
 }
@@ -255,7 +255,7 @@ void maccepa_model_get_actuator_torque( double * tau, double * x, double * u, ma
 void maccepa_model_get_damping_torque( double * tau, double * x, double * u, maccepa_model * model ) {
 
 	double b; maccepa_model_get_damping( &b, x, u, model );
-  	tau[0] = b*x[1];
+  	tau[0] = -b*x[1];
 
 	return;
 }
@@ -272,7 +272,7 @@ void maccepa_model_get_damping_torque( double * tau, double * x, double * u, mac
 void maccepa_model_get_gravity_torque( double * tau, double * x, double * u, maccepa_model * model ) {
 
 	double gc= model->gravity_constant;
- 	tau[0] = gc*sin(x[0]);
+ 	tau[0] = - gc*sin(x[0]);
 
 	return;
 }
@@ -288,7 +288,7 @@ void maccepa_model_get_gravity_torque( double * tau, double * x, double * u, mac
  */
 void maccepa_model_get_friction_torque( double * tau, double * x, double * u, maccepa_model * model ) {
 
- 	tau[0] = model->viscous_friction*x[1] + model->coulomb_friction*copysign(1.0,x[1]) ;
+ 	tau[0] = - ( model->viscous_friction*x[1] + model->coulomb_friction*copysign(1.0,x[1]) ) ;
 
 	return;
 }
@@ -463,4 +463,69 @@ void maccepa_model_get_motor_positions ( double * m, double * x, maccepa_model *
 	}
 
 	return;
+}
+
+/**
+	* \brief Calculate d tau_k / d x_1 using analytical formula. It's negative stiffness.
+	*	stiffness is - d tau_k / d q
+	*/
+void maccepa_model_get_dtaukdx1 (double * dtaukdx1, double * x, double * u, maccepa_model * model) {
+
+	double B     = model->lever_length;
+	double C     = model->pin_displacement;
+	double kappa = model->spring_constant;
+	double r     = model->drum_radius;
+	double alpha     = u[0]-x[0];
+	double A     = sqrt(pow(B,2)+pow(C,2)-2*B*C*cos(alpha));
+	double b     = r*u[1]-(C-B);
+
+	dtaukdx1[0]  = -kappa*B*C*cos(alpha)*(1+b/A)
+                  +kappa*(pow(B*C*sin(alpha),2))*b/pow(A,3);
+
+	return;
+}
+
+void maccepa_model_get_dtaubdx2 ( double * dtaubdx2, double * x, double * u, maccepa_model * model ) {
+
+	dtaubdx2[0] = -u[2] ;
+	return;
+}
+
+/**
+	* Note that currently neglect the coulomb friction
+	*/
+void maccepa_model_get_dtaufdx2 ( double * dtaufdx2, double * x, double * u, maccepa_model * model ) {
+
+	dtaufdx2[0] = - model->viscous_friction ;
+}
+
+/** /brief Calculate derivative of tau_k with respect to u_1.
+	* Note that it's just the same as stiffness
+	*/
+void maccepa_model_get_dtaukdu1 ( double * dtaukdu1, double * x, double * u, maccepa_model * model ) {
+
+	double res;
+	maccepa_model_get_stiffness(&res, x, u, model);
+	dtaukdu1[0] = res;
+	return;
+}
+
+void maccepa_model_get_dtaukdu2 ( double * dtaukdu2, double * x, double * u, maccepa_model * model ) {
+
+	double B     = model->lever_length;
+	double C     = model->pin_displacement;
+	double kappa = model->spring_constant;
+	double r     = model->drum_radius;
+	double alpha     = u[0]-x[0];
+	double A     = sqrt(pow(B,2)+pow(C,2)-2*B*C*cos(alpha));
+	double b     = r*u[1]-(C-B);
+
+	dtaukdu2[0] = r*kappa*B*C*sin(alpha)/A ;
+	return;
+}
+
+void maccepa_model_get_dtaubdu3 ( double * dtaubdu3, double * x, double * u, maccepa_model * model ) {
+
+	dtaubdu3[0] = -x[1] ;
+	return ;
 }

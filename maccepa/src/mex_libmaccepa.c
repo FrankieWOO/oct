@@ -1,4 +1,4 @@
-/** 
+/**
  * \file mex_libmaccepa.c
  * \author Matthew Howard (MH), matthew.howard@ed.ac.uk
  * \date August 2010
@@ -71,33 +71,33 @@ mex_libmaccepa_model_c_to_matlab ( mxArray * matlab_model, const maccepa_model *
  * \brief Check that the arguments passed are correct. (In general the convention is y = f(x,u,model). )
  * \param[in] nrhs number of arguments
  * \param[in] prhs argument pointers
- * \returns true if arguments are ok, false if not. 
+ * \returns true if arguments are ok, false if not.
  */
 	bool
 mex_libmaccepa_check_arguments ( int nrhs, const mxArray *prhs[] )
 {
-	if (nrhs < 4) { 
+	if (nrhs < 4) {
 		mexErrMsgTxt("Too few arguments.");
 		return false;
-	} 
+	}
 	int dimX = mxGetM(prhs[1]);
 	if (dimX != DIMX){
 		mexErrMsgTxt("Wrong dimensionality of x.");
 		return false;
-	} 
+	}
 	int dimU = mxGetM(prhs[2]);
 	if (dimU != DIMU){
 		mexErrMsgTxt("Wrong dimensionality of u.");
 		return false;
-	} 
+	}
 	if (!mxIsStruct(prhs[3])){
 		mexErrMsgTxt("You need to pass a struct containing a valid MACCEPA model.");
 		return false;
-	} 
+	}
 	return true;
 }		/* -----  end of function mex_libmaccepa_check_arguments  ----- */
 
-/** 
+/**
  * \brief Mex gateway function. Provides access to C functions.
  */
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
@@ -143,7 +143,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 
 			return;
 		}
-		else 
+		else
 		{
 			if ( !mex_libmaccepa_check_arguments(nrhs,prhs) ) return;
 			mex_libmaccepa_model_matlab_to_c (&model,prhs[3]); /* get model parameters passed by user */
@@ -179,6 +179,30 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 			else if(strcmp(function,"maccepa_model_get_stiffness_jacobian")==0){
 				plhs[0] = mxCreateDoubleMatrix(1,DIMU,mxREAL); /* Create output vector */
 				maccepa_model_get_stiffness_jacobian (mxGetPr(plhs[0]), mxGetPr(prhs[1]), mxGetPr(prhs[2]), &model );
+			}
+			else if(strcmp(function,"maccepa_model_get_dtaukdx1")==0){
+				plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); /* Create output vector */
+				maccepa_model_get_dtaukdx1 (mxGetPr(plhs[0]), mxGetPr(prhs[1]), mxGetPr(prhs[2]), &model );
+			}
+			else if(strcmp(function,"maccepa_model_get_dtaubdx2")==0){
+				plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); /* Create output vector */
+				maccepa_model_get_dtaubdx2 (mxGetPr(plhs[0]), mxGetPr(prhs[1]), mxGetPr(prhs[2]), &model );
+			}
+			else if(strcmp(function,"maccepa_model_get_dtaufdx2")==0){
+				plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); /* Create output vector */
+				maccepa_model_get_dtaufdx2 (mxGetPr(plhs[0]), mxGetPr(prhs[1]), mxGetPr(prhs[2]), &model );
+			}
+			else if(strcmp(function,"maccepa_model_get_dtaukdu1")==0){
+				plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); /* Create output vector */
+				maccepa_model_get_dtaukdu1 (mxGetPr(plhs[0]), mxGetPr(prhs[1]), mxGetPr(prhs[2]), &model );
+			}
+			else if(strcmp(function,"maccepa_model_get_dtaukdu2")==0){
+				plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); /* Create output vector */
+				maccepa_model_get_dtaukdu2 (mxGetPr(plhs[0]), mxGetPr(prhs[1]), mxGetPr(prhs[2]), &model );
+			}
+			else if(strcmp(function,"maccepa_model_get_dtaubdu3")==0){
+				plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); /* Create output vector */
+				maccepa_model_get_dtaubdu3 (mxGetPr(plhs[0]), mxGetPr(prhs[1]), mxGetPr(prhs[2]), &model );
 			}
 			else{
 				printf(usage_msg);

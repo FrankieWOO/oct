@@ -1,8 +1,9 @@
-%%  Optimization problem 1: variable damping
+%%  Optimization problem 1: fixed damping
 %   
 %   ilqr on reaching problem for MACCEPA actuator with U dimension of 3.
-%   u_1 and u_2 fixed. u_3 optimizaed w.r.t rapid movement cost function
+%   u_1 and u_2 fixed manually. u_3 (fixed constant) optimizaed w.r.t rapid movement cost function
 %   using ILQR
+%   TODO
 
 %% add paths
 clear all;
