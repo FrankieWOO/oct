@@ -3,9 +3,13 @@
 %   ilqr on reaching problem for MACCEPA actuator with U dimension of 3.
 %   u_1 and u_2 fixed. u_3 optimizaed w.r.t rapid movement cost function
 %   using ILQR
+clear all;
+%% set experiment paras
+servo1 = pi/6 ;
+servo2 = pi/8 ;
 
 %% add paths
-clear all;
+
 curPath = pwd;
 curPaths = strsplit(curPath,{'\','/'});
 fatherPath = strjoin(curPaths(1:end-1),'/');
@@ -19,7 +23,7 @@ tic
 
 % time
 dt = 0.02;       % time step
-N  = 100 ;        % number of time steps
+N  = 200 ;        % number of time steps
 t  = (0:N-1)*dt; % sample times
 
 % simulation parameters
@@ -28,13 +32,13 @@ ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 model = model_maccepa('maccepa_model'); %
 
 % dynamics
-umax = [ pi/4; pi/8; 1];
-umin = [ pi/4; pi/8; 0];
+umax = [ servo1 ; servo2; 1 ] ;
+umin = [ servo1 ; servo2; 0 ] ;
 f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
 
 % cost/reward
 pc = [];
-pc.x_target   = pi/4;
+pc.x_target   = servo1 ;
 pc.epsilon = 10^-8;
 j = @(x,u,t) j_reaching_rapid ( x, u, t, pc );
 
@@ -42,7 +46,7 @@ j = @(x,u,t) j_reaching_rapid ( x, u, t, pc );
 x0 = zeros(2,1);
 
 % set ilqr parameters
-u0 = [pi/4;pi/8;0.01]; % command initialisation
+u0 = [ servo1 ; servo2 ; 0.001 ]; % command initialisation
 po = [];
 po.umax = umax;
 po.umin = umin;

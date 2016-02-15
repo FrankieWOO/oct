@@ -13,8 +13,8 @@ addpath([fatherPath,'/maccepa/model_maccepa_d3']);
 tic
 
 % time
-dt = 0.02;       % time step
-N  = 100 ;        % number of time steps
+dt = 0.05;       % time step
+N  = 200 ;        % number of time steps
 t  = (0:N-1)*dt; % sample times
 
 % simulation parameters
@@ -23,8 +23,8 @@ ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 model = model_maccepa('maccepa_model'); %
 
 % dynamics
-umax = [ pi/4; pi/8; 1];
-umin = [ pi/4; pi/8; 0];
+umax = [ pi/2; pi/2; 1];
+umin = [ -pi/2; 0; 0];
 f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
 
 % cost/reward
@@ -37,7 +37,7 @@ j = @(x,u,t) j_reaching_rapid ( x, u, t, pc );
 x0 = zeros(2,1);
 
 % set ilqr parameters
-u0 = [pi/4;pi/8;0.01]; % command initialisation
+u0 = [0.1;0.05;0.01]; % command initialisation
 po = [];
 po.umax = umax;
 po.umin = umin;

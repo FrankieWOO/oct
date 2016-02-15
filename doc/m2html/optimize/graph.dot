@@ -1,5 +1,8 @@
 /* Created by mdot for Matlab */
 digraph m2html {
 
-  test_ilqr_maccepa_reach [URL="test_ilqr_maccepa_reach.html"];
+  Test_ilqr_maccepa_contact_task [URL="Test_ilqr_maccepa_contact_task.html"];
+  maccepavd_reach_p1 [URL="maccepavd_reach_p1.html"];
+  maccepavd_reach_p2 [URL="maccepavd_reach_p2.html"];
+  test_ilqr_maccepa_reach_d3 [URL="test_ilqr_maccepa_reach_d3.html"];
 }

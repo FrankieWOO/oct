@@ -5,6 +5,7 @@ digraph m2html {
   l_gridworld [URL="l_gridworld.html"];
   l_quadratic [URL="l_quadratic.html"];
   l_quadratic_fh [URL="l_quadratic_fh.html"];
+  l_rapid_movement [URL="l_rapid_movement.html"];
   l_reaching_task_1dof_plants [URL="l_reaching_task_1dof_plants.html"];
   l_reaching_task_2dof_plants [URL="l_reaching_task_2dof_plants.html"];
 }

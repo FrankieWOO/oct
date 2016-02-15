@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of j_reaching_rapid</title>
+  <meta name="keywords" content="j_reaching_rapid">
+  <meta name="description" content="Input:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">ilqg</a> &gt; j_reaching_rapid.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\ilqg&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>j_reaching_rapid
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Input:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_rapid(x,u,t,p) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Input:
+ x - position sequence
+ u - command sequence
+ t - time sequence
+ p - parameters: x_target, T, epsilon
+ p.x_target - target point
+ p.T - the maximium time allowed
+ p.epsilon - a small constant, by default 10^-8 in experiments
+ p.dt - time interval
+ c = /int_0^T (x(t) - x_target)^2 + epsilon (u^T * u) dt</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../cost/l_rapid_movement.html" class="code" title="function [ c ] = l_rapid_movement( x, u, t, p )">l_rapid_movement</a>	The cost function to encode the object of rapid, accurate reaching to</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../optimize/maccepavd_reach_p1.html" class="code" title="">maccepavd_reach_p1</a>	%  Optimization problem 1: variable damping</li><li><a href="../optimize/maccepavd_reach_p2.html" class="code" title="">maccepavd_reach_p2</a>	%  Optimization problem 1: fixed damping</li><li><a href="../optimize/test_ilqr_maccepa_reach_d3.html" class="code" title="">test_ilqr_maccepa_reach_d3</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator with U dimension of 3.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 <a name="_sub0" href="#_subfunctions" class="code">function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_rapid(x,u,t,p)</a>
+0003 <span class="comment">% Input:</span>
+0004 <span class="comment">% x - position sequence</span>
+0005 <span class="comment">% u - command sequence</span>
+0006 <span class="comment">% t - time sequence</span>
+0007 <span class="comment">% p - parameters: x_target, T, epsilon</span>
+0008 <span class="comment">% p.x_target - target point</span>
+0009 <span class="comment">% p.T - the maximium time allowed</span>
+0010 <span class="comment">% p.epsilon - a small constant, by default 10^-8 in experiments</span>
+0011 <span class="comment">% p.dt - time interval</span>
+0012 <span class="comment">% c = /int_0^T (x(t) - x_target)^2 + epsilon (u^T * u) dt</span>
+0013 
+0014 
+0015 fl = @(x,u,t) <a href="../cost/l_rapid_movement.html" class="code" title="function [ c ] = l_rapid_movement( x, u, t, p )">l_rapid_movement</a>(x,u,t,p);
+0016 l = fl(x,u,t);
+0017 
+0018 
+0019 <span class="comment">% compute derivatives of cost</span>
+0020 <span class="keyword">if</span> nargout&gt;1
+0021  <span class="comment">% analytical derivatives</span>
+0022  l_x = [2*(x(1) - p.x_target);0] ;
+0023  l_u = 2*p.epsilon*u ;
+0024  l_xx = [ 2 0;0 0];
+0025  l_uu = [2*p.epsilon 0 0;0 2*p.epsilon 0;0 0 2*p.epsilon] ;
+0026  l_ux = zeros(3,2);
+0027 <span class="comment">%</span>
+0028 <span class="comment">%  flJ=@(x,u,t)J_cost_fd ( fl, x, u, t );</span>
+0029 <span class="comment">%  [l_x ,l_u      ] = flJ ( x, u, t );</span>
+0030 <span class="comment">%  flH =@(x,u,t)H_cost_fd  ( flJ, x, u, t );</span>
+0031 <span class="comment">%  [l_xx,l_uu,l_ux] = flH  ( x, u, t );</span>
+0032 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Mon 15-Feb-2016 09:48:15 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

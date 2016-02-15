@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of l_rapid_movement</title>
+  <meta name="keywords" content="l_rapid_movement">
+  <meta name="description" content="The cost function to encode the object of rapid, accurate reaching to">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">cost</a> &gt; l_rapid_movement.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\cost&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>l_rapid_movement
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>The cost function to encode the object of rapid, accurate reaching to</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ c ] = l_rapid_movement( x, u, t, p ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> The cost function to encode the object of rapid, accurate reaching to
+ some target.
+ Input:
+ x - position sequence
+ u - command sequence
+ t - time sequence
+ p - parameters: x_target, T, epsilon
+ p.x_target - target point
+ p.T - the maximium time allowed
+ p.epsilon - a small constant, by default 10^-8 in experiments
+ p.dt - time interval
+ c = /int_0^T (x(t) - x_target)^2 + epsilon (u^T * u) dt</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../ilqg/j_reaching_rapid.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_rapid(x,u,t,p)">j_reaching_rapid</a>	Input:</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ c ] = l_rapid_movement( x, u, t, p )</a>
+0002 <span class="comment">% The cost function to encode the object of rapid, accurate reaching to</span>
+0003 <span class="comment">% some target.</span>
+0004 <span class="comment">% Input:</span>
+0005 <span class="comment">% x - position sequence</span>
+0006 <span class="comment">% u - command sequence</span>
+0007 <span class="comment">% t - time sequence</span>
+0008 <span class="comment">% p - parameters: x_target, T, epsilon</span>
+0009 <span class="comment">% p.x_target - target point</span>
+0010 <span class="comment">% p.T - the maximium time allowed</span>
+0011 <span class="comment">% p.epsilon - a small constant, by default 10^-8 in experiments</span>
+0012 <span class="comment">% p.dt - time interval</span>
+0013 <span class="comment">% c = /int_0^T (x(t) - x_target)^2 + epsilon (u^T * u) dt</span>
+0014 
+0015     c1 = (x(1,:) - p.x_target).^2;
+0016     <span class="keyword">if</span> isnan(t)
+0017         <span class="comment">%final cost</span>
+0018         c = c1;
+0019     <span class="keyword">else</span>
+0020         <span class="comment">% running cost</span>
+0021         c =  c1 + sum(u.^2,1) * p.epsilon ;
+0022     <span class="keyword">end</span>
+0023 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Mon 15-Feb-2016 09:48:15 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

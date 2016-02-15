@@ -27,8 +27,6 @@ digraph m2html {
 
   Fx_ideal_contact [URL="Fx_ideal_contact.html"];
   Fx_ideal_contact [URL="Fx_ideal_contact.html"];
-  Test_ilqr_maccepa_contact_task [URL="Test_ilqr_maccepa_contact_task.html"];
-  Test_ilqr_maccepa_contact_task [URL="Test_ilqr_maccepa_contact_task.html"];
   f_ideal_contact [URL="f_ideal_contact.html"];
   f_ideal_contact [URL="f_ideal_contact.html"];
   f_maccepa [URL="f_maccepa.html"];

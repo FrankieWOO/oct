@@ -67,7 +67,7 @@ This function calls:
 <li><a href="../simulate/simulate_feedforward.html" class="code" title="function x = simulate_feedforward ( x0, f, u, p )">simulate_feedforward</a>	Simulate trajectory under open-loop, feed forward control, in continuous time</li><li><a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a>	Function for evaluating the cost along a trajectory under a given cost function</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../examples/test_ilqr_kawato_1dof_reach.html" class="code" title="">test_ilqr_kawato_1dof_reach</a>	Demo script: Test ilqr on reaching problem for 2-muscle, 1-joint system with 'kawato model' muscle dynamics.</li><li><a href="../examples/test_ilqr_kawato_arm.html" class="code" title="">test_ilqr_kawato_arm</a>	Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</li><li><a href="../examples/test_ilqr_kawato_arm_reach.html" class="code" title="">test_ilqr_kawato_arm_reach</a>	Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</li><li><a href="../examples/test_ilqr_lqr_fh.html" class="code" title="">test_ilqr_lqr_fh</a>	Demo script: Test solution of finite horizon linear-quadratic regulator problem in continuous time using ILQR.</li><li><a href="../examples/test_ilqr_maccepa_reach.html" class="code" title="">test_ilqr_maccepa_reach</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../maccepa/m-files/Test_ilqr_maccepa_contact_task.html" class="code" title="">Test_ilqr_maccepa_contact_task</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../maccepa/m-files/Test_ilqr_maccepa_contact_task.html" class="code" title="">Test_ilqr_maccepa_contact_task</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../optimize/test_ilqr_maccepa_reach.html" class="code" title="">test_ilqr_maccepa_reach</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li></ul>
+<li><a href="../examples/test_ilqr_kawato_1dof_reach.html" class="code" title="">test_ilqr_kawato_1dof_reach</a>	Demo script: Test ilqr on reaching problem for 2-muscle, 1-joint system with 'kawato model' muscle dynamics.</li><li><a href="../examples/test_ilqr_kawato_arm.html" class="code" title="">test_ilqr_kawato_arm</a>	Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</li><li><a href="../examples/test_ilqr_kawato_arm_reach.html" class="code" title="">test_ilqr_kawato_arm_reach</a>	Demo script: Test ilqr on reaching problem for 6-muscle, 2-joint system with 'kawato model' muscle dynamics.</li><li><a href="../examples/test_ilqr_lqr_fh.html" class="code" title="">test_ilqr_lqr_fh</a>	Demo script: Test solution of finite horizon linear-quadratic regulator problem in continuous time using ILQR.</li><li><a href="../examples/test_ilqr_maccepa_reach.html" class="code" title="">test_ilqr_maccepa_reach</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../optimize/Test_ilqr_maccepa_contact_task.html" class="code" title="">Test_ilqr_maccepa_contact_task</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../optimize/maccepavd_reach_p1.html" class="code" title="">maccepavd_reach_p1</a>	%  Optimization problem 1: variable damping</li><li><a href="../optimize/maccepavd_reach_p2.html" class="code" title="">maccepavd_reach_p2</a>	%  Optimization problem 1: fixed damping</li><li><a href="../optimize/test_ilqr_maccepa_reach_d3.html" class="code" title="">test_ilqr_maccepa_reach_d3</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator with U dimension of 3.</li></ul>
 <!-- crossreference -->
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -111,16 +111,16 @@ This function is called by:
 0034 <a name="_sub0" href="#_subfunctions" class="code">function [x, u, L, cost] = ilqr(f, j, dt, N, x0, u0, p )</a>
 0035 
 0036 <span class="comment">% unpack parameter struct</span>
-0037 <span class="keyword">if</span> isfield(p,<span class="string">'lambda_init'</span>        ),lambda_init         = p.lambda_init        ;<span class="keyword">else</span>,lambda_init        = 1e-2    ;<span class="keyword">end</span>
-0038 <span class="keyword">if</span> isfield(p,<span class="string">'lambda_factor'</span>      ),lambda_factor       = p.lambda_factor      ;<span class="keyword">else</span>,lambda_factor      = sqrt(10);<span class="keyword">end</span>
-0039 <span class="keyword">if</span> isfield(p,<span class="string">'lambda_max'</span>         ),lambda_max          = p.lambda_max         ;<span class="keyword">else</span>,lambda_max         = 1e-2    ;<span class="keyword">end</span>
-0040 <span class="keyword">if</span> isfield(p,<span class="string">'dcost_converge'</span>     ),dcost_converge      = p.dcost_converge     ;<span class="keyword">else</span>,dcost_converge     = 1e-9    ;<span class="keyword">end</span>
-0041 <span class="keyword">if</span> isfield(p,<span class="string">'iter_max'</span>           ),iter_max            = p.iter_max           ;<span class="keyword">else</span>,iter_max           = 100     ;<span class="keyword">end</span>
-0042 <span class="keyword">if</span> isfield(p,<span class="string">'online_printing'</span>    ),online_printing     = p.online_printing    ;<span class="keyword">else</span>,online_printing    = 1       ;<span class="keyword">end</span>
-0043 <span class="keyword">if</span> isfield(p,<span class="string">'online_plotting'</span>    ),online_plotting     = p.online_plotting    ;<span class="keyword">else</span>,online_plotting    = 1       ;<span class="keyword">end</span>
-0044 <span class="keyword">if</span> isfield(p,<span class="string">'umax'</span>               ),umax                = p.umax               ;<span class="keyword">else</span>,umax               = inf     ;<span class="keyword">end</span>
-0045 <span class="keyword">if</span> isfield(p,<span class="string">'umin'</span>               ),umin                = p.umin               ;<span class="keyword">else</span>,umin               =-inf     ;<span class="keyword">end</span>
-0046 <span class="keyword">if</span> isfield(p,<span class="string">'solver'</span>             ),solver              = p.solver             ;<span class="keyword">else</span>,solver             =<span class="string">'euler'</span>  ;<span class="keyword">end</span>
+0037 <span class="keyword">if</span> isfield(p,<span class="string">'lambda_init'</span>        ),lambda_init         = p.lambda_init        ;<span class="keyword">else</span> lambda_init        = 1e-2    ;<span class="keyword">end</span>
+0038 <span class="keyword">if</span> isfield(p,<span class="string">'lambda_factor'</span>      ),lambda_factor       = p.lambda_factor      ;<span class="keyword">else</span> lambda_factor      = sqrt(10);<span class="keyword">end</span>
+0039 <span class="keyword">if</span> isfield(p,<span class="string">'lambda_max'</span>         ),lambda_max          = p.lambda_max         ;<span class="keyword">else</span> lambda_max         = 1e-2    ;<span class="keyword">end</span>
+0040 <span class="keyword">if</span> isfield(p,<span class="string">'dcost_converge'</span>     ),dcost_converge      = p.dcost_converge     ;<span class="keyword">else</span> dcost_converge     = 1e-9    ;<span class="keyword">end</span>
+0041 <span class="keyword">if</span> isfield(p,<span class="string">'iter_max'</span>           ),iter_max            = p.iter_max           ;<span class="keyword">else</span> iter_max           = 100     ;<span class="keyword">end</span>
+0042 <span class="keyword">if</span> isfield(p,<span class="string">'online_printing'</span>    ),online_printing     = p.online_printing    ;<span class="keyword">else</span> online_printing    = 1       ;<span class="keyword">end</span>
+0043 <span class="keyword">if</span> isfield(p,<span class="string">'online_plotting'</span>    ),online_plotting     = p.online_plotting    ;<span class="keyword">else</span> online_plotting    = 1       ;<span class="keyword">end</span>
+0044 <span class="keyword">if</span> isfield(p,<span class="string">'umax'</span>               ),umax                = p.umax               ;<span class="keyword">else</span> umax               = inf     ;<span class="keyword">end</span>
+0045 <span class="keyword">if</span> isfield(p,<span class="string">'umin'</span>               ),umin                = p.umin               ;<span class="keyword">else</span> umin               =-inf     ;<span class="keyword">end</span>
+0046 <span class="keyword">if</span> isfield(p,<span class="string">'solver'</span>             ),solver              = p.solver             ;<span class="keyword">else</span> solver             =<span class="string">'euler'</span>  ;<span class="keyword">end</span>
 0047 
 0048 <span class="comment">% initialise everything</span>
 0049 dimX = size(x0, 1);   <span class="comment">% state dimensionality</span>
@@ -129,163 +129,164 @@ This function is called by:
 0052 
 0053 <span class="keyword">if</span> size(u0,2)==1,                                   <span class="comment">% initial command sequence</span>
 0054 u = repmat(u0,1,N-1);                               <span class="comment">% ...if one initial command given, use as full initial command sequence</span>
-0055 <span class="keyword">else</span>,                                               <span class="comment">%</span>
-0056 u    = u0;<span class="keyword">end</span>                                       <span class="comment">% ...if full command sequence given, use as initial command sequence</span>
-0057 L    = zeros(dimU, dimX, N-1);                      <span class="comment">% initial feedback gain sequence</span>
-0058 x    = <a href="../simulate/simulate_feedforward.html" class="code" title="function x = simulate_feedforward ( x0, f, u, p )">simulate_feedforward</a> ( x0, f, u, ps );       <span class="comment">% initial state sequence</span>
-0059 cost = <a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a> ( x, u, j, ps ); <span class="comment">% initial cost</span>
-0060 t    = (0:N-1)*dt;                                  <span class="comment">% time</span>
-0061 
-0062 <span class="comment">% initialise other matrices (for speed)</span>
-0063 A  = zeros(dimX,dimX,N-1); 
-0064 B  = zeros(dimX,dimU,N-1); 
-0065 I  =   eye(dimX         );
-0066 q0 = zeros(        1,N-1); 
-0067 q  = zeros(     dimX,N-1); 
-0068 Q  = zeros(dimX,dimX,N-1); 
-0069 r  = zeros(     dimU,N-1); 
-0070 R  = zeros(dimU,dimU,N-1); 
-0071 P  = zeros(dimU,dimX,N-1); 
-0072 s0 = zeros(        1,N  ); 
-0073 s  = zeros(     dimX,N  ); 
-0074 S  = zeros(dimX,dimX,N  ); 
-0075 l  = zeros(     dimU,N-1); 
-0076 
-0077 <span class="comment">% initialise lambda</span>
-0078 lambda = lambda_init;
-0079 <span class="comment">% initialise update flag</span>
-0080 update = 1;
-0081 
-0082 <span class="comment">% set up plotting</span>
-0083 <span class="keyword">if</span> online_plotting
-0084 online_plotting_fig=figure;clf,set(online_plotting_fig,<span class="string">'Name'</span>,<span class="string">'iLQR: Cost and Lambda Convergence'</span>),set(online_plotting_fig,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>)
-0085 subplot(1,2,1),hold on,grid on,set(gca,<span class="string">'Yscale'</span>,<span class="string">'linear'</span>),title(<span class="string">'cost'</span>  ),ylabel(<span class="string">'cost'</span>  ),xlabel(<span class="string">'iteration'</span>)
-0086 subplot(1,2,2),hold on,grid on,set(gca,<span class="string">'Yscale'</span>,<span class="string">'log'</span>)   ,title(<span class="string">'lambda'</span>),ylabel(<span class="string">'lambda'</span>),xlabel(<span class="string">'iteration'</span>)
-0087 <span class="keyword">end</span>
-0088 
-0089 <span class="comment">% main loop</span>
-0090 <span class="keyword">for</span> iter = 1:iter_max
-0091     <span class="comment">%------ STEP 1: approximate dynamics and cost along new trajectory'</span>
-0092     <span class="keyword">if</span> update,
-0093         update = 0;
-0094         <span class="comment">% compute LQ approximation</span>
-0095         <span class="keyword">for</span> n = 1:N-1
-0096             <span class="comment">% linearize dynamics, adjust for dt</span>
-0097             [ff, f_x, f_u] = f(x(:,n), u(:,n));
-0098             A(:,:,n) = I + dt*f_x;
-0099             B(:,:,n) =     dt*f_u;
-0100 
-0101             <span class="comment">% quadratize cost, adjust for dt</span>
-0102             [l0,l_x,l_xx,l_u,l_uu,l_ux] = j(x(:,n), u(:,n), t(n));
-0103             q0(    n) = dt*l0;
-0104             q (  :,n) = dt*l_x;
-0105             Q (:,:,n) = dt*l_xx;
-0106             r (  :,n) = dt*l_u;
-0107             R (:,:,n) = dt*l_uu;
-0108             P (:,:,n) = dt*l_ux;
-0109         <span class="keyword">end</span>
-0110 
-0111         <span class="comment">% initialise value function approximation with final cost</span>
-0112         [s0(N),s(:,N),S(:,:,N)] = j(x(:,N), nan, nan);
-0113     <span class="keyword">end</span>
-0114     
-0115     <span class="comment">%------ STEP 2: compute optimal control law and cost-to-go</span>
-0116     diverged=0;
-0117     <span class="keyword">for</span> n = N-1:-1:1
-0118         <span class="comment">% compute shortcuts g,G,H</span>
-0119         g = r(  :,n) + B(:,:,n)'*s(  :,n+1); 
-0120         G = P(:,:,n) + B(:,:,n)'*S(:,:,n+1)*A(:,:,n);
-0121         H = R(:,:,n) + B(:,:,n)'*S(:,:,n+1)*B(:,:,n);
-0122 
-0123         <span class="comment">% check for divergence</span>
-0124         <span class="keyword">if</span> any(~isfinite(H)), diverged=1; <span class="keyword">break</span>; <span class="keyword">end</span> <span class="comment">% divergence: EXIT</span>
-0125 
-0126         <span class="comment">% find control law</span>
-0127         [l(:,n), L(:,:,n)] = <a href="#_sub1" class="code" title="subfunction [l,L] = u_optimal(g, G, H, u, umin, umax, lambda)">u_optimal</a>(g,G,H,u(:,n),umin,umax,lambda);
-0128 
-0129         <span class="comment">% update cost-to-go approximation</span>
-0130         S (:,:,n) = Q (:,:,n) + A(:,:,n)'*S (:,:,n+1)*A(:,:,n) +    L(:,:,n)'*H*L(:,:,n) + L(:,:,n)'*G + G'*L(:,:,n);
-0131         s (  :,n) = q (  :,n) + A(:,:,n)'*s (  :,n+1)          +    L(:,:,n)'*H*l(  :,n) + L(:,:,n)'*g + G'*l(:,n);
-0132         s0(    n) = q0(    n) +           s0(    n+1)          + .5*l(  :,n)'*H*l(  :,n) + l(  :,n)'*g;
-0133 
-0134     <span class="keyword">end</span>
-0135     <span class="keyword">if</span> diverged, fprintf(<span class="string">'Optimal control law and cost-to-go computation diverged. '</span>); <span class="keyword">break</span>; <span class="keyword">end</span><span class="comment">% divergence: EXIT</span>
-0136 
-0137     <span class="comment">%------ STEP 3A: new control sequence, trajectory, cost</span>
-0138     <span class="comment">% simulate linearized system to compute new control</span>
-0139     dx = zeros(dimX,1);
-0140     <span class="keyword">for</span> n=1:N-1
-0141         du = l(:,n) + L(:,:,n)*dx;   
-0142         du = min(max(du+u(:,n),umin),umax) - u(:,n);
-0143         dx = A(:,:,n)*dx + B(:,:,n)*du ;
-0144         unew(:,n) = u(:,n) + du;
-0145     <span class="keyword">end</span>
-0146 
-0147     <span class="comment">%------ STEP 3B: simulate system to compute new trajectory and cost</span>
-0148     xnew    = <a href="../simulate/simulate_feedforward.html" class="code" title="function x = simulate_feedforward ( x0, f, u, p )">simulate_feedforward</a> ( x0, f, unew, ps );
-0149     costnew = <a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a> ( xnew, unew, j, ps );<span class="comment">% initial cost</span>
-0150 
-0151     <span class="comment">%------ STEP 4: Levenberg-Marquardt method</span>
-0152     <span class="keyword">if</span> costnew&lt;cost,
-0153         <span class="comment">% decrease lambda (get closer to Newton method)</span>
-0154         lambda = lambda / lambda_factor;
-0155         dcost  = cost-costnew; <span class="comment">% decrease in cost</span>
-0156         <span class="comment">% update x, u, cost</span>
-0157         u    = unew;
-0158         x    = xnew;
-0159         cost = costnew;
-0160         <span class="comment">% check for convergence</span>
-0161         <span class="keyword">if</span> iter&gt;1 &amp;&amp; dcost&lt;dcost_converge,
-0162             fprintf(<span class="string">'Cost improvement threshold reached. '</span>); <span class="keyword">break</span>; <span class="comment">% improvement too small: EXIT</span>
-0163         <span class="keyword">end</span>
-0164         <span class="comment">% flag update</span>
-0165         update = 1;
-0166     <span class="keyword">else</span>
-0167         <span class="comment">% increase lambda (get closer to gradient descent)</span>
-0168         lambda = lambda * lambda_factor;
-0169         <span class="keyword">if</span> lambda&gt;lambda_max,
-0170             fprintf(<span class="string">'Max. lambda reached. '</span>); <span class="keyword">break</span>; <span class="comment">% lambda too large: EXIT</span>
-0171         <span class="keyword">end</span>
-0172     <span class="keyword">end</span>
-0173 
-0174     <span class="comment">% plot/print stuff out</span>
-0175     <span class="keyword">if</span> online_printing==1,fprintf(<span class="string">'Iteration = %d; Cost = %.4f; log(Lambda) = %.1f\n'</span>,iter,cost,log10(lambda));<span class="keyword">end</span>
-0176     <span class="keyword">if</span> online_plotting==1,
-0177         lambdas(iter)=lambda; costs(iter)=cost;
-0178         set(0,<span class="string">'CurrentFigure'</span>,online_plotting_fig),
-0179         subplot(1,2,1),plot([0:iter-1],costs);  
-0180         subplot(1,2,2),plot([0:iter-1],lambdas);
-0181     <span class="keyword">end</span>
-0182 <span class="keyword">end</span>
-0183 <span class="keyword">if</span> iter==iter_max
-0184     fprintf(<span class="string">'Max. number of iterations reached. '</span>);
-0185 <span class="keyword">end</span>
-0186 <span class="comment">% print final result if necessary</span>
-0187 <span class="keyword">if</span> online_printing==2,
-0188     fprintf(<span class="string">'Iterations = %d;  Cost = %.4f'</span>, iter, cost);
-0189 <span class="keyword">end</span>
-0190 fprintf(<span class="string">'\n'</span>);
-0191 <span class="comment">% close figure</span>
-0192 <span class="keyword">if</span> online_plotting==1,close(online_plotting_fig),<span class="keyword">end</span>
-0193 
-0194 <span class="comment">% compute optimal control law</span>
-0195 <a name="_sub1" href="#_subfunctions" class="code">function [l,L] = u_optimal(g, G, H, u, umin, umax, lambda)</a>
-0196 
-0197 <span class="comment">% eigenvalue decomposition, modify eigenvalues</span>
-0198 [V,D] = eig(H);
-0199 d = diag(D);
-0200 d(d&lt;0) = 0;
-0201 d = d + lambda;
-0202 
-0203 <span class="comment">% inverse modified Hessian, unconstrained control law</span>
-0204 H1 = V*diag(1./d)*V';
-0205 l = -H1*g;
-0206 L = -H1*G;
-0207 
-0208 <span class="comment">% enforce constraints</span>
-0209 l = min(max(l+u,umin),umax) - u;
-0210 L((l+u==umin)|(l+u==umax),:) = 0;
-0211</pre></div>
-<hr><address>Generated on Thu 11-Feb-2016 17:34:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0055 <span class="keyword">else</span>                                               <span class="comment">%</span>
+0056 u    = u0;
+0057 <span class="keyword">end</span>                                       <span class="comment">% ...if full command sequence given, use as initial command sequence</span>
+0058 L    = zeros(dimU, dimX, N-1);                      <span class="comment">% initial feedback gain sequence</span>
+0059 x    = <a href="../simulate/simulate_feedforward.html" class="code" title="function x = simulate_feedforward ( x0, f, u, p )">simulate_feedforward</a> ( x0, f, u, ps );       <span class="comment">% initial state sequence</span>
+0060 cost = <a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a> ( x, u, j, ps ); <span class="comment">% initial cost</span>
+0061 t    = (0:N-1)*dt;                                  <span class="comment">% time</span>
+0062 
+0063 <span class="comment">% initialise other matrices (for speed)</span>
+0064 A  = zeros(dimX,dimX,N-1); 
+0065 B  = zeros(dimX,dimU,N-1); 
+0066 I  =   eye(dimX         );
+0067 q0 = zeros(        1,N-1); 
+0068 q  = zeros(     dimX,N-1); 
+0069 Q  = zeros(dimX,dimX,N-1); 
+0070 r  = zeros(     dimU,N-1); 
+0071 R  = zeros(dimU,dimU,N-1); 
+0072 P  = zeros(dimU,dimX,N-1); 
+0073 s0 = zeros(        1,N  ); 
+0074 s  = zeros(     dimX,N  ); 
+0075 S  = zeros(dimX,dimX,N  ); 
+0076 l  = zeros(     dimU,N-1); 
+0077 
+0078 <span class="comment">% initialise lambda</span>
+0079 lambda = lambda_init;
+0080 <span class="comment">% initialise update flag</span>
+0081 update = 1;
+0082 
+0083 <span class="comment">% set up plotting</span>
+0084 <span class="keyword">if</span> online_plotting
+0085 online_plotting_fig=figure;clf,set(online_plotting_fig,<span class="string">'Name'</span>,<span class="string">'iLQR: Cost and Lambda Convergence'</span>),set(online_plotting_fig,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>)
+0086 subplot(1,2,1),hold on,grid on,set(gca,<span class="string">'Yscale'</span>,<span class="string">'linear'</span>),title(<span class="string">'cost'</span>  ),ylabel(<span class="string">'cost'</span>  ),xlabel(<span class="string">'iteration'</span>)
+0087 subplot(1,2,2),hold on,grid on,set(gca,<span class="string">'Yscale'</span>,<span class="string">'log'</span>)   ,title(<span class="string">'lambda'</span>),ylabel(<span class="string">'lambda'</span>),xlabel(<span class="string">'iteration'</span>)
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="comment">% main loop</span>
+0091 <span class="keyword">for</span> iter = 1:iter_max
+0092     <span class="comment">%------ STEP 1: approximate dynamics and cost along new trajectory'</span>
+0093     <span class="keyword">if</span> update,
+0094         update = 0;
+0095         <span class="comment">% compute LQ approximation</span>
+0096         <span class="keyword">for</span> n = 1:N-1
+0097             <span class="comment">% linearize dynamics, adjust for dt</span>
+0098             [ff, f_x, f_u] = f(x(:,n), u(:,n));
+0099             A(:,:,n) = I + dt*f_x;
+0100             B(:,:,n) =     dt*f_u;
+0101 
+0102             <span class="comment">% quadratize cost, adjust for dt</span>
+0103             [l0,l_x,l_xx,l_u,l_uu,l_ux] = j(x(:,n), u(:,n), t(n));
+0104             q0(    n) = dt*l0;
+0105             q (  :,n) = dt*l_x;
+0106             Q (:,:,n) = dt*l_xx;
+0107             r (  :,n) = dt*l_u;
+0108             R (:,:,n) = dt*l_uu;
+0109             P (:,:,n) = dt*l_ux;
+0110         <span class="keyword">end</span>
+0111 
+0112         <span class="comment">% initialise value function approximation with final cost</span>
+0113         [s0(N),s(:,N),S(:,:,N)] = j(x(:,N), nan, nan);
+0114     <span class="keyword">end</span>
+0115     
+0116     <span class="comment">%------ STEP 2: compute optimal control law and cost-to-go</span>
+0117     diverged=0;
+0118     <span class="keyword">for</span> n = N-1:-1:1
+0119         <span class="comment">% compute shortcuts g,G,H</span>
+0120         g = r(  :,n) + B(:,:,n)'*s(  :,n+1); 
+0121         G = P(:,:,n) + B(:,:,n)'*S(:,:,n+1)*A(:,:,n);
+0122         H = R(:,:,n) + B(:,:,n)'*S(:,:,n+1)*B(:,:,n);
+0123 
+0124         <span class="comment">% check for divergence</span>
+0125         <span class="keyword">if</span> any(~isfinite(H)), diverged=1; <span class="keyword">break</span>; <span class="keyword">end</span> <span class="comment">% divergence: EXIT</span>
+0126 
+0127         <span class="comment">% find control law</span>
+0128         [l(:,n), L(:,:,n)] = <a href="#_sub1" class="code" title="subfunction [l,L] = u_optimal(g, G, H, u, umin, umax, lambda)">u_optimal</a>(g,G,H,u(:,n),umin,umax,lambda);
+0129 
+0130         <span class="comment">% update cost-to-go approximation</span>
+0131         S (:,:,n) = Q (:,:,n) + A(:,:,n)'*S (:,:,n+1)*A(:,:,n) +    L(:,:,n)'*H*L(:,:,n) + L(:,:,n)'*G + G'*L(:,:,n);
+0132         s (  :,n) = q (  :,n) + A(:,:,n)'*s (  :,n+1)          +    L(:,:,n)'*H*l(  :,n) + L(:,:,n)'*g + G'*l(:,n);
+0133         s0(    n) = q0(    n) +           s0(    n+1)          + .5*l(  :,n)'*H*l(  :,n) + l(  :,n)'*g;
+0134 
+0135     <span class="keyword">end</span>
+0136     <span class="keyword">if</span> diverged, fprintf(<span class="string">'Optimal control law and cost-to-go computation diverged. '</span>); <span class="keyword">break</span>; <span class="keyword">end</span><span class="comment">% divergence: EXIT</span>
+0137 
+0138     <span class="comment">%------ STEP 3A: new control sequence, trajectory, cost</span>
+0139     <span class="comment">% simulate linearized system to compute new control</span>
+0140     dx = zeros(dimX,1);
+0141     <span class="keyword">for</span> n=1:N-1
+0142         du = l(:,n) + L(:,:,n)*dx;   
+0143         du = min(max(du+u(:,n),umin),umax) - u(:,n);
+0144         dx = A(:,:,n)*dx + B(:,:,n)*du ;
+0145         unew(:,n) = u(:,n) + du;
+0146     <span class="keyword">end</span>
+0147 
+0148     <span class="comment">%------ STEP 3B: simulate system to compute new trajectory and cost</span>
+0149     xnew    = <a href="../simulate/simulate_feedforward.html" class="code" title="function x = simulate_feedforward ( x0, f, u, p )">simulate_feedforward</a> ( x0, f, unew, ps );
+0150     costnew = <a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a> ( xnew, unew, j, ps );<span class="comment">% initial cost</span>
+0151 
+0152     <span class="comment">%------ STEP 4: Levenberg-Marquardt method</span>
+0153     <span class="keyword">if</span> costnew&lt;cost,
+0154         <span class="comment">% decrease lambda (get closer to Newton method)</span>
+0155         lambda = lambda / lambda_factor;
+0156         dcost  = cost-costnew; <span class="comment">% decrease in cost</span>
+0157         <span class="comment">% update x, u, cost</span>
+0158         u    = unew;
+0159         x    = xnew;
+0160         cost = costnew;
+0161         <span class="comment">% check for convergence</span>
+0162         <span class="keyword">if</span> iter&gt;1 &amp;&amp; dcost&lt;dcost_converge,
+0163             fprintf(<span class="string">'Cost improvement threshold reached. '</span>); <span class="keyword">break</span>; <span class="comment">% improvement too small: EXIT</span>
+0164         <span class="keyword">end</span>
+0165         <span class="comment">% flag update</span>
+0166         update = 1;
+0167     <span class="keyword">else</span>
+0168         <span class="comment">% increase lambda (get closer to gradient descent)</span>
+0169         lambda = lambda * lambda_factor;
+0170         <span class="keyword">if</span> lambda&gt;lambda_max,
+0171             fprintf(<span class="string">'Max. lambda reached. '</span>); <span class="keyword">break</span>; <span class="comment">% lambda too large: EXIT</span>
+0172         <span class="keyword">end</span>
+0173     <span class="keyword">end</span>
+0174 
+0175     <span class="comment">% plot/print stuff out</span>
+0176     <span class="keyword">if</span> online_printing==1,fprintf(<span class="string">'Iteration = %d; Cost = %.4f; log(Lambda) = %.1f\n'</span>,iter,cost,log10(lambda));<span class="keyword">end</span>
+0177     <span class="keyword">if</span> online_plotting==1,
+0178         lambdas(iter)=lambda; costs(iter)=cost;
+0179         set(0,<span class="string">'CurrentFigure'</span>,online_plotting_fig),
+0180         subplot(1,2,1),plot([0:iter-1],costs);  
+0181         subplot(1,2,2),plot([0:iter-1],lambdas);
+0182     <span class="keyword">end</span>
+0183 <span class="keyword">end</span>
+0184 <span class="keyword">if</span> iter==iter_max
+0185     fprintf(<span class="string">'Max. number of iterations reached. '</span>);
+0186 <span class="keyword">end</span>
+0187 <span class="comment">% print final result if necessary</span>
+0188 <span class="keyword">if</span> online_printing==2,
+0189     fprintf(<span class="string">'Iterations = %d;  Cost = %.4f'</span>, iter, cost);
+0190 <span class="keyword">end</span>
+0191 fprintf(<span class="string">'\n'</span>);
+0192 <span class="comment">% close figure</span>
+0193 <span class="keyword">if</span> online_plotting==1,close(online_plotting_fig),<span class="keyword">end</span>
+0194 
+0195 <span class="comment">% compute optimal control law</span>
+0196 <a name="_sub1" href="#_subfunctions" class="code">function [l,L] = u_optimal(g, G, H, u, umin, umax, lambda)</a>
+0197 
+0198 <span class="comment">% eigenvalue decomposition, modify eigenvalues</span>
+0199 [V,D] = eig(H);
+0200 d = diag(D);
+0201 d(d&lt;0) = 0;
+0202 d = d + lambda;
+0203 
+0204 <span class="comment">% inverse modified Hessian, unconstrained control law</span>
+0205 H1 = V*diag(1./d)*V';
+0206 l = -H1*g;
+0207 L = -H1*G;
+0208 
+0209 <span class="comment">% enforce constraints</span>
+0210 l = min(max(l+u,umin),umax) - u;
+0211 L((l+u==umin)|(l+u==umax),:) = 0;
+0212</pre></div>
+<hr><address>Generated on Mon 15-Feb-2016 09:48:15 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -44,7 +44,7 @@ This function calls:
 <li><a href="J_fd.html" class="code" title="function J = get_jacobian_fd ( f, x )">J_fd</a>	Function for calculating the Jacobian of a function with finite central differences.</li><li><a href="../maccepa/m-files/f_maccepa.html" class="code" title="function xdot = f_maccepa ( x, u, model )">f_maccepa</a>	State space dynamics function for the MACCEPA.</li><li><a href="../maccepa/m-files/f_maccepa.html" class="code" title="function xdot = f_maccepa ( x, u, model )">f_maccepa</a>	State space dynamics function for the MACCEPA.</li><li><a href="../maccepa/m-files/qddot_maccepa.html" class="code" title="function qddot = qddot_maccepa ( q, qdot, u, model )">qddot_maccepa</a>	Calculate acceleration for MACCEPA</li><li><a href="../maccepa/m-files/qddot_maccepa.html" class="code" title="function qddot = qddot_maccepa ( q, qdot, u, model )">qddot_maccepa</a>	Calculate acceleration for MACCEPA</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../examples/test_ilqr_maccepa_reach.html" class="code" title="">test_ilqr_maccepa_reach</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../optimize/test_ilqr_maccepa_reach.html" class="code" title="">test_ilqr_maccepa_reach</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li></ul>
+<li><a href="../examples/test_ilqr_maccepa_reach.html" class="code" title="">test_ilqr_maccepa_reach</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator.</li><li><a href="../optimize/maccepavd_reach_p1.html" class="code" title="">maccepavd_reach_p1</a>	%  Optimization problem 1: variable damping</li><li><a href="../optimize/maccepavd_reach_p2.html" class="code" title="">maccepavd_reach_p2</a>	%  Optimization problem 1: fixed damping</li><li><a href="../optimize/test_ilqr_maccepa_reach_d3.html" class="code" title="">test_ilqr_maccepa_reach_d3</a>	Demo script: Test ilqr on reaching problem for MACCEPA actuator with U dimension of 3.</li></ul>
 <!-- crossreference -->
 
 
@@ -70,17 +70,28 @@ This function is called by:
 0018     dimQ = model.dimQ;
 0019     dimX = 2*dimQ;
 0020     dimU = model.dimU;
-0021 
-0022     fx=@(x)<a href="../maccepa/m-files/qddot_maccepa.html" class="code" title="function qddot = qddot_maccepa ( q, qdot, u, model )">qddot_maccepa</a>(x(1),x(2),u,model);
-0023     dqddotdx=<a href="J_fd.html" class="code" title="function J = get_jacobian_fd ( f, x )">J_fd</a>(fx,x);
-0024     fu=@(u)<a href="../maccepa/m-files/qddot_maccepa.html" class="code" title="function qddot = qddot_maccepa ( q, qdot, u, model )">qddot_maccepa</a>(x(1),x(2),u,model);
-0025     dqddotdu=<a href="J_fd.html" class="code" title="function J = get_jacobian_fd ( f, x )">J_fd</a>(fu,u);
-0026 
-0027     xdot_x = [0 1; dqddotdx];
-0028     xdot_u = [0 0; dqddotdu];
-0029 
-0030 <span class="keyword">end</span>
-0031</pre></div>
-<hr><address>Generated on Thu 11-Feb-2016 17:34:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0021     I = model.I;
+0022     
+0023      fx=@(x)<a href="../maccepa/m-files/qddot_maccepa.html" class="code" title="function qddot = qddot_maccepa ( q, qdot, u, model )">qddot_maccepa</a>(x(1),x(2),u,model);
+0024      dqddotdx=<a href="J_fd.html" class="code" title="function J = get_jacobian_fd ( f, x )">J_fd</a>(fx,x);
+0025      fu=@(u)<a href="../maccepa/m-files/qddot_maccepa.html" class="code" title="function qddot = qddot_maccepa ( q, qdot, u, model )">qddot_maccepa</a>(x(1),x(2),u,model);
+0026      dqddotdu=<a href="J_fd.html" class="code" title="function J = get_jacobian_fd ( f, x )">J_fd</a>(fu,u);
+0027     xdot_x = [0 1; dqddotdx  ];
+0028      xdot_u = [zeros(1,dimU); dqddotdu ];
+0029     
+0030     
+0031 <span class="comment">%     dtaukdx1 = model_maccepa( 'maccepa_model_get_dtaukdx1', x, u, model);</span>
+0032 <span class="comment">%     dtaubdx2 = model_maccepa( 'maccepa_model_get_dtaubdx2', x, u, model);</span>
+0033 <span class="comment">%     dtaufdx2 = model_maccepa( 'maccepa_model_get_dtaufdx2', x, u, model);</span>
+0034 <span class="comment">%     dtaukdu1 = model_maccepa( 'maccepa_model_get_dtaukdu1', x, u, model);</span>
+0035 <span class="comment">%     dtaukdu2 = model_maccepa( 'maccepa_model_get_dtaukdu2', x, u, model);</span>
+0036 <span class="comment">%     dtaubdu3 = model_maccepa( 'maccepa_model_get_dtaubdu3', x, u, model);</span>
+0037     
+0038 <span class="comment">%     xdot_x = [0 1; dtaukdx1/I ( dtaubdx2 + dtaufdx2)/I  ];</span>
+0039 <span class="comment">%     xdot_u = [zeros(1,dimU); dtaukdu1/I dtaukdu2/I dtaubdu3/I];</span>
+0040 
+0041 <span class="keyword">end</span>
+0042</pre></div>
+<hr><address>Generated on Mon 15-Feb-2016 09:48:15 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

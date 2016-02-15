@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of maccepavd_reach_p1</title>
+  <meta name="keywords" content="maccepavd_reach_p1">
+  <meta name="description" content="%  Optimization problem 1: variable damping">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">optimize</a> &gt; maccepavd_reach_p1.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\optimize&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>maccepavd_reach_p1
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>%  Optimization problem 1: variable damping</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">%  Optimization problem 1: variable damping
+   
+   ilqr on reaching problem for MACCEPA actuator with U dimension of 3.
+   u_1 and u_2 fixed. u_3 optimizaed w.r.t rapid movement cost function
+   using ILQR</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../control/pi_ilqr.html" class="code" title="function u = pi_ilqr ( x, t, p )">pi_ilqr</a>	ILQR/G policy</li><li><a href="../ilqg/g_maccepa.html" class="code" title="function [xdot, xdot_x, xdot_u] = g_maccepa ( x, u, model )">g_maccepa</a>	Dynamics function for the MACCEPA.</li><li><a href="../ilqg/ilqr.html" class="code" title="function [x, u, L, cost] = ilqr(f, j, dt, N, x0, u0, p )">ilqr</a>	Function for solving (finite horizon) optimal control problems with the Iterative Linear Quadratic Regulator method.</li><li><a href="../ilqg/j_reaching_rapid.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_rapid(x,u,t,p)">j_reaching_rapid</a>	Input:</li><li><a href="../maccepa/m-files/k_maccepa.html" class="code" title="function k = k_maccepa ( q, u, model )">k_maccepa</a>	Estimate joint stiffness of MACCEPA model</li><li><a href="../maccepa/m-files/k_maccepa.html" class="code" title="function k = k_maccepa ( q, u, model )">k_maccepa</a>	Estimate joint stiffness of MACCEPA model</li><li><a href="../maccepa/m-files/q0_maccepa.html" class="code" title="function q0 = q0_maccepa ( u, model )">q0_maccepa</a>	Estimate equilibrium position of MACCEPA model</li><li><a href="../maccepa/m-files/q0_maccepa.html" class="code" title="function q0 = q0_maccepa ( u, model )">q0_maccepa</a>	Estimate equilibrium position of MACCEPA model</li><li><a href="../simulate/simulate_feedback_time_indexed.html" class="code" title="function [x,u] = simulate_feedback_time_indexed ( x0, f, pi, p )">simulate_feedback_time_indexed</a>	Simulate trajectory using Euler integration under closed-loop, time-indexed policy control, in continuous time</li><li><a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a>	Function for evaluating the cost along a trajectory under a given cost function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%%  Optimization problem 1: variable damping</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%   ilqr on reaching problem for MACCEPA actuator with U dimension of 3.</span>
+0004 <span class="comment">%   u_1 and u_2 fixed. u_3 optimizaed w.r.t rapid movement cost function</span>
+0005 <span class="comment">%   using ILQR</span>
+0006 clear all;
+0007 <span class="comment">%% set experiment paras</span>
+0008 servo1 = pi/6 ;
+0009 servo2 = pi/8 ;
+0010 
+0011 <span class="comment">%% add paths</span>
+0012 
+0013 curPath = pwd;
+0014 curPaths = strsplit(curPath,{<span class="string">'\'</span>,<span class="string">'/'</span>});
+0015 fatherPath = strjoin(curPaths(1:end-1),<span class="string">'/'</span>);
+0016 addpath([fatherPath,<span class="string">'/external/genpath_exclude'</span>]);
+0017 
+0018 addpath(genpath_exclude(fatherPath,{<span class="string">'/maccepa/model_maccepa_d2'</span>,<span class="string">'/maccepa/model_maccepa_d3'</span>}));
+0019 
+0020 addpath([fatherPath,<span class="string">'/maccepa/model_maccepa_d3'</span>]);
+0021 <span class="comment">%%</span>
+0022 tic
+0023 
+0024 <span class="comment">% time</span>
+0025 dt = 0.02;       <span class="comment">% time step</span>
+0026 N  = 200 ;        <span class="comment">% number of time steps</span>
+0027 t  = (0:N-1)*dt; <span class="comment">% sample times</span>
+0028 
+0029 <span class="comment">% simulation parameters</span>
+0030 ps = []; ps.dt = dt; ps.N = N; ps.solver = <span class="string">'euler'</span>;
+0031 
+0032 model = model_maccepa(<span class="string">'maccepa_model'</span>); <span class="comment">%</span>
+0033 
+0034 <span class="comment">% dynamics</span>
+0035 umax = [ servo1 ; servo2; 1 ] ;
+0036 umin = [ servo1 ; servo2; 0 ] ;
+0037 f = @(x, u) <a href="../ilqg/g_maccepa.html" class="code" title="function [xdot, xdot_x, xdot_u] = g_maccepa ( x, u, model )">g_maccepa</a> ( x, u, model ); <span class="comment">% state space dynamics</span>
+0038 
+0039 <span class="comment">% cost/reward</span>
+0040 pc = [];
+0041 pc.x_target   = servo1 ;
+0042 pc.epsilon = 10^-8;
+0043 j = @(x,u,t) <a href="../ilqg/j_reaching_rapid.html" class="code" title="function [l, l_x, l_xx, l_u, l_uu, l_ux] = j_reaching_rapid(x,u,t,p)">j_reaching_rapid</a> ( x, u, t, pc );
+0044 
+0045 <span class="comment">% start state</span>
+0046 x0 = zeros(2,1);
+0047 
+0048 <span class="comment">% set ilqr parameters</span>
+0049 u0 = [ servo1 ; servo2 ; 0.001 ]; <span class="comment">% command initialisation</span>
+0050 po = [];
+0051 po.umax = umax;
+0052 po.umin = umin;
+0053 
+0054 <span class="comment">% optimise</span>
+0055 [xx, uu, L] = <a href="../ilqg/ilqr.html" class="code" title="function [x, u, L, cost] = ilqr(f, j, dt, N, x0, u0, p )">ilqr</a>(f,j,dt,N,x0,u0,po);
+0056 
+0057 <span class="comment">% run controller on plant</span>
+0058 ppi = []; ppi.xn = xx; ppi.un = uu; ppi.Ln = L;
+0059 pi = @(x,n)<a href="../control/pi_ilqr.html" class="code" title="function u = pi_ilqr ( x, t, p )">pi_ilqr</a>(x,n,ppi);
+0060 [x,u] = <a href="../simulate/simulate_feedback_time_indexed.html" class="code" title="function [x,u] = simulate_feedback_time_indexed ( x0, f, pi, p )">simulate_feedback_time_indexed</a> ( x0, f, pi, ps );
+0061 
+0062 <span class="comment">% evaluate cost of trajectory on plant</span>
+0063 cost = <a href="../value/evaluate_trajectory_cost_fh.html" class="code" title="function cost = evaluate_trajectory_cost_fh ( x, u, l, p )">evaluate_trajectory_cost_fh</a>(x,u,j,ps);
+0064 fprintf(1,<span class="string">'Cost (evaluated on plant) = %f\n'</span>,cost)
+0065 
+0066 <span class="comment">% plot example trajectory</span>
+0067 name=<span class="string">'MACCEPA'</span>; figure(1),set(gcf,<span class="string">'Name'</span>,name),set(gcf,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>),clf
+0068 subplot(2,2,1);
+0069 hold on
+0070 plot(t,x');
+0071 plot(t(N),pc.x_target,<span class="string">'o'</span>);
+0072 xlabel(<span class="string">'t'</span>)
+0073 ylabel(<span class="string">'x'</span>)
+0074 axis tight
+0075 
+0076 subplot(2,2,2);
+0077 hold on
+0078 plot(t(1:end-1),u');
+0079 xlabel(<span class="string">'t'</span>)
+0080 ylabel(<span class="string">'u'</span>)
+0081 axis tight
+0082 
+0083 subplot(2,2,3);
+0084 hold on
+0085 <span class="keyword">for</span> n=1:N-1
+0086 l(n)=j(x(:,n), u(:,n), t(n));
+0087 <span class="keyword">end</span>
+0088 l(N)=j(x(:,N), nan, nan);
+0089 plot(t,l);
+0090 xlabel(<span class="string">'t'</span>)
+0091 ylabel(<span class="string">'cost'</span>)
+0092 axis tight
+0093 
+0094 subplot(2,2,4);
+0095 hold on
+0096 q0=nan(1,N-1); k=nan(1,N-1);
+0097 <span class="keyword">for</span> n=1:N-1
+0098 q0(n) = <a href="../maccepa/m-files/q0_maccepa.html" class="code" title="function q0 = q0_maccepa ( u, model )">q0_maccepa</a>(              u(:,n),model);
+0099  k(n) = <a href="../maccepa/m-files/k_maccepa.html" class="code" title="function k = k_maccepa ( q, u, model )">k_maccepa</a> (x(1,n),       u(:,n),model);
+0100 <span class="keyword">end</span>
+0101 h(1)=plot(t(1:end-1),q0,<span class="string">'b'</span>);
+0102 h(2)=plot(t(1:end-1), k,<span class="string">'r'</span>);
+0103 xlabel(<span class="string">'t'</span>)
+0104 axis tight
+0105 legend(h,<span class="string">'q_0'</span>,<span class="string">'k'</span>,<span class="string">'Location'</span>,<span class="string">'Best'</span>)
+0106 
+0107 <span class="comment">%name='Profiles'; figure(sum(double(name))),set(gcf,'Name',name),set(gcf,'NumberTitle','off'),clf</span>
+0108 <span class="comment">%for n=1:N-1</span>
+0109 <span class="comment">%xdot(:,n)=fnDyn(x(:,n),u(:,n));</span>
+0110 <span class="comment">%tau (:,n)=fnTorque(x(:,n),u(:,n));</span>
+0111 <span class="comment">%end</span>
+0112 <span class="comment">%subplot(5,1,1),hold on,ylabel('pos.'  ),plot(t         ,x(1,:)),plot(t(1:end-1),q0,'--'),legend('q','q_0','Location','Best'),plot(t(N),qt,'o');</span>
+0113 <span class="comment">%subplot(5,1,2),hold on,ylabel('vel.'  ),plot(t         ,x(2,:))</span>
+0114 <span class="comment">%subplot(5,1,3),hold on,ylabel('acc.'  ),plot(t(1:end-1),xdot(2,:))</span>
+0115 <span class="comment">%subplot(5,1,4),hold on,ylabel('tor.'  ),plot(t(1:end-1),tau)</span>
+0116 <span class="comment">%subplot(5,1,5),hold on,ylabel('stiff.'),plot(t(1:end-1),k),%ylim([umin(2),umax(2)])</span>
+0117 <span class="comment">%xlabel('t')</span>
+0118 
+0119 toc
+0120 <span class="comment">%%</span>
+0121 rmpath(genpath(fatherPath))</pre></div>
+<hr><address>Generated on Mon 15-Feb-2016 09:48:15 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

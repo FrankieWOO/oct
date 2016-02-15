@@ -34,16 +34,16 @@
 function [x, u, L, cost] = ilqr(f, j, dt, N, x0, u0, p )
 
 % unpack parameter struct
-if isfield(p,'lambda_init'        ),lambda_init         = p.lambda_init        ;else,lambda_init        = 1e-2    ;end
-if isfield(p,'lambda_factor'      ),lambda_factor       = p.lambda_factor      ;else,lambda_factor      = sqrt(10);end
-if isfield(p,'lambda_max'         ),lambda_max          = p.lambda_max         ;else,lambda_max         = 1e-2    ;end
-if isfield(p,'dcost_converge'     ),dcost_converge      = p.dcost_converge     ;else,dcost_converge     = 1e-9    ;end
-if isfield(p,'iter_max'           ),iter_max            = p.iter_max           ;else,iter_max           = 100     ;end
-if isfield(p,'online_printing'    ),online_printing     = p.online_printing    ;else,online_printing    = 1       ;end
-if isfield(p,'online_plotting'    ),online_plotting     = p.online_plotting    ;else,online_plotting    = 1       ;end
-if isfield(p,'umax'               ),umax                = p.umax               ;else,umax               = inf     ;end
-if isfield(p,'umin'               ),umin                = p.umin               ;else,umin               =-inf     ;end
-if isfield(p,'solver'             ),solver              = p.solver             ;else,solver             ='euler'  ;end
+if isfield(p,'lambda_init'        ),lambda_init         = p.lambda_init        ;else lambda_init        = 1e-2    ;end
+if isfield(p,'lambda_factor'      ),lambda_factor       = p.lambda_factor      ;else lambda_factor      = sqrt(10);end
+if isfield(p,'lambda_max'         ),lambda_max          = p.lambda_max         ;else lambda_max         = 1e-2    ;end
+if isfield(p,'dcost_converge'     ),dcost_converge      = p.dcost_converge     ;else dcost_converge     = 1e-9    ;end
+if isfield(p,'iter_max'           ),iter_max            = p.iter_max           ;else iter_max           = 100     ;end
+if isfield(p,'online_printing'    ),online_printing     = p.online_printing    ;else online_printing    = 1       ;end
+if isfield(p,'online_plotting'    ),online_plotting     = p.online_plotting    ;else online_plotting    = 1       ;end
+if isfield(p,'umax'               ),umax                = p.umax               ;else umax               = inf     ;end
+if isfield(p,'umin'               ),umin                = p.umin               ;else umin               =-inf     ;end
+if isfield(p,'solver'             ),solver              = p.solver             ;else solver             ='euler'  ;end
 
 % initialise everything
 dimX = size(x0, 1);   % state dimensionality
@@ -52,8 +52,9 @@ ps=[];ps.dt=dt;ps.solver=solver; % simulation parameters
 
 if size(u0,2)==1,                                   % initial command sequence
 u = repmat(u0,1,N-1);                               % ...if one initial command given, use as full initial command sequence
-else,                                               %
-u    = u0;end                                       % ...if full command sequence given, use as initial command sequence
+else                                               %
+u    = u0;
+end                                       % ...if full command sequence given, use as initial command sequence
 L    = zeros(dimU, dimX, N-1);                      % initial feedback gain sequence
 x    = simulate_feedforward ( x0, f, u, ps );       % initial state sequence
 cost = evaluate_trajectory_cost_fh ( x, u, j, ps ); % initial cost

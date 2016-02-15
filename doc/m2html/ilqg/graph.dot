@@ -21,6 +21,7 @@ digraph m2html {
   ilqr [URL="ilqr.html"];
   j_contact_task_1dof_plants [URL="j_contact_task_1dof_plants.html"];
   j_quadratic_fh [URL="j_quadratic_fh.html"];
+  j_reaching_rapid [URL="j_reaching_rapid.html"];
   j_reaching_task_1dof_plants [URL="j_reaching_task_1dof_plants.html"];
   j_reaching_task_2dof_plants [URL="j_reaching_task_2dof_plants.html"];
 }
