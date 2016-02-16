@@ -67,7 +67,8 @@ $RECYCLE.BIN/
 # =========================
 # maccepa Makefile
 # =========================
-/maccepa/Makefile
+maccepa/Makefile
+maccepa/Makefile~
 
 
 # =========================
