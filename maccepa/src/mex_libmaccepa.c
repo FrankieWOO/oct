@@ -204,6 +204,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 				plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); /* Create output vector */
 				maccepa_model_get_dtaubdu3 (mxGetPr(plhs[0]), mxGetPr(prhs[1]), mxGetPr(prhs[2]), &model );
 			}
+			else if(strcmp(function,"maccepa_model_get_damping")==0){
+				plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); /* Create output vector */
+				maccepa_model_get_damping (mxGetPr(plhs[0]), mxGetPr(prhs[1]), mxGetPr(prhs[2]), &model );
+			}
+			else if(strcmp(function,"maccepa_model_get_damping_torque")==0){
+				plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); /* Create output vector */
+				maccepa_model_get_damping_torque (mxGetPr(plhs[0]), mxGetPr(prhs[1]), mxGetPr(prhs[2]), &model );
+			}
 			else{
 				printf(usage_msg);
 			}

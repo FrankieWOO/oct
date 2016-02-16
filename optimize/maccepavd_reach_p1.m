@@ -3,10 +3,10 @@
 %   ilqr on reaching problem for MACCEPA actuator with U dimension of 3.
 %   u_1 and u_2 fixed. u_3 optimizaed w.r.t rapid movement cost function
 %   using ILQR
-clear all;
+clear variables;
 %% set experiment paras
-servo1 = pi/6 ;
-servo2 = pi/8 ;
+u1 = pi/6 ;
+u2 = pi/8 ;
 
 %% add paths
 
@@ -17,13 +17,13 @@ addpath([fatherPath,'/external/genpath_exclude']);
 
 addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
 
-addpath([fatherPath,'/maccepa/model_maccepa_d3']);
+%addpath([fatherPath,'/maccepa/model_maccepa_d3']);
 %%
 tic
 
 % time
 dt = 0.02;       % time step
-N  = 200 ;        % number of time steps
+N  = 100 ;        % number of time steps
 t  = (0:N-1)*dt; % sample times
 
 % simulation parameters
@@ -32,35 +32,35 @@ ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 model = model_maccepa('maccepa_model'); %
 
 % dynamics
-umax = [ servo1 ; servo2; 1 ] ;
-umin = [ servo1 ; servo2; 0 ] ;
-f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
+umax =   1  ;
+umin =   0  ;
+f = @(x, u) g_maccepa_u3 ( x, u, model, u1, u2 ); % state space dynamics
 
 % cost/reward
 pc = [];
-pc.x_target   = servo1 ;
+pc.x_target   = u1 ;
 pc.epsilon = 10^-8;
-j = @(x,u,t) j_reaching_rapid ( x, u, t, pc );
+j = @(x,u,t) j_reaching_rapid_u3 ( x, u, t, pc, u1, u2 );
 
 % start state
 x0 = zeros(2,1);
 
 % set ilqr parameters
-u0 = [ servo1 ; servo2 ; 0.001 ]; % command initialisation
+u0 = 0.005 ; % command initialisation
 po = [];
 po.umax = umax;
 po.umin = umin;
-
+po.lamda_init = 0.01;
 % optimise
 [xx, uu, L] = ilqr(f,j,dt,N,x0,u0,po);
 
 % run controller on plant
 ppi = []; ppi.xn = xx; ppi.un = uu; ppi.Ln = L;
 pi = @(x,n)pi_ilqr(x,n,ppi);
-[x,u] = simulate_feedback_time_indexed ( x0, f, pi, ps );
-
+[x,u3] = simulate_feedback_time_indexed ( x0, f, pi, ps );
+u = [ u1*ones(1,size(u3,2)) ; u2*ones(1, size(u3,2)); u3]; 
 % evaluate cost of trajectory on plant
-cost = evaluate_trajectory_cost_fh(x,u,j,ps);
+cost = evaluate_trajectory_cost_fh(x,u3,j,ps);
 fprintf(1,'Cost (evaluated on plant) = %f\n',cost)
 
 % plot example trajectory
@@ -75,15 +75,15 @@ axis tight
 
 subplot(2,2,2);
 hold on
-plot(t(1:end-1),u');
+plot(t(1:end-1),u3');
 xlabel('t')
-ylabel('u')
+ylabel('u3')
 axis tight
 
 subplot(2,2,3);
 hold on
 for n=1:N-1
-l(n)=j(x(:,n), u(:,n), t(n));
+l(n)=j(x(:,n), u3(:,n), t(n));
 end
 l(N)=j(x(:,N), nan, nan);
 plot(t,l);

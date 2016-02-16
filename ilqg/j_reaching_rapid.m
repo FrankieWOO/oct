@@ -19,14 +19,18 @@ l = fl(x,u,t);
 % compute derivatives of cost
 if nargout>1
  % analytical derivatives
- l_x = [2*(x(1) - p.x_target);0] ;
- l_u = 2*p.epsilon*u ;
- l_xx = [ 2 0;0 0];
- l_uu = [2*p.epsilon 0 0;0 2*p.epsilon 0;0 0 2*p.epsilon] ;
- l_ux = zeros(3,2);
-% 
-%  flJ=@(x,u,t)J_cost_fd ( fl, x, u, t );
-%  [l_x ,l_u      ] = flJ ( x, u, t );
-%  flH =@(x,u,t)H_cost_fd  ( flJ, x, u, t );
-%  [l_xx,l_uu,l_ux] = flH  ( x, u, t );
+  l_x = [2*(x(1) - p.x_target);0] ;
+  l_u = 2*p.epsilon*u ;
+  l_xx = [ 2 0;0 0];
+  l_uu = [2*p.epsilon 0 0;0 2*p.epsilon 0;0 0 2*p.epsilon] ;
+  l_ux = zeros(3,2);
+
+ 
+  % finite difference
+%   flJ=@(x,u,t)J_cost_fd ( fl, x, u, t );
+%   [l_x ,l_u      ] = flJ ( x, u, t );
+%   flH =@(x,u,t)H_cost_fd  ( flJ, x, u, t );
+%   [l_xx,l_uu,l_ux] = flH  ( x, u, t );
+
+end
 end

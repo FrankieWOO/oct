@@ -412,7 +412,7 @@ maccepa_model_get_damping ( double * b, double * x, double * u, maccepa_model * 
  * 	}
  */
 #ifdef  VARIABLE_DAMPING
-  	b[0]=u[2];
+  	b[0]=u[2]*model->damping_constant;
 #else      /* -----  not VARIABLE_DAMPING  ----- */
 	b[0]=model->damping_constant;
 #endif     /* -----  not VARIABLE_DAMPING  ----- */
@@ -526,6 +526,6 @@ void maccepa_model_get_dtaukdu2 ( double * dtaukdu2, double * x, double * u, mac
 
 void maccepa_model_get_dtaubdu3 ( double * dtaubdu3, double * x, double * u, maccepa_model * model ) {
 
-	dtaubdu3[0] = -x[1] ;
+	dtaubdu3[0] = -x[1]*model->damping_constant ;
 	return ;
 }

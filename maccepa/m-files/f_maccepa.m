@@ -12,4 +12,5 @@ function xdot = f_maccepa ( x, u, model )
 
 qddot = qddot_maccepa ( x(1,:), x(2,:), u, model );
 xdot  = [x(2,:); qddot];
+end
 

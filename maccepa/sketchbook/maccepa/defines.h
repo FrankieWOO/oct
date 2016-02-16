@@ -395,7 +395,9 @@
  */
 /* #define DAMPING_CONSTANT 2*5*0.004517508630
  */
-#define DAMPING_CONSTANT 0.001
+/* #define DAMPING_CONSTANT 0.001
+*/
+#define DAMPING_CONSTANT 3
 
 /**
  * \brief Constant for calculating joint torque due to gravity.
