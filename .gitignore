@@ -59,12 +59,24 @@ $RECYCLE.BIN/
 *.mexw64
 
 # =========================
+# gitignore~
+# =========================
+
+.gitignore~
+
+# =========================
+# maccepa Makefile
+# =========================
+/maccepa/Makefile
+
+
+# =========================
 # Operating System Files
 # =========================
 
 # OSX
 # =========================
-.gitignore~
+
 .DS_Store
 .AppleDouble
 .LSOverride
