@@ -26,25 +26,27 @@ ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 model = model_maccepa('maccepa_model'); %
 
 % dynamics
-umax = [ pi/2; pi/2; 1];
-umin = [ -pi/2; 0; 0];
+umax = [ pi/6; pi/8; 1];
+umin = [ pi/6; pi/8; 0];
 f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
 
 % cost/reward
 pc = [];
 pc.x_target   = pi/4;
 pc.epsilon = 10^-8;
+pc.dt = dt;
 j = @(x,u,t) j_reaching_rapid ( x, u, t, pc );
 
 % start state
 x0 = zeros(2,1);
 
 % set ilqr parameters
-u0 = [pi/4;pi/8;0.01]; % command initialisation
+u0 = [pi/6;pi/8;0.01]; % command initialisation
 po = [];
 po.umax = umax;
 po.umin = umin;
-
+po.lambda_init = 0.01;
+po.lambda_max  = 0.1;
 % optimise
 [xx, uu, L] = ilqr(f,j,dt,N,x0,u0,po);
 

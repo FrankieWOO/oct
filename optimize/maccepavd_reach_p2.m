@@ -1,20 +1,23 @@
-%%  Optimization problem 1: fixed damping
+%%  Optimization problem 1: Optimized fixed damping
 %   
 %   ilqr on reaching problem for MACCEPA actuator with U dimension of 3.
-%   u_1 and u_2 fixed manually. u_3 (fixed constant) optimizaed w.r.t rapid movement cost function
-%   using ILQR
-%   TODO
+%   u_1 and u_2 fixed to be constant. u_3 optimizaed as a parameter w.r.t rapid movement
+%   
+clear variables;
+%% set experiment paras
+u1 = pi/6 ;
+u2 = pi/8 ;
 
 %% add paths
-clear all;
+
 curPath = pwd;
-curPaths = strsplit(curPath,{'\','/'});
-fatherPath = strjoin(curPaths(1:end-1),'/');
-addpath([fatherPath,'/external/genpath_exclude']);
+curPaths = strsplit(curPath,{'\','/'}) ;
+fatherPath = strjoin(curPaths(1:end-1),'/') ;
+addpath(genpath(fatherPath)) ;
 
-addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
-
-addpath([fatherPath,'/maccepa/model_maccepa_d3']);
+%addpath([fatherPath,'/external/genpath_exclude']);
+%addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
+%addpath([fatherPath,'/maccepa/model_maccepa_d3']);
 %%
 tic
 
@@ -29,42 +32,39 @@ ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 model = model_maccepa('maccepa_model'); %
 
 % dynamics
-umax = [ pi/4; pi/8; 1];
-umin = [ pi/4; pi/8; 0];
-f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
 
-% cost/reward
-pc = [];
-pc.x_target   = pi/4;
-pc.epsilon = 10^-8;
-j = @(x,u,t) j_reaching_rapid ( x, u, t, pc );
+f = @(x, u) f_maccepa ( x, u, model ); % state space dynamics
 
 % start state
 x0 = zeros(2,1);
 
-% set ilqr parameters
-u0 = [pi/4;pi/8;0.01]; % command initialisation
-po = [];
-po.umax = umax;
-po.umin = umin;
+% cost/reward
+pc = [];
+pc.x_target   = u1 ;
+pc.dt = dt ;
+pc.N = 100;
+pc.epsilon = 1e-8;
+pc.solver = ps.solver;
+j = @(u3) J_maccepa_reaching_fixed_damping ( u3, x0, f, pc, u1, u2 );
 
-% optimise
-[xx, uu, L] = ilqr(f,j,dt,N,x0,u0,po);
+umax =   1  ;
+umin =   0  ;
+uu = fminbnd(j,0.01,umin,umax);
+
+u3 = uu*ones(1,N-1);
 
 % run controller on plant
-ppi = []; ppi.xn = xx; ppi.un = uu; ppi.Ln = L;
-pi = @(x,n)pi_ilqr(x,n,ppi);
-[x,u] = simulate_feedback_time_indexed ( x0, f, pi, ps );
-
+u_final = repmat([u1;u2;uu],1,N-1);
+x_final = simulate_feedforward(x0,f,u_final,ps);
 % evaluate cost of trajectory on plant
-cost = evaluate_trajectory_cost_fh(x,u,j,ps);
+cost = evaluate_trajectory_cost_fh(x_final,u_final,j,ps);
 fprintf(1,'Cost (evaluated on plant) = %f\n',cost)
 
 % plot example trajectory
 name='MACCEPA'; figure(1),set(gcf,'Name',name),set(gcf,'NumberTitle','off'),clf
 subplot(2,2,1);
 hold on
-plot(t,x');
+plot(t,x_final');
 plot(t(N),pc.x_target,'o');
 xlabel('t')
 ylabel('x')
@@ -72,17 +72,16 @@ axis tight
 
 subplot(2,2,2);
 hold on
-plot(t(1:end-1),u');
+plot(t(1:end-1),u3');
 xlabel('t')
-ylabel('u')
-axis tight
+ylabel('u3')
 
 subplot(2,2,3);
 hold on
 for n=1:N-1
-l(n)=j(x(:,n), u(:,n), t(n));
+l(n)=l_rapid_movement(x_final(:,n), u_final(:,n), t(n));
 end
-l(N)=j(x(:,N), nan, nan);
+l(N)=l_rapid_movement(x_final(:,N), nan, nan);
 plot(t,l);
 xlabel('t')
 ylabel('cost')
@@ -92,8 +91,8 @@ subplot(2,2,4);
 hold on
 q0=nan(1,N-1); k=nan(1,N-1);
 for n=1:N-1
-q0(n) = q0_maccepa(              u(:,n),model);
- k(n) = k_maccepa (x(1,n),       u(:,n),model);
+q0(n) = q0_maccepa(              u_final(:,n),model);
+ k(n) = k_maccepa (x_final(1,n),       u_final(:,n),model);
 end
 h(1)=plot(t(1:end-1),q0,'b');
 h(2)=plot(t(1:end-1), k,'r');
@@ -114,5 +113,7 @@ legend(h,'q_0','k','Location','Best')
 %xlabel('t')
 
 toc
+
+
 %%
 rmpath(genpath(fatherPath))
