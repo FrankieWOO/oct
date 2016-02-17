@@ -3,13 +3,13 @@
 clear all;
 
 curPath = pwd;
-curPaths = strsplit(curPath,{'\','/'});
-fatherPath = strjoin(curPaths(1:end-1),'/');
-addpath([fatherPath,'/external/genpath_exclude']);
+curPaths = strsplit(curPath,{'\','/'}) ;
+fatherPath = strjoin(curPaths(1:end-1),'/') ;
+addpath(genpath(fatherPath)) ;
 
-addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
-
-%addpath([fatherPath,'/maccepa/model_maccepa_d2']);
+%addpath([fatherPath,'/external/genpath_exclude']);
+%addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
+%addpath([fatherPath,'/maccepa/model_maccepa_d3']);
 
 tic
 

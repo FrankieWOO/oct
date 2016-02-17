@@ -28,3 +28,5 @@ t  = (0:N)*dt;
 % integrate running cost & add final cost
 cost = dt*sum(l(x(:,1:end-1),u,t)) + l(x(:,end),nan,nan);
 
+end
+

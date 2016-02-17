@@ -15,7 +15,7 @@ function [ c ] = l_rapid_movement( x, u, t, p )
     c1 = (x(1,:) - p.x_target).^2;
     if isnan(t)
         %final cost
-        c = c1;
+        c = c1 *p.dt;
     else
         % running cost
         c =  c1 + sum(u.^2,1) * p.epsilon ;

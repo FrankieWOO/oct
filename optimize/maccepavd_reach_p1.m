@@ -11,12 +11,12 @@ u2 = pi/8 ;
 %% add paths
 
 curPath = pwd;
-curPaths = strsplit(curPath,{'\','/'});
-fatherPath = strjoin(curPaths(1:end-1),'/');
-addpath([fatherPath,'/external/genpath_exclude']);
+curPaths = strsplit(curPath,{'\','/'}) ;
+fatherPath = strjoin(curPaths(1:end-1),'/') ;
+addpath(genpath(fatherPath)) ;
 
-addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
-
+%addpath([fatherPath,'/external/genpath_exclude']);
+%addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
 %addpath([fatherPath,'/maccepa/model_maccepa_d3']);
 %%
 tic
@@ -39,7 +39,8 @@ f = @(x, u) g_maccepa_u3 ( x, u, model, u1, u2 ); % state space dynamics
 % cost/reward
 pc = [];
 pc.x_target   = u1 ;
-pc.epsilon = 10^-8;
+pc.epsilon = 10^-8 ;
+pc.dt = dt ;
 j = @(x,u,t) j_reaching_rapid_u3 ( x, u, t, pc, u1, u2 );
 
 % start state
@@ -50,7 +51,8 @@ u0 = 0.005 ; % command initialisation
 po = [];
 po.umax = umax;
 po.umin = umin;
-po.lamda_init = 0.01;
+po.lambda_init = 0.01;
+po.lambda_max  = 0.1;
 % optimise
 [xx, uu, L] = ilqr(f,j,dt,N,x0,u0,po);
 
@@ -78,7 +80,6 @@ hold on
 plot(t(1:end-1),u3');
 xlabel('t')
 ylabel('u3')
-axis tight
 
 subplot(2,2,3);
 hold on
