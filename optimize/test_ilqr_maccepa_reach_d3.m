@@ -26,8 +26,8 @@ ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 model = model_maccepa('maccepa_model'); %
 
 % dynamics
-umax = [ pi/6; pi/8; 1];
-umin = [ pi/6; pi/8; 0];
+umax = [ pi/2; pi/2; 1];
+umin = [ -pi/2; 0; 0];
 f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
 
 % cost/reward
