@@ -17,7 +17,11 @@ tic
 
 % time
 dt = 0.02;       % time step
+<<<<<<< HEAD
 N  = 25 ;        % number of time steps
+=======
+N  = 50 ;        % number of time steps
+>>>>>>> b741d17fc094c79aafd243b4ab3ae20a52e190b0
 t  = (0:N-1)*dt; % sample times
 
 % simulation parameters
@@ -26,8 +30,13 @@ ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 model = model_maccepa('maccepa_model'); %
 
 % dynamics
+<<<<<<< HEAD
 umax = [ pi/2; pi/2; 0.1];
 umin = [ -pi/2; 0; 0];
+=======
+umax = [ pi/6; pi/8; 1];
+umin = [ pi/6; pi/8; 0];
+>>>>>>> b741d17fc094c79aafd243b4ab3ae20a52e190b0
 f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
 
 % cost/reward
@@ -41,7 +50,11 @@ j = @(x,u,t) j_reaching_rapid ( x, u, t, pc );
 x0 = zeros(2,1);
 
 % set ilqr parameters
+<<<<<<< HEAD
 u0s = [ linspace(0,pi/2,5) ; linspace(0,pi/4,5); linspace(0,0.1,5)] ; % command initialisation
+=======
+u0 = [0.5;0.3;0.1]; % command initialisation
+>>>>>>> b741d17fc094c79aafd243b4ab3ae20a52e190b0
 po = [];
 po.umax = umax;
 po.umin = umin;
