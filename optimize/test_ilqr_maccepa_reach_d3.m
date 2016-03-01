@@ -1,6 +1,6 @@
 % Demo script: Test ilqr on reaching problem for MACCEPA actuator with U dimension of 3.
 
-clear all;
+clear variables;
 
 %% add path
 
@@ -17,7 +17,7 @@ tic
 
 % time
 dt = 0.02;       % time step
-N  = 100 ;        % number of time steps
+N  = 25 ;        % number of time steps
 t  = (0:N-1)*dt; % sample times
 
 % simulation parameters
@@ -26,13 +26,13 @@ ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 model = model_maccepa('maccepa_model'); %
 
 % dynamics
-umax = [ pi/2; pi/2; 1];
+umax = [ pi/2; pi/2; 0.1];
 umin = [ -pi/2; 0; 0];
 f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
 
 % cost/reward
 pc = [];
-pc.x_target   = pi/4;
+pc.x_target   = pi/6;
 pc.epsilon = 10^-8;
 pc.dt = dt;
 j = @(x,u,t) j_reaching_rapid ( x, u, t, pc );
@@ -41,26 +41,45 @@ j = @(x,u,t) j_reaching_rapid ( x, u, t, pc );
 x0 = zeros(2,1);
 
 % set ilqr parameters
-u0 = [pi/6;pi/8;0.01]; % command initialisation
+u0s = [ linspace(0,pi/2,5) ; linspace(0,pi/4,5); linspace(0,0.1,5)] ; % command initialisation
 po = [];
 po.umax = umax;
 po.umin = umin;
 po.lambda_init = 0.01;
 po.lambda_max  = 0.1;
+
+xs = zeros(2,N,5,5,5);
+us = zeros(3,N-1,5,5,5);
+costs = zeros(5,5,5);
 % optimise
+for iu=1:5
+    for ju=1:5
+        for ku=1:5
+
+u0 = [ u0s(1,iu);u0s(2,ju);u0s(3,ku) ] ;
 [xx, uu, L] = ilqr(f,j,dt,N,x0,u0,po);
 
 % run controller on plant
 ppi = []; ppi.xn = xx; ppi.un = uu; ppi.Ln = L;
 pi = @(x,n)pi_ilqr(x,n,ppi);
-[x,u] = simulate_feedback_time_indexed ( x0, f, pi, ps );
+[xs(:,:,iu,ju,ku),us(:,:,iu,ju,ku)] = simulate_feedback_time_indexed ( x0, f, pi, ps );
 
 % evaluate cost of trajectory on plant
-cost = evaluate_trajectory_cost_fh(x,u,j,ps);
-fprintf(1,'Cost (evaluated on plant) = %f\n',cost)
+costs(iu,ju,ku) = evaluate_trajectory_cost_fh(xs(:,:,iu,ju,ku),us(:,:,iu,ju,ku),j,ps);
 
-% plot example trajectory
-name='MACCEPA'; figure(1),set(gcf,'Name',name),set(gcf,'NumberTitle','off'),clf
+        end
+    end
+end
+
+[cost,index_cost] = min(costs(:)) ;
+
+[I1,I2,I3] = ind2sub(size(costs),index_cost);
+
+x = xs(:,:,I1,I2,I3);
+u = us(:,:,I1,I2,I3);
+fprintf(1,'Cost (evaluated on plant) = %f\n',cost);
+%% plot example trajectory
+name='MACCEPA'; figure(2),set(gcf,'Name',name),set(gcf,'NumberTitle','off'),clf
 subplot(2,2,1);
 hold on
 plot(t,x');
@@ -78,6 +97,7 @@ axis tight
 
 subplot(2,2,3);
 hold on
+l = zeros(N);
 for n=1:N-1
 l(n)=j(x(:,n), u(:,n), t(n));
 end

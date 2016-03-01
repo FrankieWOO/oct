@@ -23,7 +23,7 @@ tic
 
 % time
 dt = 0.02;       % time step
-N  = 100 ;        % number of time steps
+N  = 25 ;        % number of time steps
 t  = (0:N-1)*dt; % sample times
 
 % simulation parameters
@@ -39,7 +39,7 @@ f = @(x, u) g_maccepa_u3 ( x, u, model, u1, u2 ); % state space dynamics
 % cost/reward
 pc = [];
 pc.x_target   = u1 ;
-pc.epsilon = 10^-8 ;
+pc.epsilon = 10^-2 ;
 pc.dt = dt ;
 j = @(x,u,t) j_reaching_rapid_u3 ( x, u, t, pc, u1, u2 );
 
