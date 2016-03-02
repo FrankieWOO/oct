@@ -43,7 +43,7 @@ x0 = zeros(2,1);
 
 % set ilqr parameters
 u0s = [ linspace(0,pi/2,5) ; linspace(0,pi/4,5); linspace(0,0.1,5)] ; % command initialisation
-u0 = [0.5;0.3;0.1]; % command initialisation
+
 po = [];
 po.umax = umax;
 po.umin = umin;
@@ -134,7 +134,7 @@ axis tight
 %tau (:,n)=fnTorque(x(:,n),u(:,n));
 %end
 %subplot(5,1,1),hold on,ylabel('pos.'  ),plot(t         ,x(1,:)),plot(t(1:end-1),q0,'--'),legend('q','q_0','Location','Best'),plot(t(N),qt,'o');
-%subplot(5,1,2),hold on,ylabel('vel.'  ),plot(t         ,x(2,:)) 
+%subplot(5,1,2),hold on,ylabel('vel.'  ),plot(t         ,x(2,:))
 %subplot(5,1,3),hold on,ylabel('acc.'  ),plot(t(1:end-1),xdot(2,:))
 %subplot(5,1,4),hold on,ylabel('tor.'  ),plot(t(1:end-1),tau)
 %subplot(5,1,5),hold on,ylabel('stiff.'),plot(t(1:end-1),k),%ylim([umin(2),umax(2)])
