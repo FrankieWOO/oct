@@ -17,11 +17,7 @@ tic
 
 % time
 dt = 0.02;       % time step
-<<<<<<< HEAD
-N  = 25 ;        % number of time steps
-=======
 N  = 50 ;        % number of time steps
->>>>>>> b741d17fc094c79aafd243b4ab3ae20a52e190b0
 t  = (0:N-1)*dt; % sample times
 
 % simulation parameters
@@ -30,13 +26,9 @@ ps = []; ps.dt = dt; ps.N = N; ps.solver = 'euler';
 model = model_maccepa('maccepa_model'); %
 
 % dynamics
-<<<<<<< HEAD
 umax = [ pi/2; pi/2; 0.1];
 umin = [ -pi/2; 0; 0];
-=======
-umax = [ pi/6; pi/8; 1];
-umin = [ pi/6; pi/8; 0];
->>>>>>> b741d17fc094c79aafd243b4ab3ae20a52e190b0
+
 f = @(x, u) g_maccepa ( x, u, model ); % state space dynamics
 
 % cost/reward
@@ -50,11 +42,8 @@ j = @(x,u,t) j_reaching_rapid ( x, u, t, pc );
 x0 = zeros(2,1);
 
 % set ilqr parameters
-<<<<<<< HEAD
 u0s = [ linspace(0,pi/2,5) ; linspace(0,pi/4,5); linspace(0,0.1,5)] ; % command initialisation
-=======
 u0 = [0.5;0.3;0.1]; % command initialisation
->>>>>>> b741d17fc094c79aafd243b4ab3ae20a52e190b0
 po = [];
 po.umax = umax;
 po.umin = umin;
@@ -93,7 +82,7 @@ u = us(:,:,I1,I2,I3);
 fprintf(1,'Cost (evaluated on plant) = %f\n',cost);
 %% plot example trajectory
 name='MACCEPA'; figure(2),set(gcf,'Name',name),set(gcf,'NumberTitle','off'),clf
-subplot(2,2,1);
+subplot(3,2,1);
 hold on
 plot(t,x');
 plot(t(N),pc.x_target,'o');
@@ -101,14 +90,14 @@ xlabel('t')
 ylabel('x')
 axis tight
 
-subplot(2,2,2);
+subplot(3,2,2);
 hold on
 plot(t(1:end-1),u');
 xlabel('t')
 ylabel('u')
 axis tight
 
-subplot(2,2,3);
+subplot(3,2,3);
 hold on
 l = zeros(N);
 for n=1:N-1
@@ -120,7 +109,7 @@ xlabel('t')
 ylabel('cost')
 axis tight
 
-subplot(2,2,4);
+subplot(3,2,4);
 hold on
 q0=nan(1,N-1); k=nan(1,N-1);
 for n=1:N-1
@@ -132,6 +121,12 @@ h(2)=plot(t(1:end-1), k,'r');
 xlabel('t')
 axis tight
 legend(h,'q_0','k','Location','Best')
+
+subplot(3,2,5)
+plot(t(1:end-1),u(3,:)');
+xlabel('t')
+ylabel('u3')
+axis tight
 
 %name='Profiles'; figure(sum(double(name))),set(gcf,'Name',name),set(gcf,'NumberTitle','off'),clf
 %for n=1:N-1
