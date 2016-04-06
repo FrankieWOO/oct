@@ -2,21 +2,11 @@
 
 clear variables;
 
-%% add path
-
-curPath = pwd;
-curPaths = strsplit(curPath,{'\','/'}) ;
-fatherPath = strjoin(curPaths(1:end-1),'/') ;
-addpath(genpath(fatherPath)) ;
-
-%addpath([fatherPath,'/external/genpath_exclude']);
-%addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
-%addpath([fatherPath,'/maccepa/model_maccepa_d3']);
 %%
 tic
 
 % time
-dt = 0.02;       % time step
+dt = 0.01;       % time step
 N  = 50 ;        % number of time steps
 t  = (0:N-1)*dt; % sample times
 
@@ -84,10 +74,11 @@ fprintf(1,'Cost (evaluated on plant) = %f\n',cost);
 name='MACCEPA'; figure(2),set(gcf,'Name',name),set(gcf,'NumberTitle','off'),clf
 subplot(3,2,1);
 hold on
-plot(t,x');
+ax=plotyy(t,x(1,:)',t,x(2,:)');
 plot(t(N),pc.x_target,'o');
 xlabel('t')
-ylabel('x')
+ylabel(ax(1),'position');
+ylabel(ax(2),'velocity');
 axis tight
 
 subplot(3,2,2);
@@ -141,5 +132,3 @@ axis tight
 %xlabel('t')
 
 toc
-%%
-rmpath(genpath(fatherPath))

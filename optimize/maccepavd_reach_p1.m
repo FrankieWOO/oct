@@ -8,22 +8,12 @@ clear variables;
 u1 = pi/6 ;
 u2 = pi/8 ;
 
-%% add paths
-
-curPath = pwd;
-curPaths = strsplit(curPath,{'\','/'}) ;
-fatherPath = strjoin(curPaths(1:end-1),'/') ;
-addpath(genpath(fatherPath)) ;
-
-%addpath([fatherPath,'/external/genpath_exclude']);
-%addpath(genpath_exclude(fatherPath,{'/maccepa/model_maccepa_d2','/maccepa/model_maccepa_d3'}));
-%addpath([fatherPath,'/maccepa/model_maccepa_d3']);
 %%
 tic
 
 % time
-dt = 0.02;       % time step
-N  = 25 ;        % number of time steps
+dt = 0.01;       % time step
+N  = 100 ;        % number of time steps
 t  = (0:N-1)*dt; % sample times
 
 % simulation parameters
@@ -118,5 +108,3 @@ legend(h,'q_0','k','Location','Best')
 %xlabel('t')
 
 toc
-%%
-rmpath(genpath(fatherPath))
